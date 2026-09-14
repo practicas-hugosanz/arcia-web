@@ -1732,3 +1732,176 @@ button {
   background: color-mix(in oklab, #ffb020 25%, transparent);
   color: var(--fg);
 }
+
+/* --- Móvil -----------------------------------------------------------------
+   A 390 px la página medía 12.024 px (medido): más de catorce pantallas. Lo
+   que la alargaba no era el texto, eran las listas apiladas con imagen: «Cómo
+   funciona» (1.921 px) y «Lo que pasa antes y después» (1.600). En móvil pasan
+   a carruseles que se deslizan de lado, con la siguiente tarjeta asomando para
+   que se vea que hay más, y se aprietan márgenes y listas. El contenido es el
+   mismo. */
+
+@media (max-width: 767px) {
+  .escaparate,
+  .pasos,
+  .verificacion,
+  .prospeccion,
+  .ia,
+  .mas,
+  .local,
+  .precio,
+  .preguntas {
+    padding-block: 52px;
+  }
+  .final {
+    padding-block: 64px;
+  }
+  .final-contenido {
+    gap: 28px;
+  }
+  .titulo-seccion {
+    font-size: 1.85rem;
+  }
+  .titulo-grande {
+    font-size: 2.05rem;
+  }
+  .entradilla {
+    margin-top: 12px;
+    font-size: 1rem;
+  }
+
+  .escaparate-escena {
+    margin-top: 28px;
+  }
+  .verificacion-rejilla {
+    gap: 28px;
+  }
+
+  /* Lo que pasa antes y después de llamar: carrusel. */
+  .mas .bento {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .mas .bento::-webkit-scrollbar {
+    display: none;
+  }
+  .mas .celda {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+  }
+
+  .ia-rejilla {
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .ia-destacada {
+    gap: 20px;
+  }
+  .ia-lista li {
+    gap: 12px;
+    padding-block: 16px;
+  }
+  .ia-lista li > .i {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+  }
+  .ia-nota {
+    margin-top: 24px;
+    font-size: 0.875rem;
+  }
+
+  .local-rejilla {
+    gap: 28px;
+  }
+  .local-lista {
+    gap: 22px;
+  }
+  .local-lista li {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+  .local-lista li > .i {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+  }
+
+  .precio-rejilla {
+    gap: 28px;
+  }
+  .tarjeta-precio {
+    padding: 24px;
+  }
+  .tarjeta-precio-lista {
+    margin: 20px 0 24px;
+  }
+
+  .preguntas-rejilla {
+    gap: 16px;
+  }
+  .faq summary {
+    padding: 16px 0;
+    font-size: 1rem;
+  }
+
+  .sim-rejilla {
+    gap: 20px;
+  }
+  .sim-interior > div:first-child .sim-sub {
+    display: none;
+  }
+  .sim-fila:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+/* Cómo funciona: sin los pasos fijados (móvil, tableta o movimiento reducido)
+   cada paso es una tarjeta del carrusel con su captura dentro. */
+@media (max-width: 1023px) {
+  .pasos:not(.fijada) .pasos-lista {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .pasos:not(.fijada) .pasos-lista::-webkit-scrollbar {
+    display: none;
+  }
+  .pasos:not(.fijada) .paso {
+    display: flex;
+    flex: 0 0 min(84%, 520px);
+    flex-direction: column;
+    padding: 18px;
+    border-radius: var(--r-placa);
+    border: 1px solid var(--line-soft);
+    background: var(--surface);
+    scroll-snap-align: start;
+  }
+  .pasos:not(.fijada) .paso-imagen {
+    margin-top: auto;
+    padding-top: 16px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .pasos:not(.fijada) .paso-imagen img {
+    border-radius: 12px;
+    border: 1px solid var(--line-soft);
+  }
+}
