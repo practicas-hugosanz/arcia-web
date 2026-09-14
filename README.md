@@ -64,8 +64,16 @@ pantalla con su posición, para ver por qué no encuentra alto limpio.
 Lighthouse sobre `npm run preview` (2026-09-14): rendimiento 99, accesibilidad
 100, buenas prácticas 100, SEO 100. LCP 2,0 s, CLS 0.
 
-**Chrome sin cabeza no sirve para ver la escena ni las animaciones**: no ejecuta
-`requestAnimationFrame`, así que la portada sale vacía y las entradas de GSAP se
-quedan a medias (se vio una franja blanca que no existe). Para capturas fiables
-sin navegador real, emular `prefers-reduced-motion: reduce`: la escena se pinta
-en un solo fotograma y no hay entradas animadas.
+Para revisarla sin abrir el navegador a mano, `scripts/mirar.mjs` saca capturas
+a las alturas que se le pidan y mide lo que se le pase en `EVAL`:
+
+```powershell
+npm run preview   # en otra consola
+node scripts/mirar.mjs capturas/movil 390 844 claro secciones
+$env:EVAL = 'document.documentElement.scrollHeight'; node scripts/mirar.mjs capturas/alto 390 844
+```
+
+**Chrome sin cabeza cree la página oculta** si no se emula el foco, y entonces
+no corre `requestAnimationFrame`: la escena sale vacía y las entradas de GSAP se
+quedan a medias (llegó a salir una franja blanca que no existía). `mirar.mjs` ya
+emula el foco; con `REDUCIDO=1` se ve el estado final sin animaciones.
