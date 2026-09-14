@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+  La tarjeta que enseñan WhatsApp, LinkedIn o X al compartir el enlace.
+  Se fotografía a 1200×630 con `node scripts/og.mjs` y sale en public/og.png.
+-->
+<html lang="es-ES">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @font-face { font-family: "Poppins"; src: url("../public/fonts/poppins-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Instrument Sans"; src: url("../public/fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 600; }
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        position: relative;
+        background:
+          radial-gradient(55% 70% at 88% 40%, rgb(0 199 251 / 0.16), transparent 70%),
+          #f2f0ee;
+        font-family: "Instrument Sans", sans-serif;
+        color: #181715;
+      }
+      .texto { position: absolute; left: 72px; top: 72px; width: 520px; }
+      .logo { width: 150px; height: auto; display: block; }
+      h1 {
+        margin: 56px 0 0;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 66px;
+        line-height: 1.02;
+        letter-spacing: -0.045em;
+      }
+      p { margin: 24px 0 0; font-size: 25px; line-height: 1.45; color: #575652; }
+      .ventana {
+        position: absolute;
+        left: 640px;
+        top: 96px;
+        width: 860px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid #dcdbd7;
+        box-shadow: 0 2px 6px rgb(60 50 40 / 0.06), 0 40px 90px -30px rgb(60 50 40 / 0.4);
+        transform: perspective(1600px) rotateY(-14deg) rotateX(4deg);
+        transform-origin: 0 50%;
+      }
+      .ventana img { display: block; width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div class="texto">
+      <img class="logo" src="../public/img/arcia-logo.png" alt="">
+      <h1>Encuentra clientes sin página web</h1>
+      <p>Busca, comprueba y llama con el guion delante.</p>
+    </div>
+    <div class="ventana"><img src="../public/img/app/call-claro-1600.webp" alt=""></div>
+  </body>
+</html>

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="es-ES">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Arcia | Encuentra clientes sin página web y llámalos</title>
+    <meta name="description" content="Arcia busca en Google Maps los negocios de tu zona sin página web, comprueba que de verdad no la tienen y te prepara el guion para llamarlos. Para Windows.">
+    <link rel="canonical" href="%URL%/">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f0ee">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121110">
+    <meta name="color-scheme" content="light dark">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Arcia">
+    <meta property="og:url" content="%URL%/">
+    <meta property="og:title" content="Arcia: encuentra clientes sin página web y llámalos">
+    <meta property="og:description" content="Busca en Google Maps los negocios de tu zona sin web, compruébalo y llámalos con el guion delante.">
+    <meta property="og:image" content="%URL%/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Arcia, con el modo llamada abierto sobre una peluquería de Madrid">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/src/estilos.css">
+    <!--datos-estructurados-->
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="nav" data-nav>
+      <div class="contenedor nav-fila">
+        <a href="/" class="nav-marca" aria-label="Arcia, inicio">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="/img/arcia-logo-oscuro.webp">
+            <img src="/img/arcia-logo.webp" alt="Arcia" width="132" height="44">
+          </picture>
+        </a>
+        <nav class="nav-enlaces" aria-label="Principal">
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#prospeccion">Prospección</a>
+          <a href="#ia">IA</a>
+          <a href="#precio">Precio</a>
+          <a href="#preguntas">Preguntas frecuentes</a>
+        </nav>
+        <a class="boton boton-primario boton-sm" href="%DESCARGA%">
+          <i data-i="windows-logo"></i>
+          <span>Descargar</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-titulo">
+        <div class="hero-escena" aria-hidden="true">
+          <canvas data-escena></canvas>
+          <div class="escena-capa" data-escena-capa></div>
+          <div class="escaneo">
+            <p class="escaneo-lugar"><i data-i="map-pin"></i>Leyendo Google Maps en Madrid</p>
+            <p class="escaneo-cifras">
+              <span><b data-escaneo-leidas>60</b> de 60 fichas</span>
+              <span class="escaneo-sinweb"><b data-escaneo-sinweb>11</b> sin web</span>
+            </p>
+          </div>
+        </div>
+        <div class="contenedor hero-contenido">
+          <h1 id="hero-titulo" class="hero-titulo">
+            <span class="linea"><span>Encuentra clientes</span></span>
+            <span class="linea"><span>sin página web</span></span>
+          </h1>
+          <p class="hero-sub">
+            Arcia busca en Google Maps los negocios de tu zona, comprueba que no
+            tienen web y prepara la llamada.
+          </p>
+          <div class="hero-acciones">
+            <a class="boton boton-primario" href="%DESCARGA%">
+              <i data-i="windows-logo"></i>
+              <span>Descargar para Windows</span>
+            </a>
+            <a class="boton boton-secundario" href="#como-funciona">
+              <span>Ver cómo funciona</span>
+              <i data-i="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="escaparate" aria-labelledby="escaparate-titulo">
+        <div class="contenedor">
+          <div class="escaparate-cabecera aparece">
+            <h2 id="escaparate-titulo" class="titulo-seccion">Qué negocio y dónde. Lo demás lo hace Arcia.</h2>
+            <p class="entradilla">
+              Eliges el oficio y uno de los 8.132 municipios de España. Arcia lee
+              las fichas, aparta las que ya tienen web y guarda el resto.
+            </p>
+          </div>
+          <div class="escaparate-escena">
+            <figure class="ventana escaparate-ventana">
+              <img data-captura="scan" data-tamanos="(min-width: 1320px) 1240px, 94vw" alt="Pantalla de Prospección de Arcia: una búsqueda por oficio y ciudad, los escaneos recientes y a qué hora descuelgan los negocios" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="como-funciona" class="pasos" aria-labelledby="pasos-titulo" data-pasos>
+        <div class="contenedor pasos-rejilla">
+          <div class="pasos-texto">
+            <p class="antetitulo">Cómo funciona</p>
+            <h2 id="pasos-titulo" class="titulo-seccion">De la ficha de Maps a la cita, en la misma ventana</h2>
+            <ol class="pasos-lista">
+              <li class="paso">
+                <div class="paso-cuerpo">
+                  <h3 class="paso-titulo"><i data-i="magnifying-glass"></i>Busca</h3>
+                  <p>Oficio y municipio. Arcia lee las fichas de Google Maps y aparta las que ya declaran web.</p>
+                </div>
+                <figure class="ventana paso-imagen">
+                  <img data-captura="scan" data-tamanos="94vw" alt="Prospección: nueva búsqueda y escaneos recientes" loading="lazy">
+                </figure>
+              </li>
+              <li class="paso">
+                <div class="paso-cuerpo">
+                  <h3 class="paso-titulo"><i data-i="shield-check"></i>Comprueba</h3>
+                  <p>Prueba dominios sacados del nombre y confirma con su teléfono o su ciudad. Lo que no puede asegurar queda pendiente.</p>
+                </div>
+                <figure class="ventana paso-imagen">
+                  <img data-captura="leads" data-tamanos="94vw" alt="Lista de leads con su valoración, teléfono, verificación y estado" loading="lazy">
+                </figure>
+              </li>
+              <li class="paso">
+                <div class="paso-cuerpo">
+                  <h3 class="paso-titulo"><i data-i="phone-call"></i>Llama</h3>
+                  <p>El guion con los datos del negocio, su horario de hoy y un resultado por tecla.</p>
+                </div>
+                <figure class="ventana paso-imagen">
+                  <img data-captura="call" data-tamanos="94vw" alt="Modo llamada: el guion por fases, el teléfono con el horario y los seis resultados" loading="lazy">
+                </figure>
+              </li>
+              <li class="paso">
+                <div class="paso-cuerpo">
+                  <h3 class="paso-titulo"><i data-i="calendar-check"></i>Sigue</h3>
+                  <p>Los seguimientos repartidos en vencidos, hoy y esta semana, con aviso de Windows.</p>
+                </div>
+                <figure class="ventana paso-imagen">
+                  <img data-captura="agenda" data-tamanos="94vw" alt="Agenda con los seguimientos vencidos, los de hoy y los de esta semana" loading="lazy">
+                </figure>
+              </li>
+            </ol>
+          </div>
+          <div class="pasos-visor" aria-hidden="true">
+            <figure class="ventana visor-vista">
+              <img data-captura="scan" data-tamanos="(min-width: 1320px) 720px, 56vw" alt="" loading="lazy">
+            </figure>
+            <figure class="ventana visor-vista">
+              <img data-captura="leads" data-tamanos="(min-width: 1320px) 720px, 56vw" alt="" loading="lazy">
+            </figure>
+            <figure class="ventana visor-vista">
+              <img data-captura="call" data-tamanos="(min-width: 1320px) 720px, 56vw" alt="" loading="lazy">
+            </figure>
+            <figure class="ventana visor-vista">
+              <img data-captura="agenda" data-tamanos="(min-width: 1320px) 720px, 56vw" alt="" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="verificacion" aria-labelledby="verificacion-titulo">
+        <div class="contenedor verificacion-rejilla">
+          <div class="verificacion-texto aparece">
+            <h2 id="verificacion-titulo" class="titulo-grande">Si no puede comprobarlo, no te lo da por bueno.</h2>
+            <p class="entradilla">
+              Llamar a alguien que ya tiene web te hace perder la llamada en la
+              primera frase. Por eso lo que Arcia no confirma queda pendiente,
+              nunca como «sin web».
+            </p>
+          </div>
+          <figure class="recorte verificacion-recorte aparece">
+            <img data-recorte="pendiente" data-tamanos="(min-width: 1024px) 640px, 94vw" alt="Tres leads: dos verificados sin web y uno marcado como pendiente" loading="lazy">
+          </figure>
+        </div>
+      </section>
+
+      <section id="prospeccion" class="prospeccion" aria-labelledby="prospeccion-titulo">
+        <div class="contenedor">
+          <div class="sim-rejilla aparece" data-sim>
+            <div class="sim-lateral">
+            <div class="prospeccion-cabecera">
+              <h2 id="prospeccion-titulo" class="titulo-seccion">Así es una búsqueda, de principio a fin</h2>
+              <p class="entradilla">
+                Una simulación de la pantalla de Prospección, con datos inventados:
+                de un oficio y una ciudad a una lista de negocios que llamar.
+              </p>
+            </div>
+            <ol class="sim-pasos">
+              <li class="sim-paso">
+                <h3>Escribes qué y dónde</h3>
+                <p>Un oficio y uno de los 8.132 municipios de España.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Lee Google Maps</h3>
+                <p>Trae las fichas de ese oficio en esa ciudad.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Aparta lo que no sirve</h3>
+                <p>Las que ya declaran web, las fichas vacías y las de otro pueblo.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Comprueba uno a uno</h3>
+                <p>Busca la web de cada negocio antes de dártelo por bueno.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Te deja a quién llamar</h3>
+                <p>Con su guion escrito y los pendientes aparte.</p>
+              </li>
+            </ol>
+            </div>
+
+            <div class="sim" aria-hidden="true">
+              <div class="sim-interior">
+                <div>
+                  <p class="sim-titulo">Prospección</p>
+                  <p class="sim-sub">Encuentra negocios sin web y prepara el guion para llamarles.</p>
+                </div>
+
+                <div class="sim-card">
+                  <p class="sim-card-titulo">Nueva búsqueda</p>
+                  <div class="sim-busqueda-fila">
+                    <div class="sim-campo">
+                      <span class="sim-etiqueta">Qué negocio</span>
+                      <span class="sim-input" data-sim-campo="que"><span class="sim-texto" data-vacio="Elige un nicho o escribe el tuyo">Peluquería</span></span>
+                    </div>
+                    <div class="sim-campo">
+                      <span class="sim-etiqueta">Dónde</span>
+                      <span class="sim-input" data-sim-campo="donde"><span class="sim-texto" data-vacio="Escribe la ciudad">Madrid</span></span>
+                    </div>
+                    <span class="sim-boton listo" data-sim-boton>
+                      <span class="sim-boton-buscar"><i data-i="play"></i>Buscar</span>
+                      <span class="sim-boton-cancelar"><i data-i="prohibit"></i>Cancelar</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="sim-escena">
+                  <div class="sim-card sim-avance oculto" data-sim-avance>
+                    <div class="sim-avance-cabecera">
+                      <div>
+                        <p class="sim-eyebrow" data-sim-eyebrow>Escaneo</p>
+                        <p class="sim-fase" data-sim-fase>Completado</p>
+                      </div>
+                      <p class="sim-porcentaje"><span data-sim-porcentaje>100</span>%</p>
+                    </div>
+                    <div class="sim-barra"><span data-sim-barra></span></div>
+                    <div class="sim-mensaje-fila">
+                      <p data-sim-mensaje>Proceso completado: 16 leads válidos de 24 candidatos</p>
+                      <p class="sim-quedan" data-sim-quedan></p>
+                    </div>
+                    <ul class="sim-filas">
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Peluquería Carmen Vidal</span><span class="sim-fila-nota">4,8 (214)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="tieneweb"><span class="sim-fila-nombre">Salón Alma Estilistas</span><span class="sim-fila-nota">4,6 (97)</span><span class="sim-chip">Tiene web</span></li>
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Barbería Tijera Norte</span><span class="sim-fila-nota">4,9 (312)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Peluquería Rizos y Ondas</span><span class="sim-fila-nota">4,4 (58)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="pendiente"><span class="sim-fila-nombre">Estudio Capilar Olivia</span><span class="sim-fila-nota">4,7 (143)</span><span class="sim-chip">Pendiente</span></li>
+                      <li class="sim-fila" data-estado="tieneweb"><span class="sim-fila-nombre">Cortes Urbanos</span><span class="sim-fila-nota">4,5 (201)</span><span class="sim-chip">Tiene web</span></li>
+                    </ul>
+                  </div>
+
+                  <div class="sim-card sim-resultado" data-sim-resultado>
+                    <div class="sim-resultado-cabecera">
+                      <span class="sim-resultado-icono"><i data-i="trend-up"></i></span>
+                      <div class="sim-resultado-titulos">
+                        <p class="sim-card-titulo">Resultado del escaneo</p>
+                        <p class="sim-sub">16 leads listos para llamar</p>
+                      </div>
+                      <span class="sim-accion"><i data-i="sparkle"></i>Ver los 18 en la tabla</span>
+                      <span class="sim-accion sim-accion-primaria"><i data-i="phone-call"></i>Llamar a los 16</span>
+                    </div>
+                    <dl class="sim-cifras">
+                      <div class="sim-cifra"><dt>Fichas encontradas</dt><dd data-cifra="60">60</dd></div>
+                      <div class="sim-cifra"><dt>Sin web en la ficha</dt><dd data-cifra="24">24</dd></div>
+                      <div class="sim-cifra marca"><dt>Verificados sin web</dt><dd data-cifra="16">16</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (otro municipio)</dt><dd data-cifra="2">2</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (ficha vacía)</dt><dd data-cifra="1">1</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (tienen web)</dt><dd data-cifra="6">6</dd></div>
+                      <div class="sim-cifra"><dt>Sin verificar (pendientes)</dt><dd data-cifra="2">2</dd></div>
+                      <div class="sim-cifra"><dt>Nuevos en la base</dt><dd data-cifra="16">16</dd></div>
+                    </dl>
+                    <p class="sim-nota">Solo el 41% de las fichas de este nicho no declara web · sube el límite para llegar a más candidatos.</p>
+                    <p class="sim-nota sim-nota-aviso">2 negocios quedaron sin verificar. No se dan por válidos sin pruebas: revísalos con el filtro «Pendiente».</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sim-controles">
+            <button type="button" class="boton boton-secundario boton-sm" data-sim-repetir hidden>
+              <i data-i="arrow-counter-clockwise"></i>
+              <span>Repetir la búsqueda</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="ia" class="ia" aria-labelledby="ia-titulo">
+        <div class="contenedor">
+          <div class="ia-cabecera aparece">
+            <p class="antetitulo">Con IA, si quieres</p>
+            <h2 id="ia-titulo" class="titulo-seccion">Llega a la llamada con su web ya hecha</h2>
+            <p class="entradilla">
+              Conecta tu cuenta de un proveedor de IA y Arcia escribe a medida de
+              cada negocio. Viene apagada: todo lo demás funciona sin ella.
+            </p>
+          </div>
+
+          <div class="ia-rejilla">
+            <article class="ia-destacada aparece">
+              <div class="ia-destacada-texto">
+                <h3><i data-i="layout"></i>Una web de muestra para cada negocio</h3>
+                <p>
+                  Con sus datos, sus fotos y los colores de su local. Sale una
+                  carpeta entera, lista para subir, con las librerías y las
+                  tipografías dentro. Enséñale la suya hecha y la conversación cambia.
+                </p>
+              </div>
+              <figure class="recorte ia-recorte">
+                <img data-recorte="webmuestra" data-tamanos="(min-width: 1024px) 540px, 86vw" alt="El bloque Web de muestra de la ficha de un negocio, con el botón Hacerle la web" loading="lazy">
+              </figure>
+            </article>
+
+            <ul class="ia-lista">
+              <li class="aparece">
+                <i data-i="note-pencil"></i>
+                <div>
+                  <h3>Un guion para ese negocio</h3>
+                  <p>Reescribe tu guion pensando en quién va a coger el teléfono, con un botón en su ficha.</p>
+                </div>
+              </li>
+              <li class="aparece">
+                <i data-i="envelope-simple"></i>
+                <div>
+                  <h3>Correos escritos uno a uno</h3>
+                  <p>Cada correo de la tanda, redactado para el negocio que lo recibe.</p>
+                </div>
+              </li>
+              <li class="aparece">
+                <i data-i="globe"></i>
+                <div>
+                  <h3>Una pista más para encontrar su web</h3>
+                  <p>Si ni el sondeo ni el buscador la encuentran, sugiere dónde mirar. Arcia lo comprueba abriendo la página: la IA no decide.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <p class="ia-nota aparece">
+            <i data-i="key"></i>
+            <span>
+              Funciona con Anthropic, OpenAI, Google, DeepSeek, Groq, OpenRouter y
+              cuatro proveedores más. Tu clave se guarda en Windows, cada petición
+              la paga tu cuenta, y para el guion y los correos los teléfonos y
+              correos de tus leads no salen de tu ordenador.
+            </span>
+          </p>
+        </div>
+      </section>
+
+      <section class="mas" aria-labelledby="mas-titulo">
+        <div class="contenedor">
+          <h2 id="mas-titulo" class="titulo-seccion mas-titulo aparece">Lo que pasa antes y después de llamar</h2>
+          <div class="bento">
+            <article class="celda celda-agenda aparece">
+              <div class="celda-texto">
+                <h3><i data-i="bell-ringing"></i>Agenda con avisos</h3>
+                <p>Vencidos, hoy y esta semana. Mientras la app está abierta, te avisa con una notificación de Windows.</p>
+              </div>
+              <figure class="recorte celda-recorte">
+                <img data-recorte="hoy" data-tamanos="(min-width: 1024px) 700px, 90vw" alt="El bloque Hoy de la agenda con dos seguimientos" loading="lazy">
+              </figure>
+            </article>
+            <article class="celda celda-correo aparece">
+              <h3><i data-i="envelope-simple"></i>Correos desde tu cuenta</h3>
+              <p>Gmail, Outlook, Zoho o tu dominio. Salen de tu buzón, de uno en uno, para no acabar en spam.</p>
+            </article>
+            <article class="celda celda-horas aparece">
+              <div class="celda-texto">
+                <h3><i data-i="chart-line-up"></i>A qué hora cogen</h3>
+                <p>Cada intento guarda su hora. Arcia te dice en qué franja descuelgan y cuánto te escuchan.</p>
+              </div>
+              <figure class="recorte celda-recorte">
+                <img data-recorte="horas" data-tamanos="(min-width: 1024px) 520px, 90vw" alt="Porcentaje de contacto por franja horaria" loading="lazy">
+              </figure>
+            </article>
+            <article class="celda celda-cita aparece">
+              <h3><i data-i="calendar-plus"></i>La cita, en tu calendario</h3>
+              <p>Al cerrarla la mandas a Google Calendar o a un archivo .ics, con teléfono, dirección y notas.</p>
+            </article>
+            <article class="celda celda-bajas aparece">
+              <h3><i data-i="prohibit"></i>Bajas que se respetan</h3>
+              <p>Quien pide no ser llamado queda con fecha y motivo, y no vuelve a salir aunque repitas la búsqueda.</p>
+            </article>
+            <article class="celda celda-csv aparece">
+              <h3><i data-i="file-csv"></i>Tu propia lista</h3>
+              <p>Importa un CSV de Excel. Entra pendiente de verificar y se deduplica por teléfono.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="local" aria-labelledby="local-titulo">
+        <div class="contenedor local-rejilla">
+          <h2 id="local-titulo" class="titulo-grande aparece">Tus leads se quedan en tu ordenador</h2>
+          <ul class="local-lista">
+            <li class="aparece">
+              <i data-i="hard-drives"></i>
+              <div>
+                <h3>La base, en tu equipo</h3>
+                <p>Con una copia automática cada vez que abres la app, y otra en la carpeta que elijas.</p>
+              </div>
+            </li>
+            <li class="aparece">
+              <i data-i="lock-simple"></i>
+              <div>
+                <h3>Contraseñas en Windows</h3>
+                <p>La del correo va al Administrador de credenciales, no a la base ni a las copias.</p>
+              </div>
+            </li>
+            <li class="aparece">
+              <i data-i="envelope-simple"></i>
+              <div>
+                <h3>Tu buzón, no el nuestro</h3>
+                <p>Los correos salen de tu cuenta y las respuestas te llegan a ti.</p>
+              </div>
+            </li>
+            <li class="aparece">
+              <i data-i="export"></i>
+              <div>
+                <h3>Datos que puedes entregar</h3>
+                <p>Si un negocio pide lo que sabes de él, lo exportas desde su ficha en un archivo.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="precio" class="precio" aria-labelledby="precio-titulo">
+        <div class="contenedor precio-rejilla">
+          <div class="precio-texto aparece">
+            <h2 id="precio-titulo" class="titulo-seccion">Una suscripción, todo incluido</h2>
+            <p class="entradilla">
+              Instalas, pulsas «Suscribirme» y la app se activa sola en ese
+              ordenador. Se renueva cada mes y cancelas cuando quieras.
+            </p>
+          </div>
+          <div class="tarjeta-precio aparece">
+            <p class="tarjeta-precio-nombre">Arcia</p>
+            <!--si-precio-->
+            <p class="tarjeta-precio-cifra"><span>%PRECIO% €</span><small>al mes por ordenador</small></p>
+            <p class="tarjeta-precio-iva">IVA incluido: %PRECIO_SIN_IVA% € + %IVA% € de IVA</p>
+            <!--/si-precio-->
+            <!--sin-precio-->
+            <p class="tarjeta-precio-cifra"><span>Mensual</span><small>por ordenador</small></p>
+            <!--/sin-precio-->
+            <ul class="tarjeta-precio-lista">
+              <li><i data-i="check-circle"></i>Búsquedas y verificación de webs</li>
+              <li><i data-i="check-circle"></i>Modo llamada, agenda y avisos</li>
+              <li><i data-i="check-circle"></i>Correos en tanda desde tu cuenta</li>
+              <li><i data-i="check-circle"></i>IA opcional con tu propia cuenta</li>
+              <li><i data-i="check-circle"></i>Actualizaciones automáticas</li>
+            </ul>
+            <a class="boton boton-primario boton-ancho" href="%DESCARGA%">
+              <i data-i="windows-logo"></i>
+              <span>Descargar para Windows</span>
+            </a>
+            <p class="tarjeta-precio-nota">Windows 10 y 11, 64 bits. Menos de 5 MB.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="preguntas" class="preguntas" aria-labelledby="preguntas-titulo">
+        <div class="contenedor preguntas-rejilla">
+          <h2 id="preguntas-titulo" class="titulo-seccion aparece">Preguntas frecuentes</h2>
+          <div class="faq-lista">
+            <details class="faq">
+              <summary>¿Funciona en Mac?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>No. Por ahora Arcia es una aplicación para Windows 10 y 11.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Necesito alguna cuenta o clave aparte?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>No es obligatoria. Arcia trae dos formas de leer Google Maps sin clave. Si vas a buscar a diario con mucho volumen, puedes conectar SerpApi, que es un servicio de pago aparte.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿El guion lo escribe una IA?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>Solo si tú quieres. De serie, el guion es tu plantilla, por fases, con los datos de cada negocio: nombre, ciudad, valoración y reseñas. Si enciendes la IA, puedes reescribirlo para un negocio concreto desde su ficha.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Tengo que pagar una IA para usar Arcia?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>No. La IA es opcional y viene apagada: buscar, comprobar, llamar y mandar correos funciona sin ella. Si la enciendes, conectas tu cuenta de un proveedor y pagas a ese proveedor lo que gastes. Algunos modelos gratuitos usan lo que se les envía para entrenar, y Arcia te lo avisa antes de mandarles nada.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Por qué Windows avisa al instalar?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>Porque el instalador no lleva certificado de firma, un trámite de pago anual. El programa es el mismo con él o sin él. Pulsa «Más información» y luego «Ejecutar de todas formas». Solo pasa al instalar.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Qué pasa si cambio de ordenador?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>La licencia va atada a cada equipo. Escríbenos a %CORREO% con el código del ordenador nuevo y la pasamos sin coste.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Cómo cancelo la suscripción?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>Desde el recibo que te manda Stripe. Arcia sigue funcionando hasta el final del mes que ya has pagado.</p></div>
+            </details>
+            <details class="faq">
+              <summary>¿Puedo llamar a cualquier negocio que encuentre?<i data-i="caret-down"></i></summary>
+              <div class="faq-respuesta"><p>Arcia te da las herramientas para hacerlo bien: bajas con fecha, lista de exclusión y exportación de datos. Cómo contactas a cada negocio es responsabilidad tuya, y conviene que lo consultes con alguien que sepa de protección de datos.</p></div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="final" aria-labelledby="final-titulo">
+        <div class="contenedor final-contenido aparece">
+          <h2 id="final-titulo" class="titulo-grande">Tu próxima mañana de llamadas empieza con una búsqueda.</h2>
+          <a class="boton boton-primario" href="%DESCARGA%">
+            <i data-i="windows-logo"></i>
+            <span>Descargar para Windows</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor pie-fila">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="/img/arcia-logo-oscuro.webp">
+          <img src="/img/arcia-logo.webp" alt="Arcia" width="96" height="32" loading="lazy">
+        </picture>
+        <nav class="pie-enlaces" aria-label="Legal">
+          <a href="/aviso-legal">Aviso legal</a>
+          <a href="/privacidad">Privacidad</a>
+          <a href="mailto:%CORREO%">%CORREO%</a>
+        </nav>
+        <p class="pie-copy">© %ANIO% Arcia</p>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

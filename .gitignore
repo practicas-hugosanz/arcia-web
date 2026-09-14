@@ -1,0 +1,6 @@
+node_modules/
+dist/
+# Las capturas originales a 2880 px: pesan decenas de megas y se regeneran con
+# el doble de Tauri. Lo que se publica sale de aquí a public/img con
+# `node scripts/imagenes.mjs`.
+fuentes/

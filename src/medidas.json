@@ -1,0 +1,158 @@
+{
+  "app": {
+    "scan-claro": {
+      "width": 3840,
+      "height": 2352,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "scan-oscuro": {
+      "width": 3840,
+      "height": 2352,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "scan": {
+      "width": 3840,
+      "height": 2352,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "call-claro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "call-oscuro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "call": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "leads-claro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "leads-oscuro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "leads": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "agenda-claro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "agenda-oscuro": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "agenda": {
+      "width": 3840,
+      "height": 2400,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    }
+  },
+  "recortes": {
+    "horas": {
+      "width": 1432,
+      "height": 563,
+      "anchos": [
+        716,
+        1432
+      ]
+    },
+    "hoy": {
+      "width": 2048,
+      "height": 595,
+      "anchos": [
+        1024,
+        2048
+      ]
+    },
+    "pendiente": {
+      "width": 2413,
+      "height": 880,
+      "anchos": [
+        1207,
+        2413
+      ]
+    },
+    "webmuestra": {
+      "width": 1171,
+      "height": 451,
+      "anchos": [
+        586,
+        1171
+      ]
+    }
+  }
+}

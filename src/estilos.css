@@ -1,0 +1,1734 @@
+/* ==========================================================================
+   Arcia, la web.
+
+   La paleta es la de la app (src/index.css del repositorio): grises cálidos
+   casi neutros y el cian #00c7fb solo en la marca y en lo que se pulsa. No es
+   un beige de catálogo elegido por gusto: son los tokens medidos de Arcia, con
+   la misma claridad en cada escalón para que los contrastes sigan valiendo.
+
+   Formas, una sola regla:
+     · lo que se pulsa es píldora (botones, teclas, enlaces de la cabecera)
+     · las placas grandes van a 28 px, como los paneles de la app
+     · lo que va dentro de una placa, a 16 px
+   ========================================================================== */
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins-600.woff2") format("woff2");
+  font-weight: 600 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("/fonts/instrument-sans.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+
+  --canvas: #f2f0ee;
+  --backdrop: #e4e1dd;
+  --surface: #ffffff;
+  --surface-2: #e0dfdc;
+  --line: #c4c2bf;
+  --line-soft: #dcdbd7;
+  --fg: #181715;
+  --fg-muted: #575652;
+  --fg-faint: #63625e;
+
+  --brand: #00c7fb;
+  --brand-soft: #b2ffff;
+  /* Cian para texto sobre claro: #00c7fb sobre blanco no llega a 2:1. */
+  --brand-ink: #00739e;
+  --brand-fg: #181715;
+  --won: oklch(0.47 0.15 152);
+  /* «Pendiente»: el ámbar de la app, oscurecido para leerse sobre claro. */
+  --aviso: #945400;
+  --aviso-fondo: color-mix(in oklab, #ffb020 22%, transparent);
+
+  --escena-punto: #8f8d89;
+  --sombra: 0 1px 2px rgb(60 50 40 / 0.06), 0 24px 60px -24px rgb(60 50 40 / 0.22);
+  --sombra-ventana: 0 2px 6px rgb(60 50 40 / 0.06), 0 50px 120px -40px rgb(60 50 40 / 0.35);
+
+  --r-placa: 28px;
+  --r-md: 16px;
+
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 40px);
+  --ancho: 1240px;
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Capas, de abajo arriba. Nada más usa z-index. */
+  --z-escena: 0;
+  --z-contenido: 1;
+  --z-nav: 20;
+  --z-saltar: 30;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #121110;
+    --backdrop: #0a0a09;
+    --surface: #1c1c1a;
+    --surface-2: #2d2c28;
+    --line: #403f3c;
+    --line-soft: #2c2b29;
+    --fg: #f4f3f1;
+    --fg-muted: #b8b6b3;
+    --fg-faint: #959490;
+    --brand-ink: #4fd8fc;
+    --won: oklch(0.72 0.16 150);
+    --aviso: #ffc266;
+    --aviso-fondo: color-mix(in oklab, #ffb020 16%, transparent);
+    --escena-punto: #6d6b67;
+    --sombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 24px 60px -24px rgb(0 0 0 / 0.6);
+    --sombra-ventana: 0 2px 6px rgb(0 0 0 / 0.3), 0 50px 120px -40px rgb(0 0 0 / 0.8);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+picture {
+  display: contents;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul,
+figure {
+  margin: 0;
+}
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+a {
+  color: inherit;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* `hidden` tiene que ganar siempre: `.boton` pone `display: inline-flex` y el
+   botón «Repetir la búsqueda» salía antes de terminar la simulación. */
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.i {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: calc(var(--ancho) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.saltar {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: var(--z-saltar);
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--brand-fg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.saltar:focus {
+  top: 12px;
+}
+
+/* --- Tipografía ----------------------------------------------------------- */
+
+.titulo-seccion,
+.titulo-grande,
+.hero-titulo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.titulo-seccion {
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  line-height: 1.08;
+}
+.titulo-grande {
+  font-size: clamp(2.2rem, 4.6vw, 4rem);
+  line-height: 1.04;
+}
+.entradilla {
+  margin-top: 18px;
+  max-width: 58ch;
+  color: var(--fg-muted);
+  font-size: clamp(1.0625rem, 1.3vw, 1.2rem);
+  text-wrap: pretty;
+}
+.antetitulo {
+  margin-bottom: 14px;
+  color: var(--brand-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* --- Botones -------------------------------------------------------------- */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--curva),
+    background-color 0.25s var(--curva),
+    box-shadow 0.25s var(--curva);
+}
+.boton:active {
+  transform: translateY(1px) scale(0.98);
+}
+.boton-primario {
+  background: var(--brand);
+  color: var(--brand-fg);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 10px 30px -12px rgb(0 160 210 / 0.55);
+}
+.boton-primario:hover {
+  background: #1fd0fc;
+  transform: translateY(-1px);
+}
+.boton-secundario {
+  background: var(--surface);
+  color: var(--fg);
+  border-color: var(--line-soft);
+  box-shadow: 0 1px 2px rgb(60 50 40 / 0.08);
+}
+.boton-secundario:hover {
+  border-color: var(--line);
+}
+.boton-secundario .i {
+  transition: transform 0.25s var(--curva);
+}
+.boton-secundario:hover .i {
+  transform: translateX(3px);
+}
+.boton-sm {
+  min-height: 42px;
+  padding: 0 18px;
+  font-size: 0.9375rem;
+}
+.boton-ancho {
+  width: 100%;
+}
+
+/* --- Cabecera ------------------------------------------------------------- */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-nav);
+  padding-block: 12px;
+  transition:
+    transform 0.4s var(--curva),
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.nav.con-fondo {
+  background: color-mix(in oklab, var(--canvas) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 1px 0 var(--line-soft);
+}
+.nav.oculta {
+  transform: translateY(-100%);
+}
+.nav:focus-within {
+  transform: none;
+}
+.nav-fila {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 48px;
+}
+.nav-marca img {
+  width: 108px;
+  height: auto;
+}
+.nav-enlaces {
+  display: flex;
+  gap: 4px;
+  margin-inline: auto;
+}
+.nav-enlaces a {
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+.nav-enlaces a:hover {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--surface-2) 60%, transparent);
+}
+@media (max-width: 767px) {
+  .nav-enlaces {
+    display: none;
+  }
+  .nav-fila > .boton {
+    margin-left: auto;
+  }
+}
+
+/* --- Portada -------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  align-items: center;
+  padding-block: 120px 72px;
+  isolation: isolate;
+  background:
+    radial-gradient(60% 50% at 78% 45%, color-mix(in oklab, var(--brand) 10%, transparent), transparent 70%),
+    var(--canvas);
+}
+.hero-escena {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-escena);
+  -webkit-mask-image: linear-gradient(90deg, transparent 36%, #000 64%);
+  mask-image: linear-gradient(90deg, transparent 36%, #000 64%);
+}
+/* La aparición al cargar va en lo de dentro, no en el contenedor: la opacidad
+   del contenedor es de GSAP, que la baja al hacer scroll. Cuando las dos
+   compartían elemento, GSAP arrancaba desde el 0 de antes de cargar y la
+   escena salía apagada arriba y se encendía al irse de la portada. */
+.hero-escena > * {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.hero-escena.lista > * {
+  opacity: 1;
+}
+.hero-escena canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Las fichas que salen sobre los negocios encendidos. Las coloca escena.ts
+   cada fotograma con un transform; aquí solo se decide cómo se ven y cómo
+   aparecen. */
+.escena-capa {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ficha {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+.ficha-tarjeta {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% calc(-100% - 18px);
+  padding: 8px 12px 9px;
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--sombra);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.92;
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.35s var(--curva),
+    scale 0.45s var(--curva);
+}
+.ficha::before {
+  /* Un hilo del cian de la marca hasta el punto. */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -18px;
+  width: 1px;
+  height: 18px;
+  background: linear-gradient(var(--brand), transparent);
+  opacity: 0;
+  transition: opacity 0.35s var(--curva);
+}
+.ficha.visible::before,
+.ficha.visible .ficha-tarjeta {
+  opacity: 1;
+  scale: 1;
+}
+.ficha-nombre {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ficha-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--fg-muted);
+}
+.ficha-sinweb {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand) 18%, transparent);
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+
+/* El contador del escaneo: el mismo avance que enseña la app al buscar. */
+.escaneo {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 13%;
+  display: grid;
+  gap: 4px;
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--sombra);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+.escaneo-lugar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+.escaneo-lugar .i {
+  color: var(--brand-ink);
+}
+.escaneo-cifras {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9375rem;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+.escaneo-cifras b {
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.escaneo-sinweb b {
+  color: var(--brand-ink);
+}
+@media (max-width: 1023px) {
+  .escaneo {
+    right: auto;
+    left: var(--gutter);
+    top: 78px;
+    bottom: auto;
+    padding: 10px 14px;
+  }
+}
+.hero-contenido {
+  position: relative;
+  z-index: var(--z-contenido);
+}
+.hero-titulo {
+  font-size: clamp(2.9rem, 6.6vw, 5.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.hero-titulo .linea {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.hero-titulo .linea > span {
+  display: block;
+  white-space: nowrap;
+}
+@media (max-width: 479px) {
+  .hero-titulo .linea > span {
+    white-space: normal;
+  }
+}
+.hero-sub {
+  margin-top: 28px;
+  max-width: 34ch;
+  color: var(--fg-muted);
+  font-size: clamp(1.125rem, 1.5vw, 1.3rem);
+  text-wrap: pretty;
+}
+.hero-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+@media (max-width: 1023px) {
+  .hero {
+    align-items: end;
+    padding-block: 96px 56px;
+  }
+  .hero-escena {
+    inset: 0 0 38%;
+    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+  }
+}
+
+/* --- La ventana de la app ------------------------------------------------- */
+
+.ventana {
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--backdrop);
+  box-shadow: var(--sombra-ventana);
+}
+.ventana img {
+  width: 100%;
+}
+/* Los recortes son tarjetas de la app con sus propias esquinas redondeadas en
+   transparente: no llevan marco, solo la sombra que siga su forma. */
+.recorte img {
+  width: 100%;
+  filter: drop-shadow(0 1px 2px rgb(60 50 40 / 0.08)) drop-shadow(0 18px 36px rgb(60 50 40 / 0.14));
+}
+@media (prefers-color-scheme: dark) {
+  .recorte img {
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4)) drop-shadow(0 18px 36px rgb(0 0 0 / 0.45));
+  }
+}
+
+/* --- Escaparate ----------------------------------------------------------- */
+
+.escaparate {
+  padding-block: clamp(72px, 10vw, 140px) clamp(48px, 7vw, 96px);
+}
+.escaparate-cabecera {
+  max-width: 820px;
+  margin-inline: auto;
+  text-align: center;
+}
+.escaparate-cabecera .entradilla {
+  margin-inline: auto;
+}
+.escaparate-escena {
+  margin-top: clamp(40px, 6vw, 72px);
+  perspective: 1800px;
+}
+.escaparate-ventana {
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+
+/* --- Cómo funciona -------------------------------------------------------- */
+
+.pasos {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.pasos-lista {
+  display: grid;
+  gap: 56px;
+  margin-top: 40px;
+}
+.paso-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.paso-titulo .i {
+  color: var(--brand-ink);
+}
+.paso p {
+  margin-top: 8px;
+  max-width: 42ch;
+  color: var(--fg-muted);
+}
+.paso-imagen {
+  margin-top: 24px;
+}
+.pasos-visor {
+  display: none;
+}
+
+/* Con los pasos fijados (escritorio y movimiento): texto a la izquierda y
+   una sola pantalla a la derecha que cambia según el paso. */
+.pasos.fijada {
+  min-height: 100dvh;
+  display: grid;
+  align-items: center;
+  padding-block: 96px 48px;
+}
+.pasos.fijada .pasos-rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+}
+.pasos.fijada .pasos-lista {
+  gap: 6px;
+  margin-top: 32px;
+}
+.pasos.fijada .paso {
+  position: relative;
+  padding: 16px 0 16px 24px;
+  opacity: 0.45;
+  transition: opacity 0.4s var(--curva);
+}
+.pasos.fijada .paso::before,
+.pasos.fijada .paso::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  border-radius: 2px;
+}
+.pasos.fijada .paso::before {
+  background: var(--line-soft);
+}
+.pasos.fijada .paso::after {
+  background: var(--brand);
+  transform-origin: top;
+  transform: scaleY(var(--avance, 0));
+}
+.pasos.fijada .paso.activo {
+  opacity: 1;
+}
+.pasos.fijada .paso p {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  overflow: hidden;
+  transition:
+    grid-template-rows 0.45s var(--curva),
+    margin-top 0.45s var(--curva);
+}
+.pasos.fijada .paso.activo p {
+  margin-top: 8px;
+}
+.pasos.fijada .paso-imagen {
+  display: none;
+}
+.pasos.fijada .pasos-visor {
+  display: grid;
+  grid-template-areas: "vista";
+}
+.visor-vista {
+  grid-area: vista;
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition:
+    opacity 0.5s var(--curva),
+    transform 0.6s var(--curva);
+}
+.visor-vista.pasada {
+  transform: translateY(-16px) scale(0.98);
+}
+.visor-vista.activo {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Verificación --------------------------------------------------------- */
+
+.verificacion {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.verificacion-rejilla {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .verificacion-rejilla {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 64px;
+  }
+}
+/* Recta: girada, la tabla se remuestreaba y el texto de la captura 4K se
+   veía borroso. */
+
+/* --- La simulación de Prospección ----------------------------------------- */
+
+.prospeccion {
+  padding-block: clamp(72px, 10vw, 140px);
+  background: var(--backdrop);
+}
+.prospeccion-cabecera {
+  max-width: 760px;
+}
+/* El titular va en la columna de los pasos y no encima de todo: así la
+   ventana empieza arriba de la sección y cabe entera en una pantalla de 900 px
+   mientras verifica. Encima, sus últimas filas quedaban por debajo del borde. */
+.sim-rejilla {
+  display: grid;
+  gap: 28px;
+  align-items: start;
+}
+.sim-pasos {
+  margin-top: 28px;
+}
+@media (min-width: 1024px) {
+  .sim-rejilla {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: 56px;
+  }
+  .sim-lateral {
+    position: sticky;
+    top: 104px;
+  }
+  .sim-lateral .titulo-seccion {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+  }
+}
+
+/* Los pasos: con la simulación en marcha se enciende el que toca. Sin ella
+   (sin JavaScript o con movimiento reducido) se leen todos por igual. */
+.sim-pasos {
+  display: grid;
+  gap: 4px;
+}
+.sim-paso {
+  position: relative;
+  padding: 14px 0 14px 22px;
+  transition: opacity 0.4s var(--curva);
+}
+.sim-paso::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--line-soft);
+  transition: background-color 0.4s var(--curva);
+}
+.sim-paso h3 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.sim-paso p {
+  margin-top: 4px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+}
+.animada .sim-paso {
+  opacity: 0.4;
+}
+.animada .sim-paso.hecho {
+  opacity: 0.7;
+}
+.animada .sim-paso.activo {
+  opacity: 1;
+}
+.animada .sim-paso.activo::before {
+  background: var(--brand);
+}
+/* En móvil, solo el paso en curso, encima de la ventana: los cinco a la vez
+   empujaban la simulación fuera de la pantalla. */
+@media (max-width: 1023px) {
+  /* Alto fijo, el del paso más largo a 390 px: con un mínimo más bajo, al
+     pasar de un paso de dos líneas a uno de tres la ventana saltaba 21 px
+     (medido) a mitad de la simulación. */
+  .animada .sim-pasos {
+    height: 112px;
+    overflow: hidden;
+  }
+  .animada .sim-paso {
+    display: none;
+  }
+  .animada .sim-paso.activo {
+    display: block;
+  }
+}
+/* En móvil el resultado se compacta: la ventana entera medía 1.158 px y no
+   cabía ni de lejos en una pantalla. */
+@media (max-width: 639px) {
+  .sim-interior {
+    gap: 10px;
+  }
+  .sim-sub {
+    font-size: 0.8125rem;
+  }
+  .sim-cifras {
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .sim-cifra {
+    padding: 9px 11px;
+  }
+  .sim-cifra dd {
+    font-size: 1.3rem;
+  }
+  .sim-cifra dt {
+    font-size: 0.6875rem;
+  }
+  .sim-nota:not(.sim-nota-aviso) {
+    display: none;
+  }
+  .sim-resultado-titulos {
+    min-width: 0;
+    flex-basis: calc(100% - 48px);
+  }
+}
+
+/* La ventana: el mismo marco y placa que la app. */
+.sim {
+  padding: 10px;
+  border-radius: var(--r-placa);
+  border: 1px solid var(--line-soft);
+  background: var(--backdrop);
+  box-shadow: var(--sombra-ventana);
+}
+.sim-interior {
+  display: grid;
+  gap: 14px;
+  padding: clamp(14px, 2.2vw, 26px);
+  border-radius: 20px;
+  background: var(--canvas);
+}
+.sim-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.1vw, 1.7rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.sim-sub {
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+}
+.sim-card {
+  padding: clamp(14px, 2vw, 22px);
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+.sim-card-titulo {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* La búsqueda. */
+.sim-busqueda-fila {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  align-items: end;
+}
+/* En móvil, qué y dónde en la misma fila y Buscar debajo: los tres apilados
+   alargaban la ventana otros 80 px. */
+.sim-busqueda-fila {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.sim-boton {
+  grid-column: 1 / -1;
+}
+@media (min-width: 640px) {
+  .sim-busqueda-fila {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+  .sim-boton {
+    grid-column: auto;
+  }
+}
+.sim-campo {
+  display: grid;
+  gap: 6px;
+}
+.sim-etiqueta {
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+.sim-input {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 14px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.sim-input.enfocado {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 22%, transparent);
+}
+.sim-texto:empty::before {
+  content: attr(data-vacio);
+  color: var(--fg-faint);
+}
+.sim-input.enfocado .sim-texto::after {
+  content: "";
+  display: inline-block;
+  width: 1.5px;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: -0.18em;
+  background: var(--fg);
+  animation: sim-parpadeo 1s steps(1) infinite;
+}
+.sim-input.enfocado .sim-texto:empty::before {
+  content: none;
+}
+@keyframes sim-parpadeo {
+  50% {
+    opacity: 0;
+  }
+}
+.sim-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand) 35%, var(--surface));
+  color: color-mix(in oklab, var(--fg) 45%, transparent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.15s var(--curva);
+}
+.sim-boton .i {
+  margin-right: 8px;
+}
+.sim-boton-buscar,
+.sim-boton-cancelar {
+  display: inline-flex;
+  align-items: center;
+}
+.sim-boton-cancelar {
+  display: none;
+}
+.sim-boton.listo {
+  background: var(--brand);
+  color: var(--brand-fg);
+}
+.sim-boton.pulsado {
+  transform: scale(0.94);
+}
+.sim-boton.cancelar {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.sim-boton.cancelar .sim-boton-buscar {
+  display: none;
+}
+.sim-boton.cancelar .sim-boton-cancelar {
+  display: inline-flex;
+}
+
+/* El avance y el resultado ocupan la misma celda: la ventana mide lo que el
+   más alto de los dos, así que cambiar de uno a otro no mueve la página. */
+.sim-escena {
+  display: grid;
+}
+.sim-escena > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.45s var(--curva),
+    transform 0.5s var(--curva),
+    visibility 0.45s;
+}
+.sim-escena > .oculto {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.sim-avance-cabecera {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sim-eyebrow {
+  color: var(--fg-faint);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.sim-fase {
+  margin-top: 4px;
+  font-weight: 600;
+}
+.sim-porcentaje {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.sim-barra {
+  height: 8px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+.sim-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--brand);
+  transform-origin: left;
+  transition: transform 0.2s linear;
+}
+.sim-mensaje-fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 2.8em;
+  margin-top: 10px;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+.sim-quedan {
+  flex: none;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.sim-filas {
+  margin-top: 10px;
+}
+.sim-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 8px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.9375rem;
+  transition:
+    opacity 0.35s var(--curva),
+    transform 0.35s var(--curva),
+    background-color 0.3s ease;
+}
+.sim-fila.fuera {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.sim-fila.mirando {
+  background: color-mix(in oklab, var(--brand) 8%, transparent);
+}
+.sim-fila-nombre {
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sim-fila-nota {
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+.sim-chip {
+  min-width: 96px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+.sim-fila[data-estado="sinweb"] .sim-chip {
+  background: color-mix(in oklab, var(--brand) 18%, transparent);
+  color: var(--brand-ink);
+}
+.sim-fila[data-estado="pendiente"] .sim-chip {
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+.sim-fila[data-estado="tieneweb"] {
+  opacity: 0.5;
+}
+.sim-fila[data-estado="tieneweb"] .sim-fila-nombre {
+  text-decoration: line-through;
+}
+@media (max-width: 639px) {
+  .sim-fila:nth-child(n + 6) {
+    display: none;
+  }
+  .sim-fila-nota {
+    display: none;
+  }
+}
+
+/* El resultado. */
+.sim-resultado-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.sim-resultado-icono {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--canvas);
+  color: var(--fg-muted);
+}
+.sim-resultado-titulos {
+  flex: 1;
+  min-width: 160px;
+}
+.sim-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sim-accion-primaria {
+  background: var(--brand);
+  color: var(--brand-fg);
+  box-shadow: none;
+}
+.sim-cifras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 0;
+}
+@media (min-width: 640px) {
+  .sim-cifras {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.sim-cifra {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line-soft);
+  background: var(--canvas);
+}
+.sim-cifra dt {
+  color: var(--fg-muted);
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+.sim-cifra dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.sim-cifra.marca {
+  border-color: color-mix(in oklab, var(--brand) 40%, var(--line-soft));
+  background: color-mix(in oklab, var(--brand) 12%, var(--surface));
+}
+.sim-nota {
+  margin-top: 12px;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+.sim-nota-aviso {
+  color: var(--aviso);
+}
+.sim-controles {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 42px;
+  margin-top: 16px;
+}
+
+/* --- IA ------------------------------------------------------------------- */
+
+.ia {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.ia-cabecera {
+  max-width: 760px;
+}
+.ia-rejilla {
+  display: grid;
+  gap: 24px;
+  margin-top: 48px;
+  align-items: stretch;
+}
+@media (min-width: 1024px) {
+  .ia-rejilla {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 56px;
+  }
+}
+.ia-destacada {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: clamp(24px, 3vw, 40px);
+  overflow: hidden;
+  border-radius: var(--r-placa);
+  border: 1px solid var(--line-soft);
+  background:
+    radial-gradient(80% 70% at 100% 100%, color-mix(in oklab, var(--brand) 20%, transparent), transparent 70%),
+    var(--surface);
+}
+.ia-destacada h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.ia-destacada h3 .i {
+  color: var(--brand-ink);
+}
+.ia-destacada p {
+  margin-top: 10px;
+  max-width: 46ch;
+  color: var(--fg-muted);
+}
+.ia-recorte {
+  width: min(100%, 540px);
+  margin-top: auto;
+  align-self: flex-end;
+}
+.ia-lista {
+  display: grid;
+  align-content: center;
+  border-top: 1px solid var(--line-soft);
+}
+.ia-lista li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.ia-lista li > .i {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  color: var(--brand-ink);
+}
+.ia-lista h3 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ia-lista p {
+  margin-top: 4px;
+  color: var(--fg-muted);
+}
+.ia-nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 40px;
+  max-width: 78ch;
+  color: var(--fg-faint);
+  font-size: 0.9375rem;
+}
+.ia-nota .i {
+  margin-top: 3px;
+  color: var(--brand-ink);
+}
+
+/* --- Bento ---------------------------------------------------------------- */
+
+.mas {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.mas-titulo {
+  max-width: 16ch;
+}
+.bento {
+  display: grid;
+  gap: 16px;
+  margin-top: 48px;
+}
+@media (min-width: 768px) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    /* Denso: sin esto «La cita» esperaba a que «A qué hora cogen» encontrase
+       sitio y dejaba un hueco vacío bajo «Correos». */
+    grid-auto-flow: row dense;
+  }
+  .celda-csv {
+    grid-column: span 6;
+  }
+  .celda-agenda {
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+  .celda-correo {
+    grid-column: span 2;
+  }
+  .celda-cita {
+    grid-column: span 2;
+  }
+  .celda-horas {
+    grid-column: span 3;
+  }
+  .celda-bajas,
+  .celda-csv {
+    grid-column: span 3;
+  }
+}
+@media (min-width: 1024px) {
+  .celda-horas {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+  .celda-bajas,
+  .celda-csv {
+    grid-column: span 3;
+  }
+}
+.celda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(22px, 2.6vw, 32px);
+  overflow: hidden;
+  border-radius: var(--r-placa);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+.celda h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.celda h3 .i {
+  color: var(--brand-ink);
+}
+.celda p {
+  color: var(--fg-muted);
+  max-width: 46ch;
+}
+.celda-recorte {
+  margin-top: auto;
+  padding-top: 24px;
+}
+.celda-agenda {
+  background:
+    radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--brand) 16%, transparent), transparent 70%),
+    var(--surface);
+}
+.celda-horas {
+  background: var(--backdrop);
+}
+.celda-correo {
+  background: linear-gradient(160deg, color-mix(in oklab, var(--brand-soft) 45%, var(--surface)), var(--surface) 70%);
+}
+@media (prefers-color-scheme: dark) {
+  .celda-correo {
+    background: linear-gradient(160deg, color-mix(in oklab, var(--brand) 14%, var(--surface)), var(--surface) 70%);
+  }
+}
+
+/* --- Datos locales -------------------------------------------------------- */
+
+.local {
+  padding-block: clamp(72px, 10vw, 140px);
+  border-top: 1px solid var(--line-soft);
+}
+.local-rejilla {
+  display: grid;
+  gap: 48px;
+}
+@media (min-width: 1024px) {
+  .local-rejilla {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 80px;
+    align-items: start;
+  }
+  .local-rejilla .titulo-grande {
+    position: sticky;
+    top: 120px;
+  }
+}
+.local-lista {
+  display: grid;
+  gap: 36px;
+}
+@media (min-width: 640px) {
+  .local-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px 36px;
+  }
+}
+.local-lista li {
+  display: grid;
+  gap: 14px;
+}
+.local-lista li > .i {
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  color: var(--brand-ink);
+}
+.local-lista h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.local-lista p {
+  margin-top: 4px;
+  color: var(--fg-muted);
+}
+
+/* --- Precio --------------------------------------------------------------- */
+
+.precio {
+  padding-block: clamp(72px, 10vw, 140px);
+  background: var(--backdrop);
+}
+.precio-rejilla {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .precio-rejilla {
+    grid-template-columns: minmax(0, 1fr) 440px;
+    gap: 80px;
+  }
+}
+.tarjeta-precio {
+  padding: 36px;
+  border-radius: var(--r-placa);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--sombra);
+}
+.tarjeta-precio-nombre {
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+.tarjeta-precio-cifra {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+.tarjeta-precio-cifra span {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+.tarjeta-precio-cifra small {
+  color: var(--fg-muted);
+  font-size: 1rem;
+}
+.tarjeta-precio-iva {
+  margin-top: 4px;
+  color: var(--fg-faint);
+  font-size: 0.875rem;
+}
+.tarjeta-precio-lista {
+  display: grid;
+  gap: 12px;
+  margin: 28px 0 32px;
+}
+.tarjeta-precio-lista li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tarjeta-precio-lista .i {
+  color: var(--won);
+}
+.tarjeta-precio-nota {
+  margin-top: 14px;
+  color: var(--fg-faint);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* --- Preguntas ------------------------------------------------------------ */
+
+.preguntas {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.preguntas-rejilla {
+  display: grid;
+  gap: 32px;
+}
+@media (min-width: 1024px) {
+  .preguntas-rejilla {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 80px;
+  }
+}
+.faq-lista {
+  border-top: 1px solid var(--line-soft);
+}
+.faq {
+  border-bottom: 1px solid var(--line-soft);
+}
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  list-style: none;
+  cursor: pointer;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary .i {
+  color: var(--fg-faint);
+  transition: transform 0.3s var(--curva);
+}
+.faq[open] summary .i {
+  transform: rotate(180deg);
+}
+.faq-respuesta {
+  padding-bottom: 24px;
+  color: var(--fg-muted);
+  max-width: 64ch;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .faq::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.35s var(--curva),
+      content-visibility 0.35s allow-discrete;
+  }
+  .faq[open]::details-content {
+    block-size: auto;
+  }
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* --- Cierre y pie --------------------------------------------------------- */
+
+.final {
+  padding-block: clamp(96px, 14vw, 180px);
+  background:
+    radial-gradient(50% 60% at 50% 100%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 70%),
+    var(--canvas);
+  border-top: 1px solid var(--line-soft);
+}
+.final-contenido {
+  display: grid;
+  justify-items: center;
+  gap: 40px;
+  text-align: center;
+}
+.final .titulo-grande {
+  max-width: 18ch;
+}
+
+.pie {
+  padding-block: 32px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--fg-faint);
+  font-size: 0.9375rem;
+}
+.pie-fila {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+.pie-fila img {
+  width: 84px;
+  height: auto;
+}
+.pie-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-left: auto;
+}
+.pie-enlaces a {
+  text-decoration: none;
+}
+.pie-enlaces a:hover {
+  color: var(--fg);
+}
+
+/* --- Páginas legales ------------------------------------------------------ */
+
+.legal {
+  padding-block: 140px 96px;
+}
+.legal .contenedor {
+  max-width: calc(760px + var(--gutter) * 2);
+}
+.legal h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.legal h2 {
+  margin-top: 40px;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.legal p,
+.legal li {
+  margin-top: 12px;
+  color: var(--fg-muted);
+}
+.legal ul {
+  padding-left: 1.2em;
+  list-style: disc;
+}
+.legal a {
+  color: var(--brand-ink);
+}
+.legal .pendiente {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: color-mix(in oklab, #ffb020 25%, transparent);
+  color: var(--fg);
+}

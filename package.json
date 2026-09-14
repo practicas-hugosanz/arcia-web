@@ -1,0 +1,22 @@
+{
+  "name": "arcia-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@phosphor-icons/core": "^2.1.1",
+    "@types/three": "^0.180.0",
+    "sharp": "^0.34.3",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
+  }
+}
