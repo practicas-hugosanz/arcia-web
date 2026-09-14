@@ -116,13 +116,22 @@ function datosEstructurados(html: string): string {
 }
 
 function arcia(): Plugin {
+  // La ruta base con la que se sirve la web: «/» en un dominio propio,
+  // «/arcia-web/» en GitHub Pages. Vite ya se la pone a las hojas de estilo,
+  // las fuentes y las imágenes; los enlaces entre páginas no los toca, y sin
+  // esto el logotipo y el pie mandaban a la raíz de github.io.
+  let base = "/";
   return {
     name: "arcia",
+    configResolved(config) {
+      base = config.base;
+    },
     transformIndexHtml: {
       order: "pre",
       handler(html) {
         const m = medidas();
         let salida = html
+          .replace(/href="\/(aviso-legal|privacidad)?"/g, (_, pagina) => `href="${base}${pagina ?? ""}"`)
           // Bloques que solo existen con precio, o solo sin él.
           .replace(/<!--si-precio-->([\s\S]*?)<!--\/si-precio-->/g, (_, dentro) => (sitio.precioMes ? dentro : ""))
           .replace(/<!--sin-precio-->([\s\S]*?)<!--\/sin-precio-->/g, (_, dentro) => (sitio.precioMes ? "" : dentro))
@@ -172,6 +181,7 @@ function arcia(): Plugin {
 }
 
 export default defineConfig({
+  base: process.env.BASE ?? "/",
   plugins: [arcia()],
   build: {
     target: "es2022",

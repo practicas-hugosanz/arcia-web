@@ -8,8 +8,14 @@
  * reparte la página entre dos direcciones.
  */
 export const sitio = {
-  /** Dominio definitivo, sin barra final. */
-  url: "https://arcia.com",
+  /**
+   * Dirección de la web, sin barra final.
+   *
+   * `SITIO_URL` la cambia al compilar: el despliegue de GitHub Pages la pone en
+   * `https://practicas-hugosanz.github.io/arcia-web` para que la canónica, el
+   * sitemap y los datos estructurados apunten a donde de verdad está servida.
+   */
+  url: process.env.SITIO_URL ?? "https://arcia.com",
 
   /**
    * Descarga directa del instalador de la última versión.
