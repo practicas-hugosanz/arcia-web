@@ -839,37 +839,6 @@ button {
     display: block;
   }
 }
-/* En móvil el resultado se compacta: la ventana entera medía 1.158 px y no
-   cabía ni de lejos en una pantalla. */
-@media (max-width: 639px) {
-  .sim-interior {
-    gap: 10px;
-  }
-  .sim-sub {
-    font-size: 0.8125rem;
-  }
-  .sim-cifras {
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .sim-cifra {
-    padding: 9px 11px;
-  }
-  .sim-cifra dd {
-    font-size: 1.3rem;
-  }
-  .sim-cifra dt {
-    font-size: 0.6875rem;
-  }
-  .sim-nota:not(.sim-nota-aviso) {
-    display: none;
-  }
-  .sim-resultado-titulos {
-    min-width: 0;
-    flex-basis: calc(100% - 48px);
-  }
-}
-
 /* La ventana: el mismo marco y placa que la app. */
 .sim {
   padding: 10px;
@@ -1255,6 +1224,97 @@ button {
   justify-content: flex-end;
   min-height: 42px;
   margin-top: 16px;
+}
+
+/* En móvil el resultado se compacta: la ventana entera medía 1.158 px y no
+   cabía ni de lejos en una pantalla.
+
+   Va **detrás** de las reglas de la simulación y no al lado de los pasos,
+   donde estaba: con la misma especificidad gana la última, así que casi nada de
+   lo que había aquí se aplicaba —las baldosas seguían midiendo 134 × 88 con el
+   relleno de escritorio—.
+
+   Y se adelgazan los marcos. Ventana, interior y tarjeta llevaban cada uno su
+   relleno, y con el margen de la página se comían 112 de los 390 px: el
+   contenido se quedaba en 278 (medido), así que las etiquetas de las cifras se
+   partían en dos líneas y los botones del resultado iban cada uno en su fila. */
+@media (max-width: 639px) {
+  .sim {
+    margin-inline: -8px;
+    padding: 5px;
+    border-radius: 24px;
+  }
+  .sim-interior {
+    gap: 10px;
+    padding: 10px;
+    border-radius: 19px;
+  }
+  .sim-card {
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .sim-sub {
+    font-size: 0.8125rem;
+  }
+
+  /* Las cifras, en filas: nombre a la izquierda y número a la derecha. En
+     baldosas de dos en dos, «Descartados (otro municipio)» no cabía en una
+     línea y las ocho medían 380 px. */
+  .sim-cifras {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin-top: 12px;
+  }
+  .sim-cifra {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 10px;
+    border: 0;
+    /* Rectas: la raya de separación es una sombra, y con la fila redondeada
+       se curvaba en los extremos como un paréntesis. */
+    border-radius: 0;
+    background: transparent;
+  }
+  .sim-cifra + .sim-cifra {
+    box-shadow: inset 0 1px 0 var(--line-soft);
+  }
+  .sim-cifra.marca,
+  .sim-cifra.marca + .sim-cifra {
+    box-shadow: none;
+  }
+  .sim-cifra.marca {
+    border: 0;
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--brand) 12%, var(--surface));
+  }
+  .sim-cifra dd {
+    font-size: 1.125rem;
+  }
+  .sim-cifra dt {
+    font-size: 0.8125rem;
+  }
+
+  /* Un solo botón: «Llamar» es el siguiente paso, y con los dos cada uno
+     ocupaba su propia fila. */
+  .sim-accion:not(.sim-accion-primaria) {
+    display: none;
+  }
+  .sim-nota:not(.sim-nota-aviso) {
+    display: none;
+  }
+  .sim-resultado-titulos {
+    min-width: 0;
+    flex-basis: calc(100% - 48px);
+  }
+
+  /* El avance y el resultado comparten celda, y el avance se estiraba hasta
+     el alto del resultado: medio móvil de tarjeta en blanco mientras escanea.
+     Cada uno con su alto; la ventana sigue midiendo lo del más alto y no salta. */
+  .sim-escena > * {
+    align-self: start;
+  }
 }
 
 /* --- IA ------------------------------------------------------------------- */
