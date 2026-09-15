@@ -134,6 +134,127 @@
         </div>
       </section>
 
+      <section id="prospeccion" class="prospeccion" aria-labelledby="prospeccion-titulo">
+        <div class="contenedor">
+          <div class="sim-rejilla aparece" data-sim>
+            <div class="sim-lateral">
+            <div class="prospeccion-cabecera">
+              <h2 id="prospeccion-titulo" class="titulo-seccion">Así es una búsqueda, de principio a fin</h2>
+              <p class="entradilla">
+                Una simulación de la pantalla de Prospección, con datos inventados:
+                de un oficio y una ciudad a una lista de negocios que llamar.
+              </p>
+            </div>
+            <ol class="sim-pasos">
+              <li class="sim-paso">
+                <h3>Escribes qué y dónde</h3>
+                <p>Un oficio y uno de los 8.132 municipios de España.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Lee Google Maps</h3>
+                <p>Trae las fichas de ese oficio en esa ciudad.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Aparta lo que no sirve</h3>
+                <p>Las que ya declaran web, las fichas vacías y las de otro pueblo.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Comprueba uno a uno</h3>
+                <p>Busca la web de cada negocio antes de dártelo por bueno.</p>
+              </li>
+              <li class="sim-paso">
+                <h3>Te deja a quién llamar</h3>
+                <p>Con su guion escrito y los pendientes aparte.</p>
+              </li>
+            </ol>
+            </div>
+
+            <div class="sim" aria-hidden="true">
+              <div class="sim-interior">
+                <div>
+                  <p class="sim-titulo">Prospección</p>
+                  <p class="sim-sub">Encuentra negocios sin web y prepara el guion para llamarles.</p>
+                </div>
+
+                <div class="sim-card">
+                  <p class="sim-card-titulo">Nueva búsqueda</p>
+                  <div class="sim-busqueda-fila">
+                    <div class="sim-campo">
+                      <span class="sim-etiqueta">Qué negocio</span>
+                      <span class="sim-input" data-sim-campo="que"><span class="sim-texto" data-vacio="Elige un nicho o escribe el tuyo">Peluquería</span></span>
+                    </div>
+                    <div class="sim-campo">
+                      <span class="sim-etiqueta">Dónde</span>
+                      <span class="sim-input" data-sim-campo="donde"><span class="sim-texto" data-vacio="Escribe la ciudad">Madrid</span></span>
+                    </div>
+                    <span class="sim-boton listo" data-sim-boton>
+                      <span class="sim-boton-buscar"><i data-i="play"></i>Buscar</span>
+                      <span class="sim-boton-cancelar"><i data-i="prohibit"></i>Cancelar</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="sim-escena">
+                  <div class="sim-card sim-avance oculto" data-sim-avance>
+                    <div class="sim-avance-cabecera">
+                      <div>
+                        <p class="sim-eyebrow" data-sim-eyebrow>Escaneo</p>
+                        <p class="sim-fase" data-sim-fase>Completado</p>
+                      </div>
+                      <p class="sim-porcentaje"><span data-sim-porcentaje>100</span>%</p>
+                    </div>
+                    <div class="sim-barra"><span data-sim-barra></span></div>
+                    <div class="sim-mensaje-fila">
+                      <p data-sim-mensaje>Proceso completado: 16 leads válidos de 24 candidatos</p>
+                      <p class="sim-quedan" data-sim-quedan></p>
+                    </div>
+                    <ul class="sim-filas">
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Peluquería Carmen Vidal</span><span class="sim-fila-nota">4,8 (214)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="tieneweb"><span class="sim-fila-nombre">Salón Alma Estilistas</span><span class="sim-fila-nota">4,6 (97)</span><span class="sim-chip">Tiene web</span></li>
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Barbería Tijera Norte</span><span class="sim-fila-nota">4,9 (312)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="sinweb"><span class="sim-fila-nombre">Peluquería Rizos y Ondas</span><span class="sim-fila-nota">4,4 (58)</span><span class="sim-chip">Sin web</span></li>
+                      <li class="sim-fila" data-estado="pendiente"><span class="sim-fila-nombre">Estudio Capilar Olivia</span><span class="sim-fila-nota">4,7 (143)</span><span class="sim-chip">Pendiente</span></li>
+                      <li class="sim-fila" data-estado="tieneweb"><span class="sim-fila-nombre">Cortes Urbanos</span><span class="sim-fila-nota">4,5 (201)</span><span class="sim-chip">Tiene web</span></li>
+                    </ul>
+                  </div>
+
+                  <div class="sim-card sim-resultado" data-sim-resultado>
+                    <div class="sim-resultado-cabecera">
+                      <span class="sim-resultado-icono"><i data-i="trend-up"></i></span>
+                      <div class="sim-resultado-titulos">
+                        <p class="sim-card-titulo">Resultado del escaneo</p>
+                        <p class="sim-sub">16 leads listos para llamar</p>
+                      </div>
+                      <span class="sim-accion"><i data-i="sparkle"></i>Ver los 18 en la tabla</span>
+                      <span class="sim-accion sim-accion-primaria"><i data-i="phone-call"></i>Llamar a los 16</span>
+                    </div>
+                    <dl class="sim-cifras">
+                      <div class="sim-cifra"><dt>Fichas encontradas</dt><dd data-cifra="60">60</dd></div>
+                      <div class="sim-cifra"><dt>Sin web en la ficha</dt><dd data-cifra="24">24</dd></div>
+                      <div class="sim-cifra marca"><dt>Verificados sin web</dt><dd data-cifra="16">16</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (otro municipio)</dt><dd data-cifra="2">2</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (ficha vacía)</dt><dd data-cifra="1">1</dd></div>
+                      <div class="sim-cifra"><dt>Descartados (tienen web)</dt><dd data-cifra="6">6</dd></div>
+                      <div class="sim-cifra"><dt>Sin verificar (pendientes)</dt><dd data-cifra="2">2</dd></div>
+                      <div class="sim-cifra"><dt>Nuevos en la base</dt><dd data-cifra="16">16</dd></div>
+                    </dl>
+                    <p class="sim-nota">Solo el 41% de las fichas de este nicho no declara web · sube el límite para llegar a más candidatos.</p>
+                    <p class="sim-nota sim-nota-aviso">2 negocios quedaron sin verificar. No se dan por válidos sin pruebas: revísalos con el filtro «Pendiente».</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sim-controles">
+            <button type="button" class="boton boton-secundario boton-sm" data-sim-repetir hidden>
+              <i data-i="arrow-counter-clockwise"></i>
+              <span>Repetir la búsqueda</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section id="precio" class="precio" aria-labelledby="precio-titulo">
         <div class="contenedor precio-rejilla">
           <div class="precio-texto aparece">

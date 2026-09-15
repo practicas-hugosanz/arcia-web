@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Escena } from "./escena";
+import { montarSimulacion } from "./simulacion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,6 +87,11 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.to(elementos, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, overwrite: true }),
   });
 });
+
+/* --- La simulación de Prospección ------------------------------------------
+ * Con movimiento reducido se queda en el estado final que ya trae el HTML. */
+const simulacion = $("[data-sim]");
+if (simulacion && !reducido) montarSimulacion(simulacion);
 
 /* --- La barra de descarga en móvil -----------------------------------------
  * Aparece cuando el botón de la portada ya ha salido de la pantalla y se va
