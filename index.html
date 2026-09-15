@@ -36,25 +36,7 @@
   <body>
     <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-    <header class="nav" data-nav>
-      <div class="contenedor nav-fila">
-        <a href="/" class="nav-marca" aria-label="Arcia, inicio">
-          <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="/img/arcia-logo-oscuro.webp">
-            <img src="/img/arcia-logo.webp" alt="Arcia" width="132" height="44">
-          </picture>
-        </a>
-        <nav class="nav-enlaces" aria-label="Principal">
-          <a href="#como-funciona">Cómo funciona</a>
-          <a href="#precio">Precio</a>
-          <a href="#preguntas">Preguntas frecuentes</a>
-        </nav>
-        <a class="boton boton-primario boton-sm" href="%DESCARGA%">
-          <i data-i="windows-logo"></i>
-          <span>Descargar</span>
-        </a>
-      </div>
-    </header>
+    <!--parte:cabecera-->
 
     <main id="contenido">
       <section class="hero" aria-labelledby="hero-titulo">
@@ -78,7 +60,7 @@
             Arcia busca en Google Maps los negocios de tu zona, comprueba que no
             tienen web y prepara la llamada.
           </p>
-          <div class="hero-acciones">
+          <div class="hero-acciones" data-cta>
             <a class="boton boton-primario" href="%DESCARGA%">
               <i data-i="windows-logo"></i>
               <span>Descargar para Windows</span>
@@ -111,26 +93,29 @@
           <ol class="como-pasos">
             <li class="aparece">
               <span class="como-numero">1</span>
-              <h3>Busca</h3>
+              <h3><a href="/como-funciona">Busca</a></h3>
               <p>Un oficio y un municipio. Arcia lee Google Maps y aparta a quien ya tiene web.</p>
             </li>
             <li class="aparece">
               <span class="como-numero">2</span>
-              <h3>Comprueba</h3>
+              <h3><a href="/verificacion">Comprueba</a></h3>
               <p>Busca la web de cada negocio. Lo que no puede confirmar queda pendiente.</p>
             </li>
             <li class="aparece">
               <span class="como-numero">3</span>
-              <h3>Llama</h3>
+              <h3><a href="/seguimiento">Llama</a></h3>
               <p>Con el guion delante, los datos del negocio y su horario de hoy.</p>
             </li>
           </ol>
           <ul class="como-ventajas aparece" aria-label="También incluye">
-            <li><i data-i="calendar-check"></i>Agenda con avisos</li>
-            <li><i data-i="envelope-simple"></i>Correos desde tu cuenta</li>
-            <li><i data-i="sparkle"></i>IA opcional</li>
-            <li><i data-i="hard-drives"></i>Tus datos, en tu ordenador</li>
+            <li><a href="/seguimiento"><i data-i="calendar-check"></i>Agenda con avisos</a></li>
+            <li><a href="/seguimiento"><i data-i="envelope-simple"></i>Correos desde tu cuenta</a></li>
+            <li><a href="/ia"><i data-i="sparkle"></i>IA opcional</a></li>
+            <li><a href="/tus-datos"><i data-i="hard-drives"></i>Tus datos, en tu ordenador</a></li>
           </ul>
+          <p class="como-mas aparece">
+            <a href="/como-funciona">Ver el recorrido paso a paso<i data-i="arrow-right"></i></a>
+          </p>
         </div>
       </section>
 
@@ -324,29 +309,9 @@
       </section>
     </main>
 
-    <!-- En móvil la cabecera se esconde al bajar: sin esto, entre la portada y
-         el precio no había ningún botón de descarga a la vista. -->
-    <div class="barra-descarga" data-barra>
-      <a class="boton boton-primario boton-ancho" href="%DESCARGA%">
-        <i data-i="windows-logo"></i>
-        <span>Descargar para Windows</span>
-      </a>
-    </div>
+    <!--parte:barra-->
 
-    <footer class="pie">
-      <div class="contenedor pie-fila">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="/img/arcia-logo-oscuro.webp">
-          <img src="/img/arcia-logo.webp" alt="Arcia" width="96" height="32" loading="lazy">
-        </picture>
-        <nav class="pie-enlaces" aria-label="Legal">
-          <a href="/aviso-legal">Aviso legal</a>
-          <a href="/privacidad">Privacidad</a>
-          <a href="mailto:%CORREO%">%CORREO%</a>
-        </nav>
-        <p class="pie-copy">© %ANIO% Arcia</p>
-      </div>
-    </footer>
+    <!--parte:pie-->
 
     <script type="module" src="/src/main.ts"></script>
   </body>

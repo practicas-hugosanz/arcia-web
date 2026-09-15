@@ -1289,6 +1289,670 @@ button {
   }
 }
 
+/* --- Los pasos fijados (/como-funciona) -------------------------------------------------------- */
+
+.pasos {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.pasos-lista {
+  display: grid;
+  gap: 56px;
+  margin-top: 40px;
+}
+.paso-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.paso-titulo .i {
+  color: var(--brand-ink);
+}
+.paso p {
+  margin-top: 8px;
+  max-width: 42ch;
+  color: var(--fg-muted);
+}
+.paso-imagen {
+  margin-top: 24px;
+}
+.pasos-visor {
+  display: none;
+}
+
+/* Con los pasos fijados (escritorio y movimiento): texto a la izquierda y
+   una sola pantalla a la derecha que cambia según el paso. */
+.pasos.fijada {
+  min-height: 100dvh;
+  display: grid;
+  align-items: center;
+  padding-block: 96px 48px;
+}
+.pasos.fijada .pasos-rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+}
+.pasos.fijada .pasos-lista {
+  gap: 6px;
+  margin-top: 32px;
+}
+.pasos.fijada .paso {
+  position: relative;
+  padding: 16px 0 16px 24px;
+  opacity: 0.45;
+  transition: opacity 0.4s var(--curva);
+}
+.pasos.fijada .paso::before,
+.pasos.fijada .paso::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  border-radius: 2px;
+}
+.pasos.fijada .paso::before {
+  background: var(--line-soft);
+}
+.pasos.fijada .paso::after {
+  background: var(--brand);
+  transform-origin: top;
+  transform: scaleY(var(--avance, 0));
+}
+.pasos.fijada .paso.activo {
+  opacity: 1;
+}
+.pasos.fijada .paso p {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  overflow: hidden;
+  transition:
+    grid-template-rows 0.45s var(--curva),
+    margin-top 0.45s var(--curva);
+}
+.pasos.fijada .paso.activo p {
+  margin-top: 8px;
+}
+.pasos.fijada .paso-imagen {
+  display: none;
+}
+.pasos.fijada .pasos-visor {
+  display: grid;
+  grid-template-areas: "vista";
+}
+.visor-vista {
+  grid-area: vista;
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition:
+    opacity 0.5s var(--curva),
+    transform 0.6s var(--curva);
+}
+.visor-vista.pasada {
+  transform: translateY(-16px) scale(0.98);
+}
+.visor-vista.activo {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Verificación --------------------------------------------------------- */
+
+.verificacion {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.verificacion-rejilla {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .verificacion-rejilla {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 64px;
+  }
+}
+/* Recta: girada, la tabla se remuestreaba y el texto de la captura 4K se
+   veía borroso. */
+
+/* --- IA ------------------------------------------------------------------- */
+
+.ia {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.ia-cabecera {
+  max-width: 760px;
+}
+.ia-rejilla {
+  display: grid;
+  gap: 24px;
+  margin-top: 48px;
+  align-items: stretch;
+}
+@media (min-width: 1024px) {
+  .ia-rejilla {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 56px;
+  }
+}
+.ia-destacada {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: clamp(24px, 3vw, 40px);
+  overflow: hidden;
+  border-radius: var(--r-placa);
+  border: 1px solid var(--line-soft);
+  background:
+    radial-gradient(80% 70% at 100% 100%, color-mix(in oklab, var(--brand) 20%, transparent), transparent 70%),
+    var(--surface);
+}
+.ia-destacada h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.ia-destacada h3 .i {
+  color: var(--brand-ink);
+}
+.ia-destacada p {
+  margin-top: 10px;
+  max-width: 46ch;
+  color: var(--fg-muted);
+}
+.ia-recorte {
+  width: min(100%, 540px);
+  margin-top: auto;
+  align-self: flex-end;
+}
+.ia-lista {
+  display: grid;
+  align-content: center;
+  border-top: 1px solid var(--line-soft);
+}
+.ia-lista li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.ia-lista li > .i {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  color: var(--brand-ink);
+}
+.ia-lista h3 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ia-lista p {
+  margin-top: 4px;
+  color: var(--fg-muted);
+}
+/* La letra pequeña, en datos sueltos. Era un párrafo de tres líneas en gris
+   claro que nadie leía, y lleva justo lo que pregunta quien duda: con qué
+   proveedores, dónde va la clave, quién paga y qué sale del ordenador. */
+.ia-nota {
+  display: grid;
+  gap: 14px 32px;
+  margin-top: 40px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+@media (min-width: 768px) {
+  .ia-nota {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .ia-nota {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.ia-nota li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-wrap: pretty;
+}
+.ia-nota .i {
+  margin-top: 1px;
+  color: var(--brand-ink);
+}
+
+/* Frases cortas que no dejen una palabra sola en la última línea: con
+   «notas.» o «recibe.» colgando, cada tarjeta parecía más larga de lo que era. */
+.ia-destacada p,
+.ia-lista p,
+.celda p {
+  text-wrap: pretty;
+}
+.ia-destacada h3,
+.ia-lista h3,
+.celda h3 {
+  text-wrap: balance;
+}
+/* En móvil, a 17 px, cada frase corta se iba a dos o tres líneas. */
+@media (max-width: 767px) {
+  .ia-destacada p,
+  .ia-lista p,
+  .celda p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* --- Bento ---------------------------------------------------------------- */
+
+.mas {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+.mas-titulo {
+  max-width: 16ch;
+}
+.bento {
+  display: grid;
+  gap: 16px;
+  margin-top: 48px;
+}
+@media (min-width: 768px) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    /* Denso: sin esto «La cita» esperaba a que «A qué hora cogen» encontrase
+       sitio y dejaba un hueco vacío bajo «Correos». */
+    grid-auto-flow: row dense;
+  }
+  .celda-csv {
+    grid-column: span 6;
+  }
+  .celda-agenda {
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+  .celda-correo {
+    grid-column: span 2;
+  }
+  .celda-cita {
+    grid-column: span 2;
+  }
+  .celda-horas {
+    grid-column: span 3;
+  }
+  .celda-bajas,
+  .celda-csv {
+    grid-column: span 3;
+  }
+}
+@media (min-width: 1024px) {
+  .celda-horas {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+  .celda-bajas,
+  .celda-csv {
+    grid-column: span 3;
+  }
+}
+.celda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(22px, 2.6vw, 32px);
+  overflow: hidden;
+  border-radius: var(--r-placa);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+.celda h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.celda h3 .i {
+  color: var(--brand-ink);
+}
+.celda p {
+  color: var(--fg-muted);
+  max-width: 46ch;
+}
+.celda-recorte {
+  margin-top: auto;
+  padding-top: 24px;
+}
+.celda-agenda {
+  background:
+    radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--brand) 16%, transparent), transparent 70%),
+    var(--surface);
+}
+.celda-horas {
+  background: var(--backdrop);
+}
+.celda-correo {
+  background: linear-gradient(160deg, color-mix(in oklab, var(--brand-soft) 45%, var(--surface)), var(--surface) 70%);
+}
+@media (prefers-color-scheme: dark) {
+  .celda-correo {
+    background: linear-gradient(160deg, color-mix(in oklab, var(--brand) 14%, var(--surface)), var(--surface) 70%);
+  }
+}
+
+/* --- Datos locales -------------------------------------------------------- */
+
+.local {
+  padding-block: clamp(72px, 10vw, 140px);
+  border-top: 1px solid var(--line-soft);
+}
+.local-rejilla {
+  display: grid;
+  gap: 48px;
+}
+@media (min-width: 1024px) {
+  .local-rejilla {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 80px;
+    align-items: start;
+  }
+  .local-rejilla .titulo-grande {
+    position: sticky;
+    top: 120px;
+  }
+}
+.local-lista {
+  display: grid;
+  gap: 36px;
+}
+@media (min-width: 640px) {
+  .local-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px 36px;
+  }
+}
+.local-lista li {
+  display: grid;
+  gap: 14px;
+}
+.local-lista li > .i {
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  color: var(--brand-ink);
+}
+.local-lista h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.local-lista p {
+  margin-top: 4px;
+  color: var(--fg-muted);
+}
+
+/* --- Páginas de funciones ------------------------------------------------ */
+
+/* Lo que salió de la portada el 2026-09-16 vive aquí, más desarrollado. Los
+   bloques de abajo (pasos fijados, verificación, IA, bento y datos locales)
+   son los de entonces; esto es lo que añaden las páginas. */
+.pagina-cabecera {
+  padding-block: clamp(128px, 15vw, 196px) clamp(40px, 6vw, 80px);
+}
+.pagina-cabecera .titulo-grande {
+  max-width: 20ch;
+}
+.pagina-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+/* La primera sección, pegada a la cabecera: con los dos rellenos quedaban
+   250 px vacíos entre el botón y el primer titular. Los pasos fijados no se
+   tocan: `.pasos.fijada` pone el suyo y gana. */
+.pagina-cabecera + section {
+  padding-top: clamp(16px, 3vw, 40px);
+}
+.filtros {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+@media (min-width: 1024px) {
+  .filtros-lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .filtros-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.salidas-lista .como-numero .i {
+  width: 18px;
+  height: 18px;
+}
+.salidas-lista a,
+.local-lista a {
+  color: var(--brand-ink);
+}
+.proveedores {
+  margin-top: 32px;
+}
+.proveedores li {
+  font-weight: 600;
+  color: var(--fg);
+}
+.ia-destacada-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.ia-destacada-titulo .i {
+  color: var(--brand-ink);
+}
+
+/* Los seis resultados del modo llamada, con su tecla. */
+.teclas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin-top: 28px;
+}
+.teclas li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg-muted);
+}
+.teclas kbd {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  background: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Las demás funciones, al final de cada página. La que se está leyendo no sale. */
+.otras {
+  padding-block: clamp(56px, 8vw, 104px);
+  border-top: 1px solid var(--line-soft);
+}
+.otras-titulo {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.otras-lista {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+@media (min-width: 768px) {
+  .otras-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .otras-lista {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+body[data-pagina="como-funciona"] .otras-lista [data-pagina="como-funciona"],
+body[data-pagina="verificacion"] .otras-lista [data-pagina="verificacion"],
+body[data-pagina="ia"] .otras-lista [data-pagina="ia"],
+body[data-pagina="seguimiento"] .otras-lista [data-pagina="seguimiento"],
+body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
+  display: none;
+}
+.otras-lista a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color 0.25s var(--curva);
+}
+.otras-lista a:hover {
+  border-color: var(--line);
+}
+.otras-lista a > .i:first-child {
+  color: var(--brand-ink);
+}
+.otras-lista a > .i:last-child {
+  margin-left: auto;
+  color: var(--fg-faint);
+  transition: transform 0.25s var(--curva);
+}
+.otras-lista a:hover > .i:last-child {
+  transform: translateX(3px);
+}
+.otras-lista b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.otras-lista small {
+  display: block;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+}
+
+/* En la portada, las tarjetas y etiquetas de «Cómo funciona» llevan a su
+   página. El enlace cubre la tarjeta entera, pero el texto es el título. */
+.como-pasos li,
+.como-ventajas li {
+  position: relative;
+  transition: border-color 0.25s var(--curva);
+}
+.como-pasos h3 a,
+.como-ventajas a {
+  color: inherit;
+  text-decoration: none;
+}
+.como-pasos h3 a::after,
+.como-ventajas a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.como-pasos li:has(a):hover,
+.como-ventajas li:has(a):hover {
+  border-color: var(--line);
+}
+.como-ventajas a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.como-mas {
+  margin-top: 20px;
+}
+.como-mas a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.como-mas .i {
+  transition: transform 0.25s var(--curva);
+}
+.como-mas a:hover .i {
+  transform: translateX(3px);
+}
+
+/* El pie lista las páginas de funciones debajo de lo legal. */
+.pie-funciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
+}
+.pie-funciones a {
+  text-decoration: none;
+}
+.pie-funciones a:hover {
+  color: var(--fg);
+}
+@media (max-width: 767px) {
+  .pie-funciones {
+    flex-direction: column;
+    gap: 0;
+  }
+  .pie-funciones a {
+    display: block;
+    padding-block: 10px;
+    color: var(--fg-muted);
+  }
+  .teclas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* --- Precio --------------------------------------------------------------- */
 
 .precio {
@@ -1562,6 +2226,13 @@ button {
   .escaparate,
   .como,
   .prospeccion,
+  .pasos,
+  .verificacion,
+  .filtros,
+  .ia,
+  .mas,
+  .local,
+  .otras,
   .precio,
   .preguntas {
     padding-block: 52px;
@@ -1623,6 +2294,69 @@ button {
     font-size: 0.875rem;
   }
 
+  .verificacion-rejilla {
+    gap: 28px;
+  }
+
+  /* Lo que pasa antes y después de llamar: carrusel. */
+  .mas .bento {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .mas .bento::-webkit-scrollbar {
+    display: none;
+  }
+  .mas .celda {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+  }
+
+  .ia-rejilla {
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .ia-destacada {
+    gap: 20px;
+  }
+  .ia-lista li {
+    gap: 12px;
+    padding-block: 16px;
+  }
+  .ia-lista li > .i {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+  }
+  .ia-nota {
+    margin-top: 24px;
+    font-size: 0.875rem;
+  }
+
+  .local-rejilla {
+    gap: 28px;
+  }
+  .local-lista {
+    gap: 22px;
+  }
+  .local-lista li {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+  .local-lista li > .i {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+  }
+
   .precio-rejilla {
     gap: 28px;
   }
@@ -1652,5 +2386,46 @@ button {
   }
   .sim-fila:nth-child(n + 5) {
     display: none;
+  }
+}
+
+/* Cómo funciona: sin los pasos fijados (móvil, tableta o movimiento reducido)
+   cada paso es una tarjeta del carrusel con su captura dentro. */
+@media (max-width: 1023px) {
+  .pasos:not(.fijada) .pasos-lista {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .pasos:not(.fijada) .pasos-lista::-webkit-scrollbar {
+    display: none;
+  }
+  .pasos:not(.fijada) .paso {
+    display: flex;
+    flex: 0 0 min(84%, 520px);
+    flex-direction: column;
+    padding: 18px;
+    border-radius: var(--r-placa);
+    border: 1px solid var(--line-soft);
+    background: var(--surface);
+    scroll-snap-align: start;
+  }
+  .pasos:not(.fijada) .paso-imagen {
+    margin-top: auto;
+    padding-top: 16px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .pasos:not(.fijada) .paso-imagen img {
+    border-radius: 12px;
+    border: 1px solid var(--line-soft);
   }
 }

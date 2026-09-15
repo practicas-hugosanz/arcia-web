@@ -4,7 +4,21 @@ import { resolve } from "node:path";
 import { sitio } from "./sitio.config";
 
 const RAIZ = __dirname;
-const PAGINAS = ["index", "aviso-legal", "privacidad", "404"];
+/** Las páginas que profundizan en lo que la portada solo nombra. */
+const FUNCIONES = ["como-funciona", "verificacion", "ia", "seguimiento", "tus-datos"];
+const PAGINAS = ["index", ...FUNCIONES, "aviso-legal", "privacidad", "404"];
+
+/**
+ * Las piezas que se repiten en varias páginas: cabecera, pie, barra de
+ * descarga, cierre y enlaces a las demás funciones. Con seis páginas escritas
+ * a mano, copiar la cabecera en cada una era asegurarse de que un día
+ * dijeran cosas distintas.
+ */
+const pieza = (nombre: string) => {
+  const ruta = resolve(RAIZ, `partes/${nombre}.html`);
+  if (!existsSync(ruta)) throw new Error(`No existe la pieza «partes/${nombre}.html»`);
+  return readFileSync(ruta, "utf8");
+};
 
 type Medida = { width: number; height: number; anchos: number[] };
 type Medidas = { app: Record<string, Medida>; recortes: Record<string, Medida> };
@@ -131,7 +145,13 @@ function arcia(): Plugin {
       handler(html) {
         const m = medidas();
         let salida = html
-          .replace(/href="\/(aviso-legal|privacidad)?"/g, (_, pagina) => `href="${base}${pagina ?? ""}"`)
+          // Las piezas primero: traen sus propios iconos, enlaces y %CORREO%,
+          // y así pasan por el resto de sustituciones como el HTML de la página.
+          .replace(/^[ \t]*<!--parte:([\w-]+)-->[ \t]*\r?\n?/gm, (_, nombre) => pieza(nombre))
+          // Cualquier enlace a una página propia —«/», «/ia», «/#precio»—, no
+          // solo a las legales. Los recursos (/src/…, /favicon.ico) no casan:
+          // llevan barra o punto.
+          .replace(/href="\/([\w-]*)(#[\w-]+)?"/g, (_, pagina, ancla) => `href="${base}${pagina}${ancla ?? ""}"`)
           // Bloques que solo existen con precio, o solo sin él.
           .replace(/<!--si-precio-->([\s\S]*?)<!--\/si-precio-->/g, (_, dentro) => (sitio.precioMes ? dentro : ""))
           .replace(/<!--sin-precio-->([\s\S]*?)<!--\/sin-precio-->/g, (_, dentro) => (sitio.precioMes ? "" : dentro))
@@ -163,7 +183,7 @@ function arcia(): Plugin {
     generateBundle() {
       const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad"] : [];
       const hoy = new Date().toISOString().slice(0, 10);
-      const urls = ["", ...legales].map(
+      const urls = ["", ...FUNCIONES, ...legales].map(
         (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${hoy}</lastmod></url>`,
       );
       this.emitFile({
