@@ -590,19 +590,12 @@ button {
 
 /* --- Escaparate ----------------------------------------------------------- */
 
+/* Sin titular propio desde el recorte: la captura va justo debajo de la
+   portada. Con los márgenes de antes quedaban 200 px vacíos encima. */
 .escaparate {
-  padding-block: clamp(72px, 10vw, 140px) clamp(48px, 7vw, 96px);
-}
-.escaparate-cabecera {
-  max-width: 820px;
-  margin-inline: auto;
-  text-align: center;
-}
-.escaparate-cabecera .entradilla {
-  margin-inline: auto;
+  padding-block: clamp(8px, 2vw, 24px) clamp(48px, 7vw, 96px);
 }
 .escaparate-escena {
-  margin-top: clamp(40px, 6vw, 72px);
   perspective: 1800px;
 }
 .escaparate-ventana {
@@ -612,1001 +605,112 @@ button {
 
 /* --- Cómo funciona -------------------------------------------------------- */
 
-.pasos {
+/* Tres pasos y una línea con lo demás. Aquí había seis bloques —los pasos
+   fijados con cuatro capturas, verificación, la simulación de Prospección, IA,
+   «Lo que pasa antes y después» y «Tus leads en tu ordenador»— y la página
+   medía 13.450 px en escritorio y 8.482 en móvil (medido el 2026-09-16). Lo
+   que se quiere es que bajen la app, no que se lean la web. */
+.como {
   padding-block: clamp(64px, 9vw, 120px);
 }
-.pasos-lista {
-  display: grid;
-  gap: 56px;
-  margin-top: 40px;
-}
-.paso-titulo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.paso-titulo .i {
-  color: var(--brand-ink);
-}
-.paso p {
-  margin-top: 8px;
-  max-width: 42ch;
-  color: var(--fg-muted);
-}
-.paso-imagen {
-  margin-top: 24px;
-}
-.pasos-visor {
-  display: none;
-}
-
-/* Con los pasos fijados (escritorio y movimiento): texto a la izquierda y
-   una sola pantalla a la derecha que cambia según el paso. */
-.pasos.fijada {
-  min-height: 100dvh;
-  display: grid;
-  align-items: center;
-  padding-block: 96px 48px;
-}
-.pasos.fijada .pasos-rejilla {
-  display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-  gap: clamp(40px, 5vw, 80px);
-  align-items: center;
-}
-.pasos.fijada .pasos-lista {
-  gap: 6px;
-  margin-top: 32px;
-}
-.pasos.fijada .paso {
-  position: relative;
-  padding: 16px 0 16px 24px;
-  opacity: 0.45;
-  transition: opacity 0.4s var(--curva);
-}
-.pasos.fijada .paso::before,
-.pasos.fijada .paso::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 16px;
-  bottom: 16px;
-  width: 2px;
-  border-radius: 2px;
-}
-.pasos.fijada .paso::before {
-  background: var(--line-soft);
-}
-.pasos.fijada .paso::after {
-  background: var(--brand);
-  transform-origin: top;
-  transform: scaleY(var(--avance, 0));
-}
-.pasos.fijada .paso.activo {
-  opacity: 1;
-}
-.pasos.fijada .paso p {
-  display: grid;
-  grid-template-rows: 0fr;
-  margin-top: 0;
-  overflow: hidden;
-  transition:
-    grid-template-rows 0.45s var(--curva),
-    margin-top 0.45s var(--curva);
-}
-.pasos.fijada .paso.activo p {
-  margin-top: 8px;
-}
-.pasos.fijada .paso-imagen {
-  display: none;
-}
-.pasos.fijada .pasos-visor {
-  display: grid;
-  grid-template-areas: "vista";
-}
-.visor-vista {
-  grid-area: vista;
-  opacity: 0;
-  transform: translateY(24px) scale(0.98);
-  transition:
-    opacity 0.5s var(--curva),
-    transform 0.6s var(--curva);
-}
-.visor-vista.pasada {
-  transform: translateY(-16px) scale(0.98);
-}
-.visor-vista.activo {
-  opacity: 1;
-  transform: none;
-}
-
-/* --- Verificación --------------------------------------------------------- */
-
-.verificacion {
-  padding-block: clamp(72px, 10vw, 140px);
-}
-.verificacion-rejilla {
-  display: grid;
-  gap: 48px;
-  align-items: center;
-}
-@media (min-width: 1024px) {
-  .verificacion-rejilla {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: 64px;
-  }
-}
-/* Recta: girada, la tabla se remuestreaba y el texto de la captura 4K se
-   veía borroso. */
-
-/* --- La simulación de Prospección ----------------------------------------- */
-
-.prospeccion {
-  padding-block: clamp(72px, 10vw, 140px);
-  background: var(--backdrop);
-}
-.prospeccion-cabecera {
+.como-cabecera {
   max-width: 760px;
 }
-/* El titular va en la columna de los pasos y no encima de todo: así la
-   ventana empieza arriba de la sección y cabe entera en una pantalla de 900 px
-   mientras verifica. Encima, sus últimas filas quedaban por debajo del borde. */
-.sim-rejilla {
+.como-pasos {
   display: grid;
-  gap: 28px;
-  align-items: start;
+  gap: 16px;
+  margin-top: 40px;
 }
-.sim-pasos {
-  margin-top: 28px;
-}
-@media (min-width: 1024px) {
-  .sim-rejilla {
-    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-    gap: 56px;
-  }
-  .sim-lateral {
-    position: sticky;
-    top: 104px;
-  }
-  .sim-lateral .titulo-seccion {
-    font-size: clamp(2rem, 3vw, 2.6rem);
+@media (min-width: 768px) {
+  .como-pasos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
   }
 }
-
-/* Los pasos: con la simulación en marcha se enciende el que toca. Sin ella
-   (sin JavaScript o con movimiento reducido) se leen todos por igual. */
-.sim-pasos {
-  display: grid;
-  gap: 4px;
-}
-.sim-paso {
-  position: relative;
-  padding: 14px 0 14px 22px;
-  transition: opacity 0.4s var(--curva);
-}
-.sim-paso::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 14px;
-  bottom: 14px;
-  width: 2px;
-  border-radius: 2px;
-  background: var(--line-soft);
-  transition: background-color 0.4s var(--curva);
-}
-.sim-paso h3 {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.sim-paso p {
-  margin-top: 4px;
-  color: var(--fg-muted);
-  font-size: 0.9375rem;
-}
-.animada .sim-paso {
-  opacity: 0.4;
-}
-.animada .sim-paso.hecho {
-  opacity: 0.7;
-}
-.animada .sim-paso.activo {
-  opacity: 1;
-}
-.animada .sim-paso.activo::before {
-  background: var(--brand);
-}
-/* En móvil, solo el paso en curso, encima de la ventana: los cinco a la vez
-   empujaban la simulación fuera de la pantalla. */
-@media (max-width: 1023px) {
-  /* Alto fijo, el del paso más largo a 390 px: con un mínimo más bajo, al
-     pasar de un paso de dos líneas a uno de tres la ventana saltaba 21 px
-     (medido) a mitad de la simulación. */
-  .animada .sim-pasos {
-    height: 112px;
-    overflow: hidden;
-  }
-  .animada .sim-paso {
-    display: none;
-  }
-  .animada .sim-paso.activo {
-    display: block;
-  }
-}
-/* La ventana: el mismo marco y placa que la app. */
-.sim {
-  padding: 10px;
+.como-pasos li {
+  padding: 28px;
   border-radius: var(--r-placa);
   border: 1px solid var(--line-soft);
-  background: var(--backdrop);
-  box-shadow: var(--sombra-ventana);
-}
-.sim-interior {
-  display: grid;
-  gap: 14px;
-  padding: clamp(14px, 2.2vw, 26px);
-  border-radius: 20px;
-  background: var(--canvas);
-}
-.sim-titulo {
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2.1vw, 1.7rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.sim-sub {
-  color: var(--fg-muted);
-  font-size: 0.875rem;
-}
-.sim-card {
-  padding: clamp(14px, 2vw, 22px);
-  border-radius: 20px;
-  border: 1px solid var(--line-soft);
   background: var(--surface);
 }
-.sim-card-titulo {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-/* La búsqueda. */
-.sim-busqueda-fila {
-  display: grid;
-  gap: 12px;
-  margin-top: 14px;
-  align-items: end;
-}
-/* En móvil, qué y dónde en la misma fila y Buscar debajo: los tres apilados
-   alargaban la ventana otros 80 px. */
-.sim-busqueda-fila {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-}
-.sim-boton {
-  grid-column: 1 / -1;
-}
-@media (min-width: 640px) {
-  .sim-busqueda-fila {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-  }
-  .sim-boton {
-    grid-column: auto;
-  }
-}
-.sim-campo {
-  display: grid;
-  gap: 6px;
-}
-.sim-etiqueta {
-  color: var(--fg-muted);
-  font-size: 0.8125rem;
-}
-.sim-input {
-  display: flex;
-  align-items: center;
-  height: 44px;
-  padding: 0 14px;
-  overflow: hidden;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--canvas);
-  font-size: 0.9375rem;
-  white-space: nowrap;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-.sim-input.enfocado {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 22%, transparent);
-}
-.sim-texto:empty::before {
-  content: attr(data-vacio);
-  color: var(--fg-faint);
-}
-.sim-input.enfocado .sim-texto::after {
-  content: "";
-  display: inline-block;
-  width: 1.5px;
-  height: 1.1em;
-  margin-left: 1px;
-  vertical-align: -0.18em;
-  background: var(--fg);
-  animation: sim-parpadeo 1s steps(1) infinite;
-}
-.sim-input.enfocado .sim-texto:empty::before {
-  content: none;
-}
-@keyframes sim-parpadeo {
-  50% {
-    opacity: 0;
-  }
-}
-.sim-boton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  padding: 0 22px;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--brand) 35%, var(--surface));
-  color: color-mix(in oklab, var(--fg) 45%, transparent);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    transform 0.15s var(--curva);
-}
-.sim-boton .i {
-  margin-right: 8px;
-}
-.sim-boton-buscar,
-.sim-boton-cancelar {
-  display: inline-flex;
-  align-items: center;
-}
-.sim-boton-cancelar {
-  display: none;
-}
-.sim-boton.listo {
-  background: var(--brand);
-  color: var(--brand-fg);
-}
-.sim-boton.pulsado {
-  transform: scale(0.94);
-}
-.sim-boton.cancelar {
-  background: var(--surface);
-  color: var(--fg);
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-.sim-boton.cancelar .sim-boton-buscar {
-  display: none;
-}
-.sim-boton.cancelar .sim-boton-cancelar {
-  display: inline-flex;
-}
-
-/* El avance y el resultado ocupan la misma celda: la ventana mide lo que el
-   más alto de los dos, así que cambiar de uno a otro no mueve la página. */
-.sim-escena {
-  display: grid;
-}
-.sim-escena > * {
-  grid-area: 1 / 1;
-  transition:
-    opacity 0.45s var(--curva),
-    transform 0.5s var(--curva),
-    visibility 0.45s;
-}
-.sim-escena > .oculto {
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(10px);
-}
-.sim-avance-cabecera {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-}
-.sim-eyebrow {
-  color: var(--fg-faint);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.sim-fase {
-  margin-top: 4px;
-  font-weight: 600;
-}
-.sim-porcentaje {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 600;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.sim-barra {
-  height: 8px;
-  margin-top: 12px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--surface-2);
-}
-.sim-barra span {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: var(--brand);
-  transform-origin: left;
-  transition: transform 0.2s linear;
-}
-.sim-mensaje-fila {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 2.8em;
-  margin-top: 10px;
-  color: var(--fg-muted);
-  font-size: 0.8125rem;
-}
-.sim-quedan {
-  flex: none;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-.sim-filas {
-  margin-top: 10px;
-}
-.sim-fila {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 8px;
-  border-top: 1px solid var(--line-soft);
-  font-size: 0.9375rem;
-  transition:
-    opacity 0.35s var(--curva),
-    transform 0.35s var(--curva),
-    background-color 0.3s ease;
-}
-.sim-fila.fuera {
-  opacity: 0;
-  transform: translateY(6px);
-}
-.sim-fila.mirando {
-  background: color-mix(in oklab, var(--brand) 8%, transparent);
-}
-.sim-fila-nombre {
-  overflow: hidden;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.sim-fila-nota {
-  color: var(--fg-muted);
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-}
-.sim-chip {
-  min-width: 96px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--fg-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-align: center;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-}
-.sim-fila[data-estado="sinweb"] .sim-chip {
-  background: color-mix(in oklab, var(--brand) 18%, transparent);
-  color: var(--brand-ink);
-}
-.sim-fila[data-estado="pendiente"] .sim-chip {
-  background: var(--aviso-fondo);
-  color: var(--aviso);
-}
-.sim-fila[data-estado="tieneweb"] {
-  opacity: 0.5;
-}
-.sim-fila[data-estado="tieneweb"] .sim-fila-nombre {
-  text-decoration: line-through;
-}
-@media (max-width: 639px) {
-  .sim-fila:nth-child(n + 6) {
-    display: none;
-  }
-  .sim-fila-nota {
-    display: none;
-  }
-}
-
-/* El resultado. */
-.sim-resultado-cabecera {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-.sim-resultado-icono {
+.como-numero {
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
-  border-radius: 12px;
-  background: var(--canvas);
-  color: var(--fg-muted);
-}
-.sim-resultado-titulos {
-  flex: 1;
-  min-width: 160px;
-}
-.sim-accion {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 14px;
   border-radius: 999px;
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--line-soft);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.sim-accion-primaria {
-  background: var(--brand);
-  color: var(--brand-fg);
-  box-shadow: none;
-}
-.sim-cifras {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 18px 0 0;
-}
-@media (min-width: 640px) {
-  .sim-cifras {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-.sim-cifra {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid var(--line-soft);
-  background: var(--canvas);
-}
-.sim-cifra dt {
-  color: var(--fg-muted);
-  font-size: 0.75rem;
-  line-height: 1.25;
-}
-.sim-cifra dd {
-  margin: 0;
+  background: color-mix(in oklab, var(--brand) 16%, var(--surface));
+  color: var(--brand-ink);
   font-family: var(--font-display);
-  font-size: 1.6rem;
   font-weight: 600;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
 }
-.sim-cifra.marca {
-  border-color: color-mix(in oklab, var(--brand) 40%, var(--line-soft));
-  background: color-mix(in oklab, var(--brand) 12%, var(--surface));
-}
-.sim-nota {
-  margin-top: 12px;
-  color: var(--fg-muted);
-  font-size: 0.8125rem;
-}
-.sim-nota-aviso {
-  color: var(--aviso);
-}
-.sim-controles {
-  display: flex;
-  justify-content: flex-end;
-  min-height: 42px;
-  margin-top: 16px;
-}
-
-/* En móvil el resultado se compacta: la ventana entera medía 1.158 px y no
-   cabía ni de lejos en una pantalla.
-
-   Va **detrás** de las reglas de la simulación y no al lado de los pasos,
-   donde estaba: con la misma especificidad gana la última, así que casi nada de
-   lo que había aquí se aplicaba —las baldosas seguían midiendo 134 × 88 con el
-   relleno de escritorio—.
-
-   Y se adelgazan los marcos. Ventana, interior y tarjeta llevaban cada uno su
-   relleno, y con el margen de la página se comían 112 de los 390 px: el
-   contenido se quedaba en 278 (medido), así que las etiquetas de las cifras se
-   partían en dos líneas y los botones del resultado iban cada uno en su fila. */
-@media (max-width: 639px) {
-  .sim {
-    margin-inline: -8px;
-    padding: 5px;
-    border-radius: 24px;
-  }
-  .sim-interior {
-    gap: 10px;
-    padding: 10px;
-    border-radius: 19px;
-  }
-  .sim-card {
-    padding: 14px;
-    border-radius: 16px;
-  }
-  .sim-sub {
-    font-size: 0.8125rem;
-  }
-
-  /* Las cifras, en filas: nombre a la izquierda y número a la derecha. En
-     baldosas de dos en dos, «Descartados (otro municipio)» no cabía en una
-     línea y las ocho medían 380 px. */
-  .sim-cifras {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-    margin-top: 12px;
-  }
-  .sim-cifra {
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 7px 10px;
-    border: 0;
-    /* Rectas: la raya de separación es una sombra, y con la fila redondeada
-       se curvaba en los extremos como un paréntesis. */
-    border-radius: 0;
-    background: transparent;
-  }
-  .sim-cifra + .sim-cifra {
-    box-shadow: inset 0 1px 0 var(--line-soft);
-  }
-  .sim-cifra.marca,
-  .sim-cifra.marca + .sim-cifra {
-    box-shadow: none;
-  }
-  .sim-cifra.marca {
-    border: 0;
-    border-radius: 10px;
-    background: color-mix(in oklab, var(--brand) 12%, var(--surface));
-  }
-  .sim-cifra dd {
-    font-size: 1.125rem;
-  }
-  .sim-cifra dt {
-    font-size: 0.8125rem;
-  }
-
-  /* Un solo botón: «Llamar» es el siguiente paso, y con los dos cada uno
-     ocupaba su propia fila. */
-  .sim-accion:not(.sim-accion-primaria) {
-    display: none;
-  }
-  .sim-nota:not(.sim-nota-aviso) {
-    display: none;
-  }
-  .sim-resultado-titulos {
-    min-width: 0;
-    flex-basis: calc(100% - 48px);
-  }
-
-  /* El avance y el resultado comparten celda, y el avance se estiraba hasta
-     el alto del resultado: medio móvil de tarjeta en blanco mientras escanea.
-     Cada uno con su alto; la ventana sigue midiendo lo del más alto y no salta. */
-  .sim-escena > * {
-    align-self: start;
-  }
-}
-
-/* --- IA ------------------------------------------------------------------- */
-
-.ia {
-  padding-block: clamp(72px, 10vw, 140px);
-}
-.ia-cabecera {
-  max-width: 760px;
-}
-.ia-rejilla {
-  display: grid;
-  gap: 24px;
-  margin-top: 48px;
-  align-items: stretch;
-}
-@media (min-width: 1024px) {
-  .ia-rejilla {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 56px;
-  }
-}
-.ia-destacada {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  padding: clamp(24px, 3vw, 40px);
-  overflow: hidden;
-  border-radius: var(--r-placa);
-  border: 1px solid var(--line-soft);
-  background:
-    radial-gradient(80% 70% at 100% 100%, color-mix(in oklab, var(--brand) 20%, transparent), transparent 70%),
-    var(--surface);
-}
-.ia-destacada h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.como-pasos h3 {
+  margin-top: 18px;
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.2;
 }
-.ia-destacada h3 .i {
-  color: var(--brand-ink);
-}
-.ia-destacada p {
-  margin-top: 10px;
-  max-width: 46ch;
+.como-pasos p {
+  margin-top: 6px;
   color: var(--fg-muted);
+  text-wrap: pretty;
 }
-.ia-recorte {
-  width: min(100%, 540px);
-  margin-top: auto;
-  align-self: flex-end;
+.como-ventajas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
 }
-.ia-lista {
-  display: grid;
-  align-content: center;
-  border-top: 1px solid var(--line-soft);
-}
-.ia-lista li {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 16px;
-  padding-block: 24px;
-  border-bottom: 1px solid var(--line-soft);
-}
-.ia-lista li > .i {
-  width: 40px;
-  height: 40px;
-  padding: 10px;
+.como-ventajas li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
   border-radius: 999px;
-  background: var(--surface);
   border: 1px solid var(--line-soft);
-  color: var(--brand-ink);
-}
-.ia-lista h3 {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.ia-lista p {
-  margin-top: 4px;
-  color: var(--fg-muted);
-}
-/* La letra pequeña, en datos sueltos. Era un párrafo de tres líneas en gris
-   claro que nadie leía, y lleva justo lo que pregunta quien duda: con qué
-   proveedores, dónde va la clave, quién paga y qué sale del ordenador. */
-.ia-nota {
-  display: grid;
-  gap: 14px 32px;
-  margin-top: 40px;
+  background: var(--surface);
   color: var(--fg-muted);
   font-size: 0.9375rem;
-  line-height: 1.45;
 }
-@media (min-width: 768px) {
-  .ia-nota {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .ia-nota {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-.ia-nota li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  text-wrap: pretty;
-}
-.ia-nota .i {
-  margin-top: 1px;
+.como-ventajas .i {
   color: var(--brand-ink);
 }
 
-/* Frases cortas que no dejen una palabra sola en la última línea: con
-   «notas.» o «recibe.» colgando, cada tarjeta parecía más larga de lo que era. */
-.ia-destacada p,
-.ia-lista p,
-.celda p {
-  text-wrap: pretty;
+/* Debajo de los botones de la portada: quien no tiene Windows lo sabe antes
+   de bajarse nada. Sustituye a la pregunta «¿Funciona en Mac?». */
+.hero-nota {
+  margin-top: 14px;
+  color: var(--fg-faint);
+  font-size: 0.875rem;
 }
-.ia-destacada h3,
-.ia-lista h3,
-.celda h3 {
-  text-wrap: balance;
+
+/* --- Barra de descarga (móvil) -------------------------------------------- */
+
+.barra-descarga {
+  display: none;
 }
-/* En móvil, a 17 px, cada frase corta se iba a dos o tres líneas. */
 @media (max-width: 767px) {
-  .ia-destacada p,
-  .ia-lista p,
-  .celda p {
-    font-size: 1rem;
-    line-height: 1.5;
+  .barra-descarga {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 40;
+    display: block;
+    padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-soft);
+    background: color-mix(in oklab, var(--canvas) 88%, transparent);
+    backdrop-filter: blur(12px);
+    transform: translateY(110%);
+    transition: transform 0.35s var(--curva);
+  }
+  .barra-descarga.visible {
+    transform: none;
   }
 }
-
-/* --- Bento ---------------------------------------------------------------- */
-
-.mas {
-  padding-block: clamp(72px, 10vw, 140px);
-}
-.mas-titulo {
-  max-width: 16ch;
-}
-.bento {
-  display: grid;
-  gap: 16px;
-  margin-top: 48px;
-}
-@media (min-width: 768px) {
-  .bento {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    /* Denso: sin esto «La cita» esperaba a que «A qué hora cogen» encontrase
-       sitio y dejaba un hueco vacío bajo «Correos». */
-    grid-auto-flow: row dense;
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .barra-descarga {
+    transition: none;
   }
-  .celda-csv {
-    grid-column: span 6;
-  }
-  .celda-agenda {
-    grid-column: span 4;
-    grid-row: span 2;
-  }
-  .celda-correo {
-    grid-column: span 2;
-  }
-  .celda-cita {
-    grid-column: span 2;
-  }
-  .celda-horas {
-    grid-column: span 3;
-  }
-  .celda-bajas,
-  .celda-csv {
-    grid-column: span 3;
-  }
-}
-@media (min-width: 1024px) {
-  .celda-horas {
-    grid-column: span 3;
-    grid-row: span 2;
-  }
-  .celda-bajas,
-  .celda-csv {
-    grid-column: span 3;
-  }
-}
-.celda {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: clamp(22px, 2.6vw, 32px);
-  overflow: hidden;
-  border-radius: var(--r-placa);
-  background: var(--surface);
-  border: 1px solid var(--line-soft);
-}
-.celda h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.celda h3 .i {
-  color: var(--brand-ink);
-}
-.celda p {
-  color: var(--fg-muted);
-  max-width: 46ch;
-}
-.celda-recorte {
-  margin-top: auto;
-  padding-top: 24px;
-}
-.celda-agenda {
-  background:
-    radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--brand) 16%, transparent), transparent 70%),
-    var(--surface);
-}
-.celda-horas {
-  background: var(--backdrop);
-}
-.celda-correo {
-  background: linear-gradient(160deg, color-mix(in oklab, var(--brand-soft) 45%, var(--surface)), var(--surface) 70%);
-}
-@media (prefers-color-scheme: dark) {
-  .celda-correo {
-    background: linear-gradient(160deg, color-mix(in oklab, var(--brand) 14%, var(--surface)), var(--surface) 70%);
-  }
-}
-
-/* --- Datos locales -------------------------------------------------------- */
-
-.local {
-  padding-block: clamp(72px, 10vw, 140px);
-  border-top: 1px solid var(--line-soft);
-}
-.local-rejilla {
-  display: grid;
-  gap: 48px;
-}
-@media (min-width: 1024px) {
-  .local-rejilla {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 80px;
-    align-items: start;
-  }
-  .local-rejilla .titulo-grande {
-    position: sticky;
-    top: 120px;
-  }
-}
-.local-lista {
-  display: grid;
-  gap: 36px;
-}
-@media (min-width: 640px) {
-  .local-lista {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 44px 36px;
-  }
-}
-.local-lista li {
-  display: grid;
-  gap: 14px;
-}
-.local-lista li > .i {
-  width: 44px;
-  height: 44px;
-  padding: 11px;
-  border-radius: 999px;
-  background: var(--surface);
-  border: 1px solid var(--line-soft);
-  color: var(--brand-ink);
-}
-.local-lista h3 {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-.local-lista p {
-  margin-top: 4px;
-  color: var(--fg-muted);
 }
 
 /* --- Precio --------------------------------------------------------------- */
@@ -1880,12 +984,7 @@ button {
 
 @media (max-width: 767px) {
   .escaparate,
-  .pasos,
-  .verificacion,
-  .prospeccion,
-  .ia,
-  .mas,
-  .local,
+  .como,
   .precio,
   .preguntas {
     padding-block: 52px;
@@ -1907,70 +1006,44 @@ button {
     font-size: 1rem;
   }
 
-  .escaparate-escena {
+  .escaparate {
+    padding-top: 8px;
+  }
+  /* El número al lado del título y no encima: las tres tarjetas apiladas
+     medían 1.097 px, más que una pantalla y media. */
+  .como-pasos {
+    gap: 10px;
     margin-top: 28px;
   }
-  .verificacion-rejilla {
-    gap: 28px;
+  .como-pasos li {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: center;
+    padding: 16px 18px;
   }
-
-  /* Lo que pasa antes y después de llamar: carrusel. */
-  .mas .bento {
-    display: flex;
-    gap: 12px;
-    margin-top: 28px;
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
+  .como-numero {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9375rem;
   }
-  .mas .bento::-webkit-scrollbar {
-    display: none;
+  .como-pasos h3 {
+    margin-top: 0;
+    font-size: 1.15rem;
   }
-  .mas .celda {
-    flex: 0 0 84%;
-    scroll-snap-align: start;
+  .como-pasos p {
+    grid-column: 2;
+    margin-top: 2px;
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
-
-  .ia-rejilla {
-    gap: 16px;
-    margin-top: 28px;
+  .como-ventajas {
+    gap: 8px;
+    margin-top: 18px;
   }
-  .ia-destacada {
-    gap: 20px;
-  }
-  .ia-lista li {
-    gap: 12px;
-    padding-block: 16px;
-  }
-  .ia-lista li > .i {
-    width: 34px;
-    height: 34px;
-    padding: 8px;
-  }
-  .ia-nota {
-    margin-top: 24px;
+  .como-ventajas li {
+    padding: 6px 12px;
     font-size: 0.875rem;
-  }
-
-  .local-rejilla {
-    gap: 28px;
-  }
-  .local-lista {
-    gap: 22px;
-  }
-  .local-lista li {
-    grid-template-columns: 40px minmax(0, 1fr);
-    gap: 14px;
-    align-items: start;
-  }
-  .local-lista li > .i {
-    width: 40px;
-    height: 40px;
-    padding: 10px;
   }
 
   .precio-rejilla {
@@ -1989,56 +1062,5 @@ button {
   .faq summary {
     padding: 16px 0;
     font-size: 1rem;
-  }
-
-  .sim-rejilla {
-    gap: 20px;
-  }
-  .sim-interior > div:first-child .sim-sub {
-    display: none;
-  }
-  .sim-fila:nth-child(n + 5) {
-    display: none;
-  }
-}
-
-/* Cómo funciona: sin los pasos fijados (móvil, tableta o movimiento reducido)
-   cada paso es una tarjeta del carrusel con su captura dentro. */
-@media (max-width: 1023px) {
-  .pasos:not(.fijada) .pasos-lista {
-    display: flex;
-    gap: 12px;
-    margin-top: 28px;
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
-  }
-  .pasos:not(.fijada) .pasos-lista::-webkit-scrollbar {
-    display: none;
-  }
-  .pasos:not(.fijada) .paso {
-    display: flex;
-    flex: 0 0 min(84%, 520px);
-    flex-direction: column;
-    padding: 18px;
-    border-radius: var(--r-placa);
-    border: 1px solid var(--line-soft);
-    background: var(--surface);
-    scroll-snap-align: start;
-  }
-  .pasos:not(.fijada) .paso-imagen {
-    margin-top: auto;
-    padding-top: 16px;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-  .pasos:not(.fijada) .paso-imagen img {
-    border-radius: 12px;
-    border: 1px solid var(--line-soft);
   }
 }

@@ -1,13 +1,11 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Escena } from "./escena";
-import { montarSimulacion } from "./simulacion";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = <T extends Element = HTMLElement>(sel: string, raiz: ParentNode = document) => raiz.querySelector<T>(sel);
-const $$ = <T extends Element = HTMLElement>(sel: string, raiz: ParentNode = document) => [...raiz.querySelectorAll<T>(sel)];
 
 /* --- La escena 3D ---------------------------------------------------------
  * Se carga después de pintar la página: three.js es lo más pesado de la web y
@@ -89,55 +87,27 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   });
 });
 
-/* --- Cómo funciona: los pasos fijados y la pantalla que cambia ------------
- * Solo en escritorio y con movimiento: en móvil, o con movimiento reducido,
- * cada paso lleva su propia captura debajo y no se fija nada. */
-mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-  const seccion = $("[data-pasos]");
-  if (!seccion) return;
-  const pasos = $$(".paso", seccion);
-  const vistas = $$(".visor-vista", seccion);
-  const n = pasos.length;
-  seccion.classList.add("fijada");
-
-  let actual = -1;
-  const activar = (i: number) => {
-    if (i === actual) return;
-    actual = i;
-    pasos.forEach((p, k) => p.classList.toggle("activo", k === i));
-    vistas.forEach((v, k) => {
-      v.classList.toggle("activo", k === i);
-      v.classList.toggle("pasada", k < i);
-    });
+/* --- La barra de descarga en móvil -----------------------------------------
+ * Aparece cuando el botón de la portada ya ha salido de la pantalla y se va
+ * al llegar al cierre, que trae el suyo: nunca hay dos botones iguales a la
+ * vista. Solo se ve por debajo de 768 px; lo decide el CSS. */
+const barra = $("[data-barra]");
+if (barra) {
+  const portada = $(".hero-acciones");
+  const cierre = $(".final");
+  let pendiente = false;
+  const actualizar = () => {
+    pendiente = false;
+    const pasada = portada ? portada.getBoundingClientRect().bottom < 0 : true;
+    const enCierre = cierre ? cierre.getBoundingClientRect().top < window.innerHeight : false;
+    barra.classList.toggle("visible", pasada && !enCierre);
   };
-  activar(0);
-
-  const disparador = ScrollTrigger.create({
-    trigger: seccion,
-    start: "top top",
-    end: () => `+=${window.innerHeight * (n - 1) * 0.85}`,
-    pin: true,
-    invalidateOnRefresh: true,
-    onUpdate(s) {
-      const posicion = s.progress * n;
-      const i = Math.min(n - 1, Math.floor(posicion));
-      activar(i);
-      pasos.forEach((p, k) => p.style.setProperty("--avance", String(Math.min(Math.max(posicion - k, 0), 1))));
-    },
-  });
-
-  return () => {
-    disparador.kill();
-    seccion.classList.remove("fijada");
-    pasos.forEach((p) => {
-      p.classList.remove("activo");
-      p.style.removeProperty("--avance");
-    });
-    vistas.forEach((v) => v.classList.remove("activo", "pasada"));
+  const pedir = () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(actualizar);
   };
-});
-
-/* --- La simulación de Prospección ------------------------------------------
- * Con movimiento reducido se queda en el estado final que ya trae el HTML. */
-const simulacion = $("[data-sim]");
-if (simulacion && !reducido) montarSimulacion(simulacion);
+  window.addEventListener("scroll", pedir, { passive: true });
+  window.addEventListener("resize", pedir);
+  actualizar();
+}
