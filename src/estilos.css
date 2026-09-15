@@ -679,22 +679,24 @@ button {
 
 /* Debajo de los botones de la portada: quien no tiene Windows lo sabe antes
    de bajarse nada. Sustituye a la pregunta «¿Funciona en Mac?». */
-/* El requisito, pegado al botón que describe. Suelto debajo de los botones
-   quedaba contra el borde izquierdo sin ser de ninguno, y en móvil caía bajo
-   «Ver cómo funciona», lejos de la descarga. */
-.descarga {
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-}
-.hero-acciones,
-.pagina-acciones {
-  align-items: flex-start;
-}
+/* Debajo de los botones, alineada con ellos. Se probó a pegarla al botón de
+   descarga y a él le gustaba más suelta; lo que la hacía parecer descolocada
+   era el móvil, donde los dos botones medían distinto (267 y 220 px) y la nota
+   quedaba sola a la izquierda. */
 .hero-nota {
+  margin-top: 16px;
   color: var(--fg-muted);
-  font-size: 0.8125rem;
-  line-height: 1.3;
+  font-size: 0.875rem;
+}
+@media (max-width: 767px) {
+  .hero-acciones,
+  .pagina-acciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero-nota {
+    text-align: center;
+  }
 }
 
 /* --- Barra de descarga (móvil) -------------------------------------------- */
