@@ -1403,18 +1403,58 @@ button {
   margin-top: 4px;
   color: var(--fg-muted);
 }
+/* La letra pequeña, en datos sueltos. Era un párrafo de tres líneas en gris
+   claro que nadie leía, y lleva justo lo que pregunta quien duda: con qué
+   proveedores, dónde va la clave, quién paga y qué sale del ordenador. */
 .ia-nota {
+  display: grid;
+  gap: 14px 32px;
+  margin-top: 40px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+@media (min-width: 768px) {
+  .ia-nota {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .ia-nota {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.ia-nota li {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-top: 40px;
-  max-width: 78ch;
-  color: var(--fg-faint);
-  font-size: 0.9375rem;
+  gap: 10px;
+  text-wrap: pretty;
 }
 .ia-nota .i {
-  margin-top: 3px;
+  margin-top: 1px;
   color: var(--brand-ink);
+}
+
+/* Frases cortas que no dejen una palabra sola en la última línea: con
+   «notas.» o «recibe.» colgando, cada tarjeta parecía más larga de lo que era. */
+.ia-destacada p,
+.ia-lista p,
+.celda p {
+  text-wrap: pretty;
+}
+.ia-destacada h3,
+.ia-lista h3,
+.celda h3 {
+  text-wrap: balance;
+}
+/* En móvil, a 17 px, cada frase corta se iba a dos o tres líneas. */
+@media (max-width: 767px) {
+  .ia-destacada p,
+  .ia-lista p,
+  .celda p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 }
 
 /* --- Bento ---------------------------------------------------------------- */
