@@ -1780,6 +1780,14 @@ button {
   width: 84px;
   height: auto;
 }
+/* Una caja de verdad para el logo. Con el `display: contents` que llevan
+   todas las `picture`, su `<source>` entraba en la fila como un hijo más de
+   0 px y se llevaba el hueco de 32 px: el logo empezaba en x132 con el resto
+   de la página en x100, y en móvil en x48 con el © en x16. */
+.pie-fila picture {
+  display: block;
+  line-height: 0;
+}
 .pie-enlaces {
   display: flex;
   flex-wrap: wrap;
@@ -1791,6 +1799,35 @@ button {
 }
 .pie-enlaces a:hover {
   color: var(--fg);
+}
+/* En móvil, apilado y alineado a la izquierda. En fila con `flex-wrap`, el
+   `margin-left: auto` de los enlaces los empujaba a la derecha en su propia
+   línea: medido a 390 px, el logo empezaba en x48, los enlaces en x38 y el ©
+   en x16, tres márgenes distintos uno encima de otro. Y los enlaces medían 24
+   px de alto, poco para un dedo. */
+@media (max-width: 767px) {
+  .pie {
+    padding-block: 28px 36px;
+  }
+  .pie-fila {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .pie-fila picture {
+    display: block;
+    line-height: 0;
+  }
+  .pie-enlaces {
+    flex-direction: column;
+    gap: 0;
+    margin-left: 0;
+  }
+  .pie-enlaces a {
+    display: block;
+    padding-block: 10px;
+    color: var(--fg-muted);
+  }
 }
 
 /* --- Páginas legales ------------------------------------------------------ */
