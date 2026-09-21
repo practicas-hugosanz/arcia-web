@@ -28,7 +28,12 @@ jobs:
   compilar:
     runs-on: ubuntu-latest
     steps:
+      # Con la historia entera: el `lastmod` del sitemap sale del último commit
+      # que tocó cada página, y con la copia de un solo commit que trae el
+      # checkout por defecto todas dirían que cambiaron hoy.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22

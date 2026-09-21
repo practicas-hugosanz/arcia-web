@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from "vite";
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { sitio } from "./sitio.config";
 
@@ -62,7 +63,29 @@ function icono(nombre: string): string {
     .replace("<svg ", '<svg class="i" aria-hidden="true" focusable="false" ');
 }
 
-function datosEstructurados(html: string): string {
+/** El título y la descripción que ya lleva la página, para no escribirlos dos veces. */
+const cabecera = (html: string) => ({
+  titulo: texto(/<title>([\s\S]*?)<\/title>/.exec(html)?.[1] ?? "Arcia"),
+  descripcion: /<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "",
+});
+
+/**
+ * El nombre con el que se enseña cada página en las migas.
+ *
+ * Es el del menú del pie, no el `<title>`: «Cómo funciona» y no «Cómo funciona
+ * Arcia: de Google Maps a la llamada», que en una miga se lee fatal.
+ */
+const MIGAS: Record<string, string> = {
+  "como-funciona": "Cómo funciona",
+  verificacion: "Verificación",
+  ia: "IA",
+  seguimiento: "Llamadas y seguimiento",
+  "tus-datos": "Tus datos",
+  "aviso-legal": "Aviso legal",
+  privacidad: "Privacidad",
+};
+
+function datosEstructurados(html: string, pagina: string): string {
   const preguntas = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>\s*<div class="faq-respuesta">([\s\S]*?)<\/div>/g)].map(
     ([, pregunta, respuesta]) => ({
       "@type": "Question",
@@ -82,7 +105,21 @@ function datosEstructurados(html: string): string {
     operatingSystem: "Windows 10, Windows 11",
     inLanguage: "es-ES",
     downloadUrl: sitio.descarga,
-    screenshot: `${sitio.url}/img/app/call-claro-1400.webp`,
+    installUrl: `${sitio.url}/`,
+    softwareRequirements: "Windows 10 o superior, 64 bits",
+    screenshot: ["scan", "leads", "call", "agenda"].map((p) => `${sitio.url}/img/app/${p}-claro-1400.webp`),
+    // Lo que hace, con las palabras con las que se busca. Cada línea sale de
+    // una página del sitio: nada aquí que no esté contado y sea verdad.
+    featureList: [
+      "Busca negocios en Google Maps por oficio y municipio, en cualquiera de los 8.132 de España",
+      "Comprueba si cada negocio tiene web antes de darlo por bueno, y deja aparte lo que no puede asegurar",
+      "Modo llamada con el guion delante y un resultado por tecla",
+      "Agenda de seguimientos y citas en tu calendario",
+      "Correos en tanda desde tu propia cuenta",
+      "IA opcional con tu clave: web de muestra, guion y correos",
+      "Los leads se guardan en tu ordenador, no en un servidor nuestro",
+    ],
+    keywords: "prospección B2B, negocios sin web, clientes sin página web, Google Maps, llamadas en frío, leads locales",
     publisher: { "@id": `${sitio.url}/#organizacion` },
   };
   if (sitio.precioMes) {
@@ -103,6 +140,17 @@ function datosEstructurados(html: string): string {
     };
   }
 
+  const { titulo, descripcion } = cabecera(html);
+  const direccion = pagina ? `${sitio.url}/${pagina}` : `${sitio.url}/`;
+  // El aviso legal y la privacidad no van «de» la aplicación: son del titular.
+  // Declararlas como páginas sobre el producto, con su precio y todo, es
+  // decirle a Google que ahí se vende algo, y ahí no se vende nada.
+  const legal = pagina === "aviso-legal" || pagina === "privacidad";
+
+  // La Organization y el WebSite van en **todas** las páginas, no solo en la
+  // portada. Son lo que le dice a Google que «Arcia» es una cosa concreta con
+  // su nombre, su logotipo y sus perfiles, y repetirlo en cada página es lo
+  // que sostiene la búsqueda por la marca a secas.
   const grafo = {
     "@context": "https://schema.org",
     "@graph": [
@@ -110,6 +158,9 @@ function datosEstructurados(html: string): string {
         "@type": "Organization",
         "@id": `${sitio.url}/#organizacion`,
         name: "Arcia",
+        alternateName: "Arcia App",
+        description:
+          "Arcia hace prospección B2B local: encuentra en Google Maps los negocios sin web de una zona, comprueba que de verdad no la tienen y prepara la llamada.",
         url: `${sitio.url}/`,
         logo: `${sitio.url}/img/arcia-logo.png`,
         email: sitio.correo,
@@ -125,12 +176,62 @@ function datosEstructurados(html: string): string {
         inLanguage: "es-ES",
         publisher: { "@id": `${sitio.url}/#organizacion` },
       },
-      aplicacion,
+      {
+        "@type": "WebPage",
+        "@id": `${direccion}#pagina`,
+        url: direccion,
+        name: titulo,
+        ...(descripcion ? { description: descripcion } : {}),
+        isPartOf: { "@id": `${sitio.url}/#web` },
+        ...(legal ? {} : { about: { "@id": `${sitio.url}/#app` } }),
+        inLanguage: "es-ES",
+        ...(pagina && MIGAS[pagina] ? { breadcrumb: { "@id": `${direccion}#migas` } } : {}),
+      },
+      // Las migas solo en las de dentro: en la portada serían un solo escalón.
+      ...(pagina && MIGAS[pagina]
+        ? [
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${direccion}#migas`,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Arcia", item: `${sitio.url}/` },
+                { "@type": "ListItem", position: 2, name: MIGAS[pagina] },
+              ],
+            },
+          ]
+        : []),
+      ...(legal ? [] : [aplicacion]),
       ...(preguntas.length ? [{ "@type": "FAQPage", "@id": `${sitio.url}/#preguntas`, mainEntity: preguntas }] : []),
     ],
   };
   return `<script type="application/ld+json">${JSON.stringify(grafo)}</script>`;
 }
+
+/**
+ * Cuándo se tocó por última vez la página, de verdad.
+ *
+ * Antes todas llevaban la fecha del despliegue, así que cada publicación decía
+ * que las ocho habían cambiado hoy —incluida la privacidad, que lleva sin
+ * tocarse desde que se escribió—. Google se fía del `lastmod` mientras le
+ * cuadra y lo ignora en cuanto le mienten, y ese es justo el aviso que
+ * interesa que crea: «esta ha cambiado, vuelve a mirarla».
+ *
+ * Sale del último commit que tocó el fichero. Si no hay historia —una copia
+ * descargada en zip, o un `checkout` sin profundidad— se cae a la fecha del
+ * fichero, que sigue siendo mejor que la de hoy para todas.
+ */
+const tocada = (pagina: string): string => {
+  const fichero = `${pagina || "index"}.html`;
+  try {
+    const fecha = execFileSync("git", ["log", "-1", "--format=%cs", "--", fichero], {
+      cwd: RAIZ,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return fecha;
+  } catch {}
+  return new Date(statSync(resolve(RAIZ, fichero)).mtime).toISOString().slice(0, 10);
+};
 
 function arcia(): Plugin {
   // La ruta base con la que se sirve la web: «/» en arcia.es, y `BASE` la
@@ -145,7 +246,11 @@ function arcia(): Plugin {
     },
     transformIndexHtml: {
       order: "pre",
-      handler(html) {
+      handler(html, ctx) {
+        // «/ia.html» → «ia»; la portada, cadena vacía. De aquí salen la URL de
+        // la página en los datos estructurados y sus migas.
+        const archivo = ctx.path.replace(/^\//, "").replace(/\.html$/, "");
+        const pagina = archivo === "index" ? "" : archivo;
         const m = medidas();
         let salida = html
           // Las piezas primero: traen sus propios iconos, enlaces y %CORREO%,
@@ -185,16 +290,15 @@ function arcia(): Plugin {
             return imagen("app", nombre, medida, resto);
           });
         if (salida.includes("<!--datos-estructurados-->")) {
-          salida = salida.replace("<!--datos-estructurados-->", datosEstructurados(salida));
+          salida = salida.replace("<!--datos-estructurados-->", datosEstructurados(salida, pagina));
         }
         return salida;
       },
     },
     generateBundle() {
       const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad"] : [];
-      const hoy = new Date().toISOString().slice(0, 10);
       const urls = ["", ...FUNCIONES, ...legales].map(
-        (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${hoy}</lastmod></url>`,
+        (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${tocada(p)}</lastmod></url>`,
       );
       this.emitFile({
         type: "asset",
