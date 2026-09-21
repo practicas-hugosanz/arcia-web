@@ -280,11 +280,6 @@ button {
   background: var(--brand);
   transform: none;
 }
-.hero-nota a,
-.tarjeta-precio-nota a {
-  color: var(--brand-ink);
-  font-weight: 600;
-}
 .boton-secundario {
   background: var(--surface);
   color: var(--fg);
@@ -588,14 +583,6 @@ button {
   .hero-titulo {
     font-size: clamp(1.9rem, 10.2vw, 2.9rem);
   }
-  /* Centrada solo en un teléfono de verdad. Estaba centrada desde los 767 px,
-     que también coge la ventana de un ordenador a media pantalla: allí el
-     titular y la frase siguen a la izquierda y la nota se ve corrida a la
-     derecha, sola. En el teléfono, con los dos botones a todo el ancho,
-     centrada queda bien y así se queda. */
-  .hero-nota {
-    text-align: center;
-  }
 }
 .hero-sub {
   margin-top: 28px;
@@ -825,6 +812,28 @@ button {
   margin-top: 16px;
   color: var(--fg-muted);
   font-size: 0.875rem;
+}
+/* Sangrada los 24 px de relleno del botón más su borde: pegada al margen de la
+   página caía bajo el arranque redondo de la píldora, que es aire, y se veía
+   descolgada; así empieza donde empieza el icono, que es lo que el ojo toma
+   por principio del botón.
+   Solo de 768 para arriba, que es donde los botones abrazan su texto. Por
+   debajo van a todo el ancho con la etiqueta centrada y la sangría no
+   alinearía con nada. */
+@media (min-width: 768px) {
+  .hero-nota {
+    padding-left: 25px;
+  }
+}
+/* Centrada solo en un teléfono de verdad. Estaba centrada desde los 767 px, y
+   ese umbral también coge la ventana de un ordenador a media pantalla: allí el
+   titular y la frase siguen a la izquierda y la nota se ve corrida a la
+   derecha, sola. En el teléfono, con los dos botones a todo el ancho, centrada
+   queda bien y así se queda. */
+@media (max-width: 479px) {
+  .hero-nota {
+    text-align: center;
+  }
 }
 @media (max-width: 767px) {
   .hero-acciones,

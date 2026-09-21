@@ -180,9 +180,11 @@ if (barra) {
 /* --- Desde un teléfono no hay nada que descargar ---------------------------
  * Arcia es una app de Windows: quien abra la página desde el móvil no puede
  * bajársela, y un botón que promete un .exe en un iPhone es una puerta a
- * ninguna parte. Ahí los botones dicen a qué tienda va la app, y debajo se
- * deja el camino a la de escritorio, que es la que existe hoy: si alguien
- * llega por un enlace compartido, tiene que poder encontrarla.
+ * ninguna parte. Ahí los botones dicen a qué tienda va la app.
+ *
+ * Solo cambian los botones. Las notas de debajo —«Para Windows 10 y 11»— se
+ * quedan como están: se probó a colgarles el enlace al instalador y él lo
+ * quitó, no quiere nada más ahí.
  *
  * Se mira el sistema y no el ancho de la ventana: una ventana estrecha en un
  * ordenador sigue siendo un ordenador donde el instalador funciona. */
@@ -202,20 +204,8 @@ if (suTienda) {
   for (const boton of $$<HTMLAnchorElement>("[data-descarga]")) {
     // El de la cabecera solo dice «Descargar»: ahí no cabe el nombre entero.
     const corto = (boton.querySelector("span")?.textContent ?? "").trim() === "Descargar";
-    const destino = boton.href;
     boton.removeAttribute("href");
     boton.classList.add("boton-proximamente");
     boton.innerHTML = `${icono}<span>${corto ? "Próximamente" : `Próximamente en ${suTienda.nombre}`}</span>`;
-    boton.dataset.escritorio = destino;
-  }
-  // Las notas que hablaban del instalador, ahora que el botón no lo baja.
-  const nota = $(".hero-nota");
-  const enlace = $<HTMLAnchorElement>("[data-descarga]")?.dataset.escritorio ?? "";
-  // Corta a propósito: partida en dos líneas se come 20 px del hueco donde
-  // caben las fichas de la escena, y ahí cada píxel cuenta.
-  if (nota) nota.innerHTML = `Para Windows 10 y 11: <a href="${enlace}">descargar</a>`;
-  const notaPrecio = $(".tarjeta-precio-nota");
-  if (notaPrecio) {
-    notaPrecio.innerHTML = `Windows 10 y 11, 64 bits: <a href="${enlace}">descargar el instalador</a>`;
   }
 }
