@@ -226,6 +226,33 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   const camara = new PerspectiveCamera(38, 1, 0.1, 100);
   const desde = new Vector3(0, 12.5, 15.5);
   const hasta = new Vector3(0, 7.5, 9);
+
+  /**
+   * Cuánto se echa atrás la cámara en una pantalla estrecha.
+   *
+   * El fov de una `PerspectiveCamera` es el vertical: lo que se ve de ancho
+   * sale de multiplicarlo por el aspecto. Con 38° y 1440×900 entran 57,8° de
+   * ancho; en un móvil de 390×523 entran 28,8°, la mitad justa. El pueblo es
+   * un disco ancho, así que ahí salía recortado por los lados y pegado a los
+   * dos bordes: es lo que se veía apretado, y no tenía que ver con el alto del
+   * hueco sino con el aspecto.
+   *
+   * Compensarlo del todo (`REF / aspecto`) deja el pueblo diminuto en el
+   * centro, porque también se aleja en vertical, que es donde sobra sitio.
+   * La raíz cuadrada se queda a medio camino: a 390×523 son 1,32, el pueblo
+   * mengua un tercio y aparece margen a los lados sin que el barrido del
+   * anillo pierda tamaño.
+   */
+  const REF = 1.3;
+  let retirada = 1;
+  const recalcularRetirada = () => {
+    retirada = camara.aspect < REF ? Math.sqrt(REF / camara.aspect) : 1;
+  };
+  /** La cámara en su punto del vuelo, ya retirada si la pantalla es estrecha. */
+  const colocar = (avance: number) => {
+    camara.position.lerpVectors(desde, hasta, avance).multiplyScalar(retirada);
+    camara.lookAt(0, 0, 0);
+  };
   camara.position.copy(desde);
   camara.lookAt(0, 0, 0);
 
@@ -283,12 +310,33 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   // va arriba.
   // Entre 1024 y 1280 px el titular ocupa más de media pantalla: ahí la zona
   // empieza más a la derecha o la primera ficha tapaba «clientes».
+  //
+  // En móvil la franja se mide contra lo que tiene encima y debajo —el
+  // contador y el titular— y no en fracciones del lienzo: el hueco entre esos
+  // dos no crece al mismo ritmo que la pantalla. Con fracciones, a 320×700
+  // salía una tarjeta metida detrás del contador y otra encima de «Encuentra
+  // clientes», mientras que a 390×844 quedaban bien. Si en un teléfono muy
+  // bajo no cabe ninguna, no sale ninguna: es mejor que verlas pisando el
+  // texto.
+  const ALTO_TARJETA = 76;
+  const AIRE = 30;
+  let franja = { y0: 0, y1: 0 };
+  const medirFranja = () => {
+    const r = lienzo.getBoundingClientRect();
+    const contador = contenedor.querySelector(".escaneo")?.getBoundingClientRect();
+    const titulo = document.querySelector(".hero-titulo")?.getBoundingClientRect();
+    // La tarjeta se dibuja encima de su punto, así que arriba hay que guardar
+    // su alto entero; abajo basta con el hilo que la une al punto.
+    const techo = contador ? contador.bottom - r.top : alto * 0.2;
+    const suelo = titulo ? titulo.top - r.top : alto * 0.8;
+    franja = { y0: techo + ALTO_TARJETA + AIRE, y1: suelo - AIRE };
+  };
   const base = () =>
     ancho >= 1280
       ? { x0: ancho * 0.63, x1: ancho * 0.88, y0: alto * 0.22, y1: alto * 0.74 }
       : ancho >= 1024
         ? { x0: ancho * 0.74, x1: ancho * 0.88, y0: alto * 0.3, y1: alto * 0.74 }
-        : { x0: ancho * 0.32, x1: ancho * 0.68, y0: alto * 0.4, y1: alto * 0.78 };
+        : { x0: ancho * 0.32, x1: ancho * 0.68, y0: franja.y0, y1: franja.y1 };
 
   // El pueblo gira despacio, y en lo que tarda el anillo en llegar a un
   // negocio su punto se mueve decenas de píxeles. Si se exigía la misma zona
@@ -306,11 +354,16 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   };
   const zona = () => {
     const z = base();
+    // La holgura de 90 px vale donde sobra sitio. En móvil la franja está
+    // medida contra el contador y el titular: estirarla 90 px es volver a
+    // pisarlos, así que ahí se deja solo lo justo para que una ficha no
+    // desaparezca por moverse su punto mientras el anillo llega.
+    const suelta = ancho >= 1024 ? HOLGURA : 24;
     return {
       x0: z.x0,
       x1: Math.min(z.x1 + HOLGURA, ancho - 110),
-      y0: Math.max(z.y0 - HOLGURA, 80),
-      y1: Math.min(z.y1 + HOLGURA, alto - 30),
+      y0: Math.max(z.y0 - suelta, 80),
+      y1: Math.min(z.y1 + suelta, alto - 30),
     };
   };
   const dentro = (p: { x: number; y: number }, z: { x0: number; x1: number; y0: number; y1: number }) =>
@@ -420,10 +473,16 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     render.setSize(ancho, alto, false);
     material.uniforms.uPixel.value = dpr;
     camara.aspect = ancho / alto;
+    recalcularRetirada();
+    medirFranja();
     if (ancho >= 1024) camara.setViewOffset(ancho, alto, -ancho * 0.27, alto * 0.03, ancho, alto);
     else camara.clearViewOffset();
     camara.updateProjectionMatrix();
     if (reducido) {
+      // La cámara antes de elegir, o las fichas se colocan con la posición sin
+      // retirar y la de después: con movimiento reducido no hay más fotogramas
+      // que arreglen el desajuste.
+      colocar(0);
       elegir();
       dibujar(0);
     }
@@ -464,13 +523,11 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
       // Empieza un barrido nuevo: fichas nuevas, sobre otros negocios. Se
       // eligen con la cámara ya colocada para este fotograma.
       if (nuevaVuelta) {
-        camara.position.lerpVectors(desde, hasta, avance);
-        camara.lookAt(0, 0, 0);
+        colocar(avance);
         elegir();
       }
     }
-    camara.position.lerpVectors(desde, hasta, avance);
-    camara.lookAt(0, 0, 0);
+    colocar(avance);
     grupo.updateMatrixWorld();
     render.render(escena, camara);
     colocarFichas(barrido, visible);
@@ -504,6 +561,10 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   encajar();
   colores();
   arrancar();
+  // El titular mide otra cosa con la tipografía ya cargada, y de él sale el
+  // suelo de la franja: sin esto la primera tanda de fichas se coloca contra
+  // un titular más corto del que se acaba viendo.
+  document.fonts?.ready.then(encajar);
 
   return {
     progreso(p) {
