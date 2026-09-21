@@ -159,6 +159,11 @@ function arcia(): Plugin {
           .replace(/<!--si-precio-->([\s\S]*?)<!--\/si-precio-->/g, (_, dentro) => (sitio.precioMes ? dentro : ""))
           .replace(/<!--sin-precio-->([\s\S]*?)<!--\/sin-precio-->/g, (_, dentro) => (sitio.precioMes ? "" : dentro))
           .replace(/<!--si-tiktok-->([\s\S]*?)<!--\/si-tiktok-->/g, (_, dentro) => (sitio.tiktok ? dentro : ""))
+          // Todo enlace a la descarga queda marcado para que `main.ts` lo
+          // encuentre: en un teléfono no hay nada que bajarse y ahí el botón
+          // dice que la app está en camino a su tienda. Se marca aquí y no a
+          // mano en los once sitios donde aparece, que es donde se olvida.
+          .replace(/<a ([^>]*)href="%DESCARGA%"/g, '<a data-descarga $1href="%DESCARGA%"')
           .replace(/<!--robots-legal-->/g, sitio.legalCompleto ? "" : '<meta name="robots" content="noindex, follow">')
           .replace(/%URL%/g, sitio.url)
           .replace(/%DESCARGA%/g, sitio.descarga)

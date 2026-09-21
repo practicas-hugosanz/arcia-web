@@ -176,3 +176,46 @@ if (barra) {
   window.addEventListener("resize", pedir);
   actualizar();
 }
+
+/* --- Desde un teléfono no hay nada que descargar ---------------------------
+ * Arcia es una app de Windows: quien abra la página desde el móvil no puede
+ * bajársela, y un botón que promete un .exe en un iPhone es una puerta a
+ * ninguna parte. Ahí los botones dicen a qué tienda va la app, y debajo se
+ * deja el camino a la de escritorio, que es la que existe hoy: si alguien
+ * llega por un enlace compartido, tiene que poder encontrarla.
+ *
+ * Se mira el sistema y no el ancho de la ventana: una ventana estrecha en un
+ * ordenador sigue siendo un ordenador donde el instalador funciona. */
+const tienda = () => {
+  const ua = navigator.userAgent;
+  if (/Android/i.test(ua)) return { id: "android", nombre: "Google Play" };
+  // El iPad dice ser un Mac desde iPadOS 13; lo delata que acepte varios dedos.
+  const iPadNuevo = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+  if (/iPhone|iPad|iPod/i.test(ua) || iPadNuevo) return { id: "ios", nombre: "la App Store" };
+  return null;
+};
+
+const suTienda = tienda();
+if (suTienda) {
+  const logo = $(`[data-tiendas]`) as HTMLTemplateElement | null;
+  const icono = logo?.content.querySelector(`[data-tienda="${suTienda.id}"]`)?.innerHTML ?? "";
+  for (const boton of $$<HTMLAnchorElement>("[data-descarga]")) {
+    // El de la cabecera solo dice «Descargar»: ahí no cabe el nombre entero.
+    const corto = (boton.querySelector("span")?.textContent ?? "").trim() === "Descargar";
+    const destino = boton.href;
+    boton.removeAttribute("href");
+    boton.classList.add("boton-proximamente");
+    boton.innerHTML = `${icono}<span>${corto ? "Próximamente" : `Próximamente en ${suTienda.nombre}`}</span>`;
+    boton.dataset.escritorio = destino;
+  }
+  // Las notas que hablaban del instalador, ahora que el botón no lo baja.
+  const nota = $(".hero-nota");
+  const enlace = $<HTMLAnchorElement>("[data-descarga]")?.dataset.escritorio ?? "";
+  // Corta a propósito: partida en dos líneas se come 20 px del hueco donde
+  // caben las fichas de la escena, y ahí cada píxel cuenta.
+  if (nota) nota.innerHTML = `Para Windows 10 y 11: <a href="${enlace}">descargar</a>`;
+  const notaPrecio = $(".tarjeta-precio-nota");
+  if (notaPrecio) {
+    notaPrecio.innerHTML = `Windows 10 y 11, 64 bits: <a href="${enlace}">descargar el instalador</a>`;
+  }
+}

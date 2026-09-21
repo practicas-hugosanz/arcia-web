@@ -268,6 +268,23 @@ button {
   background: #1fd0fc;
   transform: translateY(-1px);
 }
+/* El botón que anuncia la tienda desde un teléfono. Guarda el peso del
+   principal —es lo que se tiene que ver— pero no reacciona: no lleva a ningún
+   sitio todavía, y un botón que se ilumina al tocarlo y no hace nada se siente
+   roto. Debajo queda la nota con el enlace al instalador, que sí existe. */
+.boton-proximamente {
+  cursor: default;
+}
+.boton-proximamente:hover,
+.boton-proximamente:active {
+  background: var(--brand);
+  transform: none;
+}
+.hero-nota a,
+.tarjeta-precio-nota a {
+  color: var(--brand-ink);
+  font-weight: 600;
+}
 .boton-secundario {
   background: var(--surface);
   color: var(--fg);
@@ -636,25 +653,29 @@ button {
   will-change: transform;
 }
 /* En el móvil la ventana entera no se ve: son 1.400 px de app metidos en 358,
-   un 26 %, con el texto de la interfaz a 3,4 px. Medido a 390×844. Así que
-   ahí no se enseña la ventana entera sino un trozo en vertical, a más del
-   doble de tamaño: la cabecera de Prospección, el principio de «Nueva
-   búsqueda» y la lista de escaneos recientes con sus cuentas. Al 66 % de la
-   app de verdad los títulos ya se leen.
-   El recorte se hace con la imagen de siempre desplazada dentro del marco
-   —que ya recorta— y no con un recorte nuevo: `capturas.mjs` tendría que
-   volver a compilar la app y fotografiarla entera para uno solo. */
+   un 26 %, con el texto de la interfaz a 3,4 px. Medido a 390×844.
+   Así que ahí se enseña una sola tarjeta de la app —«Escaneos recientes», que
+   es la que cuenta algo sola: qué se buscó, cuándo y cuántos salieron— y se
+   recorta por sus propios bordes, de modo que no hay ninguna palabra partida
+   ni ningún campo a medias. Sale al 70 % del tamaño que tiene en la app.
+   Se hace desplazando la imagen de siempre dentro del marco, que ya recorta,
+   y no con un recorte nuevo: para eso `capturas.mjs` tiene que compilar la
+   app y fotografiarla entera, y esto es una sola imagen.
+   Los porcentajes del `translate` son del propio tamaño de la imagen, así que
+   se leen como lo que son: la esquina de la tarjeta dentro de la captura,
+   336/1600 de ancho y 550/980 de alto. */
 @media (max-width: 767px) {
   .escaparate-ventana {
     position: relative;
-    aspect-ratio: 5 / 6;
+    aspect-ratio: 580 / 388;
   }
   .escaparate-ventana img {
     position: absolute;
-    top: -16.1%;
-    left: -48.4%;
-    width: 258%;
+    top: 0;
+    left: 0;
+    width: 275.9%;
     max-width: none;
+    transform: translate(-21%, -56.1%);
   }
 }
 

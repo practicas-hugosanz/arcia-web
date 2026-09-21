@@ -11,6 +11,8 @@
 //   REDUCIDO=1    emula prefers-reduced-motion: la escena se pinta en un solo
 //                 fotograma y no hay entradas animadas
 //   DPR=<n>       densidad de pantalla (para ver qué tamaño de imagen se baja)
+//   UA=<cadena>   se hace pasar por ese navegador, con pantalla táctil: es la
+//                 única forma de ver lo que la página cambia según el sistema
 //
 // Dos trampas que costaron capturas falsas:
 //   - Sin foco emulado y la pestaña al frente, Chrome sin cabeza cree la página
@@ -92,6 +94,14 @@ try {
       ...(process.env.REDUCIDO ? [{ name: "prefers-reduced-motion", value: "reduce" }] : []),
     ],
   });
+  // Lo que la página cambia según el sistema —los botones de descarga, que en
+  // un teléfono anuncian la tienda— no se puede ver solo estrechando la
+  // ventana: hay que decir que somos un móvil. `maxTouchPoints` va aparte del
+  // user agent y es lo que delata a un iPad, que dice ser un Mac.
+  if (process.env.UA) {
+    await cdp("Emulation.setUserAgentOverride", { userAgent: process.env.UA });
+    await cdp("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  }
   await cdp("Emulation.setFocusEmulationEnabled", { enabled: true });
   await cdp("Page.bringToFront");
   await cdp("Page.navigate", { url });
