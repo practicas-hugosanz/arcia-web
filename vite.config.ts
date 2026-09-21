@@ -113,6 +113,9 @@ function datosEstructurados(html: string): string {
         url: `${sitio.url}/`,
         logo: `${sitio.url}/img/arcia-logo.png`,
         email: sitio.correo,
+        // `sameAs` es lo que ata la web a los perfiles de fuera: sin él, la
+        // cuenta de TikTok y esta página son dos cosas sueltas para Google.
+        ...(sitio.tiktok ? { sameAs: [sitio.tiktok] } : {}),
       },
       {
         "@type": "WebSite",
@@ -130,10 +133,10 @@ function datosEstructurados(html: string): string {
 }
 
 function arcia(): Plugin {
-  // La ruta base con la que se sirve la web: «/» en un dominio propio,
-  // «/arcia-web/» en GitHub Pages. Vite ya se la pone a las hojas de estilo,
-  // las fuentes y las imágenes; los enlaces entre páginas no los toca, y sin
-  // esto el logotipo y el pie mandaban a la raíz de github.io.
+  // La ruta base con la que se sirve la web: «/» en arcia.es, y `BASE` la
+  // cambia para servirla en un subdirectorio. Vite ya se la pone a las hojas de
+  // estilo, las fuentes y las imágenes; los enlaces entre páginas no los toca,
+  // y sin esto el logotipo y el pie mandaban a la raíz del dominio.
   let base = "/";
   return {
     name: "arcia",
@@ -155,10 +158,12 @@ function arcia(): Plugin {
           // Bloques que solo existen con precio, o solo sin él.
           .replace(/<!--si-precio-->([\s\S]*?)<!--\/si-precio-->/g, (_, dentro) => (sitio.precioMes ? dentro : ""))
           .replace(/<!--sin-precio-->([\s\S]*?)<!--\/sin-precio-->/g, (_, dentro) => (sitio.precioMes ? "" : dentro))
+          .replace(/<!--si-tiktok-->([\s\S]*?)<!--\/si-tiktok-->/g, (_, dentro) => (sitio.tiktok ? dentro : ""))
           .replace(/<!--robots-legal-->/g, sitio.legalCompleto ? "" : '<meta name="robots" content="noindex, follow">')
           .replace(/%URL%/g, sitio.url)
           .replace(/%DESCARGA%/g, sitio.descarga)
           .replace(/%CORREO%/g, sitio.correo)
+          .replace(/%TIKTOK%/g, sitio.tiktok)
           .replace(/%PRECIO%/g, sitio.precioMes)
           .replace(/%PRECIO_SIN_IVA%/g, sitio.precioSinIva)
           .replace(/%IVA%/g, sitio.iva)

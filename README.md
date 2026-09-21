@@ -18,19 +18,38 @@ datos estructurados, `robots.txt` y `sitemap.xml`:
 
 | Qué | Dónde | Por qué importa |
 |---|---|---|
-| **El dominio** | `url` | Es la URL canónica de cada página: `https://arcia.com` |
+| **El dominio** | `url` | Es la URL canónica de cada página: `https://arcia.es` |
+| **La red social** | `tiktok` | El enlace del pie y el `sameAs` que ata la cuenta a la web. Vacío, no sale ninguno |
 | **El precio** | `precioMes` | 30 €. Vacío, la web no enseña cifra y Google no recibe oferta |
 | **Los datos legales** | `aviso-legal.html` y `privacidad.html`, lo marcado entre corchetes; luego `legalCompleto: true` | La LSSI obliga a identificar al titular. Mientras falten, esas páginas van con `noindex` |
 | **La descarga** | `descarga` | Ahora abre la página de la última versión en GitHub |
 
 ## Publicarla
 
-Cualquier alojamiento estático sirve: Cloudflare Pages, Netlify o Vercel.
-Carpeta `web`, orden `npm run build`, salida `dist`. `404.html` ya está en la
-raíz de `dist/`, que es donde lo buscan los tres.
+El dominio es **arcia.es**. El repositorio `arcia-web` lo publica solo en cada
+push a `main` con `.github/workflows/pages.yml`, y `public/CNAME` es lo que le
+dice a GitHub Pages cuál es el dominio: sin ese fichero, cada despliegue lo
+borra de los ajustes del repositorio y la web vuelve a github.io.
+
+En el registrador, para servir el dominio desnudo:
+
+```
+@     A       185.199.108.153
+@     A       185.199.109.153
+@     A       185.199.110.153
+@     A       185.199.111.153
+www   CNAME   practicas-hugosanz.github.io
+```
+
+Luego, en Settings → Pages del repositorio, «Enforce HTTPS» cuando GitHub haya
+emitido el certificado (tarda hasta una hora desde que el DNS propaga).
+
+Cualquier otro alojamiento estático sirve igual: Cloudflare Pages, Netlify o
+Vercel, con carpeta `web`, orden `npm run build` y salida `dist`. `404.html` ya
+está en la raíz de `dist/`, que es donde lo buscan los tres.
 
 Después, en Google Search Console: verificar el dominio y enviar
-`https://<dominio>/sitemap.xml`.
+`https://arcia.es/sitemap.xml`.
 
 ## Las imágenes
 

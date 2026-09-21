@@ -11,11 +11,15 @@ export const sitio = {
   /**
    * Dirección de la web, sin barra final.
    *
-   * `SITIO_URL` la cambia al compilar: el despliegue de GitHub Pages la pone en
-   * `https://practicas-hugosanz.github.io/arcia-web` para que la canónica, el
-   * sitemap y los datos estructurados apunten a donde de verdad está servida.
+   * `SITIO_URL` la cambia al compilar, por si alguna vez hay que servirla en
+   * otra dirección —una copia de prueba, o github.io mientras el DNS propaga—
+   * para que la canónica, el sitemap y los datos estructurados apunten a donde
+   * de verdad está servida.
+   *
+   * Sin `www`: el dominio se sirve desnudo y `www.arcia.es` redirige a él. Las
+   * dos direcciones sirviendo la misma página son dos webs para Google.
    */
-  url: process.env.SITIO_URL ?? "https://arcia.com",
+  url: process.env.SITIO_URL ?? "https://arcia.es",
 
   /**
    * Descarga directa del instalador de la última versión.
@@ -29,6 +33,15 @@ export const sitio = {
   descarga: "https://github.com/practicas-hugosanz/arcia-releases/releases/latest/download/Arcia_x64-setup.exe",
 
   correo: "arciaapp@gmail.com",
+
+  /**
+   * Perfil de TikTok, con la URL entera.
+   *
+   * Vacío, el pie no enseña el enlace y los datos estructurados no declaran
+   * ningún perfil: `sameAs` con una cuenta que no existe es peor que nada,
+   * porque es lo que Google usa para atar la web a la cuenta.
+   */
+  tiktok: "https://www.tiktok.com/@arciaapp",
 
   /**
    * Cuota mensual en euros con IVA, como se escribe en España («30» o «29,90»).

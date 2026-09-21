@@ -4,8 +4,10 @@
 # el build (%URL%, iconos, imágenes a varios tamaños) y enlaza /src/estilos.css,
 # que solo existe en desarrollo. Lo que se publica es `dist/`.
 #
-# Se sirve bajo /arcia-web/, así que se compila con esa base, y la canónica y
-# el sitemap apuntan a la dirección de github.io mientras no haya dominio.
+# Con dominio propio se sirve en la raíz, así que la base es «/» y la canónica
+# sale de `sitio.config.ts`. El `public/CNAME` es lo que le dice a Pages cuál es
+# el dominio: sin él, cada despliegue desde artefacto lo borra de los ajustes
+# del repositorio y la web vuelve a github.io.
 name: Publicar en GitHub Pages
 
 on:
@@ -33,9 +35,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-        env:
-          BASE: /arcia-web/
-          SITIO_URL: https://practicas-hugosanz.github.io/arcia-web
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

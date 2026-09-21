@@ -2158,6 +2158,13 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
 .pie-enlaces a:hover {
   color: var(--fg);
 }
+/* El de la red social es el único del pie con icono: en línea con su texto y
+   centrado con él, que si no el logotipo se apoya en la base de la letra. */
+.pie-red {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 /* En móvil, apilado y alineado a la izquierda. En fila con `flex-wrap`, el
    `margin-left: auto` de los enlaces los empujaba a la derecha en su propia
    línea: medido a 390 px, el logo empezaba en x48, los enlaces en x38 y el ©
@@ -2185,6 +2192,11 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
     display: block;
     padding-block: 10px;
     color: var(--fg-muted);
+  }
+  /* El `display: block` de arriba le quitaría el flex y el icono se iría a su
+     propia línea encima del texto. */
+  .pie-enlaces .pie-red {
+    display: flex;
   }
 }
 
