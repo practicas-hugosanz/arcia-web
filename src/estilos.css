@@ -534,9 +534,16 @@ button {
   display: block;
   white-space: nowrap;
 }
+/* En el móvil el título no cabía y se partía solo: «Encuentra clientes» pide
+   400 px a 46,4 px de cuerpo y en un teléfono de 390 hay 358 útiles, así que
+   salía «Encuentra / clientes / sin página web», tres líneas descuadradas con
+   la segunda casi vacía. Antes se resolvía dejándolo partir (`white-space:
+   normal`), que es justo lo que se veía mal. Ahora el cuerpo sigue al ancho de
+   la pantalla y cada verso cabe entero: 10,2vw da 40 px a 390, 37 a 360 y 33 a
+   320, y en los tres el texto mide menos que el hueco. */
 @media (max-width: 479px) {
-  .hero-titulo .linea > span {
-    white-space: normal;
+  .hero-titulo {
+    font-size: clamp(1.9rem, 10.2vw, 2.9rem);
   }
 }
 .hero-sub {
@@ -612,6 +619,60 @@ button {
    que se quiere es que bajen la app, no que se lean la web. */
 .como {
   padding-block: clamp(64px, 9vw, 120px);
+}
+/* El recorrido se contaba en tres tarjetas blancas iguales con el número en un
+   círculo, títulos de una palabra —Busca, Comprueba, Llama— y una fila de
+   etiquetas con icono. Es el molde de landing que se ve en todas partes y él
+   lo dijo claro: parecía escrito por una máquina. Ahora es lo mismo contado de
+   seguido, con los datos que ninguna máquina se sabe —los 8.132 municipios, lo
+   que hace con lo que no puede confirmar—, y el peso lo lleva la tipografía:
+   sin cajas, sin sombras y sin numerar. */
+.como-rejilla {
+  display: grid;
+  gap: 32px;
+}
+/* La columna de texto va a 540 px y el título se queda con lo que sobre. En
+   fracciones medía 672 px a 1440, que a 17 px son renglones de 85 caracteres:
+   se lee bien la línea y se pierde el salto a la siguiente. 540 deja unos 68.
+   En píxeles y no en `ch` porque el «0» de esta tipografía mide 11,3 px y
+   `62ch` resolvía a 702, más ancho todavía que la columna que quería estrechar. */
+@media (min-width: 900px) {
+  .como-rejilla {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+    gap: 72px;
+    align-items: start;
+  }
+}
+.como-recorrido > p {
+  padding-block: 24px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--fg-muted);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+.como-recorrido > p:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.como-recorrido b {
+  color: var(--fg);
+  font-weight: 600;
+}
+/* Enlaces dentro del texto: subrayado fino en vez de cian, que aquí hay cuatro
+   seguidos y en cian el párrafo se volvía un semáforo. */
+.como-recorrido a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s var(--curva);
+}
+.como-recorrido a:hover {
+  text-decoration-color: var(--brand-ink);
+}
+.como-extras {
+  font-size: 1rem;
 }
 .como-cabecera {
   max-width: 760px;
@@ -696,6 +757,15 @@ button {
   }
   .hero-nota {
     text-align: center;
+  }
+  /* Titular, frase y botones leen como un bloque. Con los 28 y 36 px de
+     escritorio, en una pantalla de mano quedaban tres trozos sueltos sobre la
+     escena, y el botón se despegaba de lo que lo justifica. */
+  .hero-sub {
+    margin-top: 20px;
+  }
+  .hero-acciones {
+    margin-top: 26px;
   }
 }
 
