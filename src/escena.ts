@@ -344,7 +344,7 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
       ? { x0: ancho * 0.63, x1: ancho * 0.88, y0: alto * 0.22, y1: alto * 0.74 }
       : ancho >= 1024
         ? { x0: ancho * 0.74, x1: ancho * 0.88, y0: alto * 0.3, y1: alto * 0.74 }
-        : { x0: ancho * 0.32, x1: ancho * 0.68, y0: franja.y0, y1: franja.y1 };
+        : { x0: ancho * 0.24, x1: ancho * 0.74, y0: franja.y0, y1: franja.y1 };
 
   // El pueblo gira despacio, y en lo que tarda el anillo en llegar a un
   // negocio su punto se mueve decenas de píxeles. Si se exigía la misma zona
@@ -357,7 +357,12 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   const zonaParaElegir = () => {
     const z = base();
     // En móvil la zona mide unos 140 px de ancho: el margen no puede comérsela.
-    const m = Math.min(MARGEN, (z.x1 - z.x0) / 4);
+    // Y ahí se usa uno fijo y pequeño: el ancho se abrió de 0,32–0,68 a
+    // 0,24–0,74 para que haya de dónde elegir, y un margen de la cuarta parte
+    // se comía lo abierto y devolvía las fichas al centro. La deriva del giro
+    // es hacia la derecha —60 px en un barrido, medidos—, y por ese lado ya la
+    // aguanta la holgura de `zona()`.
+    const m = ancho >= 1024 ? Math.min(MARGEN, (z.x1 - z.x0) / 4) : 24;
     return { x0: z.x0 + m, x1: z.x1 - m, y0: z.y0 + m * 0.5, y1: z.y1 - m * 0.5 };
   };
   const zona = () => {
@@ -417,8 +422,16 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
       const desdeAqui = Math.floor((candidatos.length * k) / cuantas);
       const hastaAqui = Math.floor((candidatos.length * (k + 1)) / cuantas);
       const tramo = candidatos.slice(desdeAqui, hastaAqui).filter((c) => libre(c, elegidos));
+      // Del tramo no se coge siempre el de en medio, sino uno distinto en cada
+      // barrido. Con el de en medio las fichas salían barrido tras barrido en
+      // los mismos dos puntos —medido a 390×844: y=220 y y=305 en las tres
+      // pasadas seguidas—, y lo único que cambiaba era el nombre. `tanda` ya
+      // cuenta las fichas que se han enseñado, así que sirve de turno y la
+      // escena sigue siendo la misma en cada carga: nada de azar, que estas
+      // páginas se fotografían.
       const elegido =
-        tramo[Math.floor(tramo.length / 2)] ?? candidatos.find((c) => !elegidos.includes(c) && libre(c, elegidos));
+        tramo[(tanda + k) % tramo.length] ??
+        candidatos.find((c) => !elegidos.includes(c) && libre(c, elegidos));
       if (elegido) elegidos.push(elegido);
     }
     elegidos.sort((a, b) => a.d - b.d);
