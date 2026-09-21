@@ -122,7 +122,36 @@
       { hour: 17, attempts: 12, answered: 8, appointments: 2, avgDuration: 141 },
     ],
     get_probe_accuracy: { called: 34, webFoundOnCall: 2 },
-    get_speech_performance: [],
+    // Dos versiones del guion, para que la comparación de «Qué guion cierra»
+    // tenga algo que comparar. Inventadas, como todo lo de aquí.
+    get_speech_performance: [
+      { version: "1add17f2", leads: 64, called: 41, appointments: 7, sales: 2, filtered: 12 },
+      { version: "b418514f", leads: 52, called: 33, appointments: 3, sales: 0, filtered: 15 },
+    ],
+    get_embudo: {
+      tramos: [
+        { nombre: "Encontrados", cuantos: 512, paso: null, delTotal: 100 },
+        { nombre: "Sin web", cuantos: 187, paso: 36.5, delTotal: 36.5 },
+        { nombre: "Con correo", cuantos: 96, paso: 51.3, delTotal: 18.8 },
+        { nombre: "Citas", cuantos: 14, paso: 14.6, delTotal: 2.7 },
+        { nombre: "Ventas", cuantos: 5, paso: 35.7, delTotal: 1 },
+      ],
+      porNicho: [
+        { clave: "Peluquería · Madrid", encontrados: 96, aptos: 51, contactables: 33, citas: 6, ventas: 3, euros: 2400, citasPorCien: 18.2 },
+        { clave: "Floristería · Valencia", encontrados: 74, aptos: 40, contactables: 26, citas: 4, ventas: 1, euros: 790, citasPorCien: 15.4 },
+        { clave: "Taller mecánico · Zaragoza", encontrados: 61, aptos: 28, contactables: 19, citas: 2, ventas: 1, euros: 850, citasPorCien: 10.5 },
+      ],
+      porCiudad: [
+        { clave: "Madrid", encontrados: 168, aptos: 78, contactables: 52, citas: 8, ventas: 3, euros: 2400, citasPorCien: 15.4 },
+        { clave: "Valencia", encontrados: 121, aptos: 55, contactables: 34, citas: 4, ventas: 1, euros: 790, citasPorCien: 11.8 },
+      ],
+      citas30: 9,
+      ventas30: 3,
+      euros30: 2250,
+      eurosTotal: 4040,
+      ticketMedio: 808,
+      sinMarcar: false,
+    },
     get_pending_queue: [],
     get_settings: {
       mapsProvider: "scraping", serpapiKey: "", googleCseKey: "", googleCseCx: "", outscraperKey: "", lang: "es", country: "es",
