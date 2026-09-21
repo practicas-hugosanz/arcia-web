@@ -465,6 +465,32 @@ button {
   font-weight: 600;
 }
 
+/* En el móvil las fichas van más pequeñas. Entre el contador y el titular hay
+   unos 160 px, y con el tamaño de escritorio —58 px de tarjeta más 18 de hilo—
+   solo entraba una. Quitando dos puntos de cuerpo, un poco de relleno y seis
+   del hilo, la ficha baja a unos 47 px y caben las dos. */
+@media (max-width: 1023px) {
+  .ficha-tarjeta {
+    translate: -50% calc(-100% - 12px);
+    padding: 6px 10px 7px;
+    border-radius: 11px;
+  }
+  .ficha::before {
+    top: -12px;
+    height: 12px;
+  }
+  .ficha-nombre {
+    font-size: 0.75rem;
+  }
+  .ficha-meta {
+    margin-top: 2px;
+    font-size: 0.6875rem;
+  }
+  .ficha-sinweb {
+    padding: 1px 6px;
+  }
+}
+
 /* El contador del escaneo: el mismo avance que enseña la app al buscar. */
 .escaneo {
   position: absolute;

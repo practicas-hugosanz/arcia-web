@@ -318,7 +318,15 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   // clientes», mientras que a 390×844 quedaban bien. Si en un teléfono muy
   // bajo no cabe ninguna, no sale ninguna: es mejor que verlas pisando el
   // texto.
-  const ALTO_TARJETA = 76;
+  /** Lo que ocupa una ficha por encima de su punto: la tarjeta y su hilo. */
+  const altoTarjeta = () => (ancho >= 1024 ? 76 : 60);
+  /**
+   * Lo que se respeta por arriba y por abajo, contra el contador y el titular.
+   *
+   * Se probó a bajarlo a 22 para ver si entraba una ficha más en las pantallas
+   * justas y no cambió ninguna cuenta —ni a 360×780 ni a 375×667—, así que se
+   * queda en 30: la misma ficha con más aire alrededor.
+   */
   const AIRE = 30;
   let franja = { y0: 0, y1: 0 };
   const medirFranja = () => {
@@ -329,7 +337,7 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     // su alto entero; abajo basta con el hilo que la une al punto.
     const techo = contador ? contador.bottom - r.top : alto * 0.2;
     const suelo = titulo ? titulo.top - r.top : alto * 0.8;
-    franja = { y0: techo + ALTO_TARJETA + AIRE, y1: suelo - AIRE };
+    franja = { y0: techo + altoTarjeta() + AIRE, y1: suelo - AIRE };
   };
   const base = () =>
     ancho >= 1280
@@ -394,10 +402,13 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     // Dos fichas se pisan si están cerca en horizontal Y en vertical: una
     // encima de otra caben. Exigir distancia en línea recta dejaba en móvil y a
     // 1024 px una sola ficha, porque la zona es estrecha.
+    // 96 y no 78: una ficha mide unos 58 px de alto, y con el giro del pueblo
+    // dos que empezaban separadas acababan tocándose. En móvil la tarjeta es
+    // más baja —47 px— y la franja donde caben mide unos 160: con 96 solo
+    // entraba una, que es lo que se veía.
+    const aparte = ancho >= 1024 ? 96 : 76;
     const libre = (c: (typeof candidatos)[number], elegidos: typeof candidatos) =>
-      // 96 y no 78: una ficha mide unos 58 px de alto, y con el giro del
-      // pueblo dos que empezaban separadas acababan tocándose.
-      elegidos.every((e) => Math.abs(e.p.x - c.p.x) > 210 || Math.abs(e.p.y - c.p.y) > 96);
+      elegidos.every((e) => Math.abs(e.p.x - c.p.x) > 210 || Math.abs(e.p.y - c.p.y) > aparte);
 
     const elegidos: typeof candidatos = [];
     for (let k = 0; k < cuantas && candidatos.length; k++) {
