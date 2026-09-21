@@ -558,7 +558,13 @@ button {
   z-index: var(--z-contenido);
 }
 .hero-titulo {
-  font-size: clamp(2.9rem, 6.6vw, 5.8rem);
+  /* Un 7 % más pequeño que el 6,6vw/5,8rem de antes. El titular pasó de
+     «Encuentra clientes sin página web» a «Encuentra negocios sin web y
+     llámalos», que es más ancho —«negocios» y «llámalos» son letras redondas
+     donde «clientes» tenía palos—, y al crecer se metía debajo de las fichas
+     de la escena: medido a 1440, el texto llegaba a 962 y la tarjeta más a la
+     izquierda empezaba en 947. */
+  font-size: clamp(2.8rem, 6.2vw, 5.4rem);
   line-height: 0.98;
   letter-spacing: -0.045em;
 }
@@ -577,11 +583,15 @@ button {
    salía «Encuentra / clientes / sin página web», tres líneas descuadradas con
    la segunda casi vacía. Antes se resolvía dejándolo partir (`white-space:
    normal`), que es justo lo que se veía mal. Ahora el cuerpo sigue al ancho de
-   la pantalla y cada verso cabe entero: 10,2vw da 40 px a 390, 37 a 360 y 33 a
-   320, y en los tres el texto mide menos que el hueco. */
+   la pantalla y cada verso cabe entero.
+   9,5vw y no 10,2: con «Encuentra clientes» sobraban 15 px, pero «Encuentra
+   negocios» es más ancho —«negocios» son letras redondas donde «clientes»
+   tenía palos— y a 10,2vw pedía 372 px con 370 de hueco, o sea que se comía
+   la última letra. Medido con canvas, que el `getBoundingClientRect` de un
+   texto recortado devuelve el ancho de la caja y parece que cabe. */
 @media (max-width: 479px) {
   .hero-titulo {
-    font-size: clamp(1.9rem, 10.2vw, 2.9rem);
+    font-size: clamp(1.8rem, 9.5vw, 2.9rem);
   }
 }
 .hero-sub {
