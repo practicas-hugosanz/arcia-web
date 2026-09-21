@@ -635,6 +635,28 @@ button {
   transform-origin: 50% 0%;
   will-change: transform;
 }
+/* En el móvil la ventana entera no se ve: son 1.400 px de app metidos en 358,
+   un 26 %, con el texto de la interfaz a 3,4 px. Medido a 390×844. Así que
+   ahí no se enseña la ventana entera sino un trozo en vertical, a más del
+   doble de tamaño: la cabecera de Prospección, el principio de «Nueva
+   búsqueda» y la lista de escaneos recientes con sus cuentas. Al 66 % de la
+   app de verdad los títulos ya se leen.
+   El recorte se hace con la imagen de siempre desplazada dentro del marco
+   —que ya recorta— y no con un recorte nuevo: `capturas.mjs` tendría que
+   volver a compilar la app y fotografiarla entera para uno solo. */
+@media (max-width: 767px) {
+  .escaparate-ventana {
+    position: relative;
+    aspect-ratio: 5 / 6;
+  }
+  .escaparate-ventana img {
+    position: absolute;
+    top: -16.1%;
+    left: -48.4%;
+    width: 258%;
+    max-width: none;
+  }
+}
 
 /* --- Cómo funciona -------------------------------------------------------- */
 
