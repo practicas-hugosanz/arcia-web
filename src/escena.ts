@@ -162,6 +162,7 @@ const vertice = /* glsl */ `
   uniform float uVisible;
   uniform float uPixel;
   uniform float uTamano;
+  uniform float uRealce;
   varying float vEncendido;
   varying float vAnillo;
 
@@ -176,7 +177,7 @@ const vertice = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uTamano * uPixel * (1.0 + encendido * 1.5 + anillo * 0.7) * (7.0 / -mv.z);
+    gl_PointSize = uTamano * uPixel * (1.0 + encendido * uRealce + anillo * 0.7) * (7.0 / -mv.z);
 
     vEncendido = encendido;
     vAnillo = anillo;
@@ -302,6 +303,8 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
       // 3,5 px, y los encendidos rondan los 9. Con 2,2 salía de 1 px y no se
       // veía el pueblo.
       uTamano: { value: 8 },
+      // Cuánto engorda un negocio encendido. Ver `encajar`.
+      uRealce: { value: 1.5 },
       uBase: { value: new Color() },
       uMarca: { value: new Color("#00c7fb") },
       uAlfaBase: { value: 0.5 },
@@ -366,12 +369,19 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     const titulo = document.querySelector(".hero-titulo")?.getBoundingClientRect();
     // La tarjeta se dibuja encima de su punto, así que arriba hay que guardar
     // su alto entero; abajo basta con el hilo que la une al punto.
-    const techo = contador ? contador.bottom - r.top : alto * 0.2;
+    // Sin contador el techo es el borde de arriba, no un quinto del lienzo: ese
+    // 0,2 era el apaño de cuando en el móvil siempre había contador, y en el
+    // teléfono se comía 42 de los 211 px de la fila —justo los que faltaban
+    // para que cupieran dos fichas—.
+    const techo = contador ? contador.bottom - r.top : 0;
     // Tope en el borde del lienzo: en el móvil el pueblo ya no está debajo del
     // texto, sino en su propia fila encima, así que el titular cae fuera y sin
     // el tope la franja se salía por abajo con las fichas dentro.
     const suelo = Math.min(titulo ? titulo.top - r.top : alto * 0.8, alto);
-    franja = { y0: techo + altoTarjeta() + AIRE, y1: suelo - AIRE };
+    // El aire de arriba guarda el contador; cuando no se pinta —el teléfono—
+    // basta con no pegar la tarjeta al borde, y esos 20 px de más son los que
+    // dejan cabar dos fichas en vez de una.
+    franja = { y0: techo + altoTarjeta() + (contador ? AIRE : 10), y1: suelo - AIRE };
   };
   const base = () =>
     ancho >= 1280
@@ -445,7 +455,10 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     // dos que empezaban separadas acababan tocándose. En móvil la tarjeta es
     // más baja —47 px— y la franja donde caben mide unos 160: con 96 solo
     // entraba una, que es lo que se veía.
-    const aparte = ancho >= 1024 ? 96 : 76;
+    // 64 en el móvil: la tarjeta mide 47 px de alto, así que dos separadas 64
+    // se quedan a 17 de aire y aguantan la deriva del giro. Con los 76 de
+    // antes no entraba la segunda en la franja, que ahí mide 87 px.
+    const aparte = ancho >= 1024 ? 96 : 64;
     const libre = (c: (typeof candidatos)[number], elegidos: typeof candidatos) =>
       elegidos.every((e) => Math.abs(e.p.x - c.p.x) > 210 || Math.abs(e.p.y - c.p.y) > aparte);
 
@@ -540,6 +553,12 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     // proporción de punto contra pueblo de cada sitio: el pueblo del móvil
     // mide 334 px de ancho y el del escritorio 880.
     material.uniforms.uTamano.value = (ancho >= 1024 ? 8 : 6) * retirada;
+    // Y el encendido engorda menos en el móvil. Los mismos 600 puntos caben
+    // ahí en un pueblo de 334 px de ancho en vez de 880, o sea siete veces más
+    // apretados por centímetro: con el realce del escritorio, dos negocios
+    // vecinos encendidos se fundían en una mancha —y encima en oscuro la
+    // mezcla es aditiva, así que donde se tocan brilla el doble—.
+    material.uniforms.uRealce.value = ancho >= 1024 ? 1.5 : 0.9;
     medirFranja();
     if (ancho >= 1024) camara.setViewOffset(ancho, alto, -ancho * 0.27, alto * 0.03, ancho, alto);
     else camara.setViewOffset(ancho, alto, 0, alto * SUBE_MOVIL, ancho, alto);
