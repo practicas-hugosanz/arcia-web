@@ -245,24 +245,17 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
    */
   const REF = 1.3;
   /**
-   * Y el mismo apretado al revés: un hueco ancho y bajo.
-   *
-   * Desde que en el móvil el pueblo tiene su propia fila encima del texto, lo
-   * que mide depende de lo que deje el navegador: con las dos barras a la
-   * vista son 390×147 (medido), un aspecto de 2,65 donde lo que falta es alto
-   * y el disco salía cortado por arriba y por abajo. Aquí se compensa entero
-   * —`aspecto / TECHO`, no la raíz— porque en vertical no sobra nada: es el
-   * lado que manda.
+   * Medido el 2026-09-22, con la escena ya en su propia fila del móvil: el
+   * pueblo ocupa el 66 % del alto del lienzo y acaba al 90 %, sea cual sea el
+   * hueco. O sea que cabe entero mientras la fila no baje de 200 px, que es lo
+   * que asegura la rejilla. No hace falta echar la cámara atrás por lo ancho:
+   * lo que se probó —compensar el aspecto— dejaba el pueblo en 105 px dentro
+   * de una banda de 200 y parecía una mancha. Lo que lo recortaba era el
+   * difuminado, que empezaba al 62 %.
    */
-  const TECHO = 1.6;
   let retirada = 1;
   const recalcularRetirada = () => {
-    retirada =
-      camara.aspect < REF
-        ? Math.sqrt(REF / camara.aspect)
-        : camara.aspect > TECHO
-          ? camara.aspect / TECHO
-          : 1;
+    retirada = camara.aspect < REF ? Math.sqrt(REF / camara.aspect) : 1;
   };
   /** La cámara en su punto del vuelo, ya retirada si la pantalla es estrecha. */
   const colocar = (avance: number) => {

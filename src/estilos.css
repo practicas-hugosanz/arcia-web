@@ -635,8 +635,11 @@ button {
     position: relative;
     inset: auto;
     grid-row: 1;
-    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+    /* El difuminado empieza donde acaba el pueblo, no antes: el disco llega
+       al 90 % del lienzo (medido), y con el 62 % de antes se le comía el
+       cuarto de abajo y quedaba cortado a cuchillo. */
+    -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 85%, transparent 100%);
   }
   .hero-contenido {
     grid-row: 2;
