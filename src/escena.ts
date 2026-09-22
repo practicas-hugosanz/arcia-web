@@ -245,6 +245,25 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
    */
   const REF = 1.3;
   /**
+   * Y en el móvil la cámara se acerca, en vez de alejarse.
+   *
+   * Desde que el pueblo tiene su propia fila —unos 211 px en un teléfono de
+   * 390—, lo que lo hace pequeño es que su tamaño en pantalla sale del alto
+   * del lienzo, no del ancho: a la distancia de siempre medía 205 px de ancho
+   * en una pantalla de 390 y parecía un adorno. Acercando la cámara al 66 % de
+   * su distancia mide 334 (medido), como cuando la escena ocupaba la portada
+   * entera, y se sale un poco por arriba y por abajo: por eso la máscara
+   * difumina por los dos lados y no solo por abajo.
+   */
+  const ZOOM_MOVIL = 0.66;
+  /**
+   * Y sube el encuadre un 23,2 % del alto. El pueblo no cae en el centro del
+   * lienzo —la cámara lo mira desde arriba y en picado—, y al acercarla se
+   * iba hacia abajo: medido, el centro del disco quedaba en 154 de una fila de
+   * 211. Con esto queda en 100.
+   */
+  const SUBE_MOVIL = 0.232;
+  /**
    * Medido el 2026-09-22, con la escena ya en su propia fila del móvil: el
    * pueblo ocupa el 66 % del alto del lienzo y acaba al 90 %, sea cual sea el
    * hueco. O sea que cabe entero mientras la fila no baje de 200 px, que es lo
@@ -255,7 +274,7 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
    */
   let retirada = 1;
   const recalcularRetirada = () => {
-    retirada = camara.aspect < REF ? Math.sqrt(REF / camara.aspect) : 1;
+    retirada = ancho >= 1024 ? (camara.aspect < REF ? Math.sqrt(REF / camara.aspect) : 1) : ZOOM_MOVIL;
   };
   /** La cámara en su punto del vuelo, ya retirada si la pantalla es estrecha. */
   const colocar = (avance: number) => {
@@ -515,7 +534,7 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     recalcularRetirada();
     medirFranja();
     if (ancho >= 1024) camara.setViewOffset(ancho, alto, -ancho * 0.27, alto * 0.03, ancho, alto);
-    else camara.clearViewOffset();
+    else camara.setViewOffset(ancho, alto, 0, alto * SUBE_MOVIL, ancho, alto);
     camara.updateProjectionMatrix();
     if (reducido) {
       // La cámara antes de elegir, o las fichas se colocan con la posición sin

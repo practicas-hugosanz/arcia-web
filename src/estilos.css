@@ -651,11 +651,14 @@ button {
     position: relative;
     inset: auto;
     grid-row: 1;
-    /* El difuminado empieza donde acaba el pueblo, no antes: el disco llega
-       al 90 % del lienzo (medido), y con el 62 % de antes se le comía el
-       cuarto de abajo y quedaba cortado a cuchillo. */
-    -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 85%, transparent 100%);
+    /* Difumina por arriba y por abajo, no solo por abajo. El pueblo se dibuja
+       grande a propósito —334 px de ancho en una pantalla de 390— y eso le
+       hace sobrar unos 17 px por arriba y 5 por abajo de su fila: sin el
+       difuminado de arriba, el borde del disco acabaría en una línea recta
+       pegada a la cabecera. El de antes empezaba al 62 % y partía el disco por
+       la mitad de abajo. */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 13%, #000 87%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 13%, #000 87%, transparent 100%);
   }
   .hero-contenido {
     grid-row: 2;
