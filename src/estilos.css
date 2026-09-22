@@ -398,7 +398,13 @@ button {
 .hero-escena.lista > * {
   opacity: 1;
 }
+/* Fuera del flujo: en el móvil el pueblo es una fila de la rejilla, y un
+   lienzo en flujo con `height: 100 %` mide por su atributo `height` —que lo
+   pone el propio guión con lo que mide el hueco—, así que la fila se hacía
+   48 px más alta a cada vuelta. */
 .hero-escena canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
@@ -544,11 +550,14 @@ button {
 .escaneo-sinweb b {
   color: var(--brand-ink);
 }
+/* Arriba del todo de su fila: los 78 px de antes contaban desde el borde de la
+   portada, y ahora cuentan desde donde empieza el pueblo, que ya está por
+   debajo de la cabecera. */
 @media (max-width: 1023px) {
   .escaneo {
     right: auto;
     left: var(--gutter);
-    top: 78px;
+    top: 0;
     bottom: auto;
     padding: 10px 14px;
   }
@@ -607,15 +616,62 @@ button {
   gap: 12px;
   margin-top: 36px;
 }
+/* En el móvil la escena deja de estar debajo del texto y pasa a ser la fila de
+   arriba: la portada es una rejilla de dos filas, el pueblo y lo que se lee.
+   Estaba puesta encima con `inset: 0 0 38%`, y ese 38 % es del alto de la
+   portada, que en un teléfono lo fija el navegador: con las dos barras a la
+   vista (medido, 390×640) la nube de puntos llegaba a 397 px y el titular
+   empezaba en 225, o sea que se leía sobre los puntos y todo parecía un
+   bloque aplastado. Así la fila del pueblo se queda con lo que sobre —321 px
+   con la barra escondida, 120 con ella— y el texto nunca lo pisa. */
 @media (max-width: 1023px) {
   .hero {
-    align-items: end;
-    padding-block: 96px 56px;
+    align-items: stretch;
+    grid-template-rows: minmax(120px, 1fr) auto;
+    row-gap: 20px;
+    padding-block: 84px 56px;
   }
   .hero-escena {
-    inset: 0 0 38%;
-    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 45%, transparent 100%);
+    position: relative;
+    inset: auto;
+    grid-row: 1;
+    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  }
+  .hero-contenido {
+    grid-row: 2;
+  }
+}
+/* `svh` y no `dvh`: `dvh` es el hueco que hay ahora mismo, y en el teléfono ese
+   hueco cambia solo —al bajar, el navegador esconde sus barras y la pantalla
+   pasa de 640 a 844—, así que la portada crecía a mitad de gesto y el pueblo
+   se recolocaba entero. `svh` es el hueco con las barras puestas: siempre el
+   mismo número, se vean o no. */
+@media (max-width: 1023px) {
+  .hero {
+    min-height: 100svh;
+  }
+}
+/* Teléfono bajo, o alto normal con las dos barras del navegador a la vista:
+   quedan 640 px de los 844 de la pantalla. Se recorta el aire, no el texto, y
+   el pueblo no baja de 200 px: por debajo de eso es una mancha detrás del
+   contador (probado a 147). Lo que no cabe es la línea de «Para Windows 10 y
+   11», que queda justo en el borde e invita a bajar; los dos botones se ven
+   enteros (medido, 390×640: el segundo acaba en 605). */
+@media (max-width: 1023px) and (max-height: 740px) {
+  .hero {
+    grid-template-rows: minmax(200px, 1fr) auto;
+    row-gap: 14px;
+    padding-block: 80px 40px;
+  }
+  .hero-sub {
+    margin-top: 14px;
+  }
+  .hero-acciones {
+    margin-top: 20px;
+  }
+  .hero-nota {
+    margin-top: 10px;
   }
 }
 
@@ -978,14 +1034,34 @@ button {
      pasar de un paso de dos líneas a uno de tres la ventana saltaba 21 px
      (medido) a mitad de la simulación. */
   .animada .sim-pasos {
+    position: relative;
     height: 112px;
     overflow: hidden;
   }
-  .animada .sim-paso {
-    display: none;
+  /* Uno encima de otro y se cruzan: con `display: none` el paso desaparecía y
+     el siguiente salía de golpe, un parpadeo a mitad de la simulación. Aquí
+     el que sale se va apagando y subiendo mientras el que entra sube desde
+     abajo, así que el relevo se lee.
+     `.hecho` va nombrado aparte porque pesa más que `.sim-paso` a secas: sin
+     él, el paso ya dado se quedaba visible al 70 % encima del siguiente. */
+  .animada .sim-paso,
+  .animada .sim-paso.hecho {
+    position: absolute;
+    inset: 0 0 auto;
+    display: block;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition:
+      opacity 0.45s var(--curva),
+      transform 0.45s var(--curva);
+  }
+  .animada .sim-paso.hecho {
+    transform: translateY(-10px);
   }
   .animada .sim-paso.activo {
-    display: block;
+    opacity: 1;
+    transform: none;
   }
 }
 /* La ventana: el mismo marco y placa que la app. */
