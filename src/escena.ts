@@ -532,6 +532,14 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     material.uniforms.uPixel.value = dpr;
     camara.aspect = ancho / alto;
     recalcularRetirada();
+    // El tamaño del punto sale de `7 / -mv.z`, o sea que crece cuando la
+    // cámara se acerca: con el acercamiento del móvil los puntos salían el
+    // doble de gordos que por la mañana y el pueblo se veía emborronado en vez
+    // de limpio. Multiplicando por la retirada, lo que se ve mide lo mismo
+    // esté la cámara donde esté. El 6 del móvil y el 8 del escritorio son la
+    // proporción de punto contra pueblo de cada sitio: el pueblo del móvil
+    // mide 334 px de ancho y el del escritorio 880.
+    material.uniforms.uTamano.value = (ancho >= 1024 ? 8 : 6) * retirada;
     medirFranja();
     if (ancho >= 1024) camara.setViewOffset(ancho, alto, -ancho * 0.27, alto * 0.03, ancho, alto);
     else camara.setViewOffset(ancho, alto, 0, alto * SUBE_MOVIL, ancho, alto);
