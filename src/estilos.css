@@ -878,6 +878,11 @@ button {
   color: var(--fg-muted);
   font-size: 0.875rem;
 }
+/* Ver `main.ts`: en un teléfono o una tableta, donde el botón anuncia la
+   tienda, la nota de Windows no sale. */
+.con-tienda .hero-nota {
+  display: none;
+}
 /* Sangrada los 24 px de relleno del botón más su borde: pegada al margen de la
    página caía bajo el arranque redondo de la píldora, que es aire, y se veía
    descolgada; así empieza donde empieza el icono, que es lo que el ojo toma

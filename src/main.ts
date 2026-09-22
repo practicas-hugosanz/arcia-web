@@ -199,6 +199,11 @@ const tienda = () => {
 
 const suTienda = tienda();
 if (suTienda) {
+  // Y el «Para Windows 10 y 11» de debajo de los botones se va: en un móvil,
+  // bajo un botón que dice «Próximamente en la App Store», no viene a cuento
+  // (lo pidió él). Va por sistema y no por ancho, igual que los botones: en
+  // una ventana estrecha de un ordenador la nota sigue valiendo.
+  document.documentElement.classList.add("con-tienda");
   const logo = $(`[data-tiendas]`) as HTMLTemplateElement | null;
   const icono = logo?.content.querySelector(`[data-tienda="${suTienda.id}"]`)?.innerHTML ?? "";
   for (const boton of $$<HTMLAnchorElement>("[data-descarga]")) {
