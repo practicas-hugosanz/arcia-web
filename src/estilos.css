@@ -562,6 +562,16 @@ button {
     padding: 10px 14px;
   }
 }
+/* Y en el teléfono no sale. Mide 71 px de los 210 de la fila y se ponía justo
+   encima del pueblo: lo que se veía era un disco saliendo de debajo de una
+   caja. Lo que cuenta —que lee Google Maps y cuántos no tienen web— lo dicen
+   igual las fichas que se encienden y la frase de debajo del titular. De 768
+   para arriba se queda, que ahí hay sitio de sobra. */
+@media (max-width: 767px) {
+  .escaneo {
+    display: none;
+  }
+}
 .hero-contenido {
   position: relative;
   z-index: var(--z-contenido);
@@ -622,14 +632,20 @@ button {
    portada, que en un teléfono lo fija el navegador: con las dos barras a la
    vista (medido, 390×640) la nube de puntos llegaba a 397 px y el titular
    empezaba en 225, o sea que se leía sobre los puntos y todo parecía un
-   bloque aplastado. Así la fila del pueblo se queda con lo que sobre —321 px
-   con la barra escondida, 120 con ella— y el texto nunca lo pisa. */
+   bloque aplastado. Ahora el pueblo tiene su fila, con una medida fija, y el
+   texto nunca lo pisa. */
 @media (max-width: 1023px) {
   .hero {
     align-items: stretch;
-    grid-template-rows: minmax(120px, 1fr) auto;
-    row-gap: 20px;
-    padding-block: 84px 56px;
+    /* En `vw`, no en `vh` ni en `fr`: el ancho del teléfono no cambia nunca y
+       su alto sí —lo decide el navegador con sus barras—. Mientras la fila
+       medía «lo que sobre», la portada se veía de una manera en las medidas de
+       móvil de Chrome y de otra en el teléfono de verdad, que es lo que él
+       veía. Así la composición es la misma en los dos. */
+    grid-template-rows: clamp(200px, 54vw, 280px) auto;
+    row-gap: 18px;
+    padding-block: 80px 48px;
+    min-height: 0;
   }
   .hero-escena {
     position: relative;
@@ -645,39 +661,16 @@ button {
     grid-row: 2;
   }
 }
-/* `svh` y no `dvh`: `dvh` es el hueco que hay ahora mismo, y en el teléfono ese
-   hueco cambia solo —al bajar, el navegador esconde sus barras y la pantalla
-   pasa de 640 a 844—, así que la portada crecía a mitad de gesto y el pueblo
-   se recolocaba entero. `svh` es el hueco con las barras puestas: siempre el
-   mismo número, se vean o no. */
-@media (max-width: 1023px) {
+/* En una tableta sí sobra alto, así que la portada vuelve a llenar la pantalla
+   y su bloque se centra. `svh` —el hueco con las barras puestas— para que no
+   se recoloque sola al esconderlas el navegador. En el teléfono no: ahí la
+   portada mide lo que miden sus piezas y punto. */
+@media (min-width: 768px) and (max-width: 1023px) {
   .hero {
     min-height: 100svh;
+    align-content: center;
   }
 }
-/* Teléfono bajo, o alto normal con las dos barras del navegador a la vista:
-   quedan 640 px de los 844 de la pantalla. Se recorta el aire, no el texto, y
-   el pueblo no baja de 200 px: por debajo de eso es una mancha detrás del
-   contador (probado a 147). Lo que no cabe es la línea de «Para Windows 10 y
-   11», que queda justo en el borde e invita a bajar; los dos botones se ven
-   enteros (medido, 390×640: el segundo acaba en 605). */
-@media (max-width: 1023px) and (max-height: 740px) {
-  .hero {
-    grid-template-rows: minmax(200px, 1fr) auto;
-    row-gap: 14px;
-    padding-block: 80px 40px;
-  }
-  .hero-sub {
-    margin-top: 14px;
-  }
-  .hero-acciones {
-    margin-top: 20px;
-  }
-  .hero-nota {
-    margin-top: 10px;
-  }
-}
-
 /* --- La ventana de la app ------------------------------------------------- */
 
 .ventana {

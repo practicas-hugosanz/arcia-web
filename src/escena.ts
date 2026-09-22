@@ -340,7 +340,10 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
   let franja = { y0: 0, y1: 0 };
   const medirFranja = () => {
     const r = lienzo.getBoundingClientRect();
-    const contador = contenedor.querySelector(".escaneo")?.getBoundingClientRect();
+    // En el teléfono el contador no se pinta: un elemento con `display: none`
+    // devuelve una caja de ceros, y sin esto el techo salía negativo.
+    const caja = contenedor.querySelector(".escaneo")?.getBoundingClientRect();
+    const contador = caja && caja.height > 0 ? caja : null;
     const titulo = document.querySelector(".hero-titulo")?.getBoundingClientRect();
     // La tarjeta se dibuja encima de su punto, así que arriba hay que guardar
     // su alto entero; abajo basta con el hilo que la une al punto.
