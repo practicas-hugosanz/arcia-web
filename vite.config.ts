@@ -7,7 +7,21 @@ import { sitio } from "./sitio.config";
 const RAIZ = __dirname;
 /** Las páginas que profundizan en lo que la portada solo nombra. */
 const FUNCIONES = ["como-funciona", "verificacion", "ia", "seguimiento", "tus-datos"];
-const PAGINAS = ["index", ...FUNCIONES, "aviso-legal", "privacidad", "404"];
+/**
+ * Las guías: responden a lo que se busca —«peluquerías sin página web»— con las
+ * cifras de escaneos reales. Son las que tienen que salir en Google por el
+ * nicho; las de funciones salen por la marca.
+ */
+const GUIAS = [
+  "negocios-sin-pagina-web",
+  "peluquerias-sin-pagina-web-alicante",
+  "hamburgueserias-sin-pagina-web",
+  "cafeterias-sin-pagina-web",
+  "brunch-sin-pagina-web",
+  "inmobiliarias-sin-pagina-web-alicante",
+  "alternativas",
+];
+const PAGINAS = ["index", ...FUNCIONES, ...GUIAS, "aviso-legal", "privacidad", "404"];
 
 /**
  * Las piezas que se repiten en varias páginas: cabecera, pie, barra de
@@ -81,6 +95,13 @@ const MIGAS: Record<string, string> = {
   ia: "IA",
   seguimiento: "Llamadas y seguimiento",
   "tus-datos": "Tus datos",
+  "negocios-sin-pagina-web": "Negocios sin página web",
+  "peluquerias-sin-pagina-web-alicante": "Peluquerías sin web en Alicante",
+  "hamburgueserias-sin-pagina-web": "Hamburgueserías sin web",
+  "cafeterias-sin-pagina-web": "Cafeterías sin web",
+  "brunch-sin-pagina-web": "Brunch sin web",
+  "inmobiliarias-sin-pagina-web-alicante": "Inmobiliarias sin web en Alicante",
+  alternativas: "Alternativas",
   "aviso-legal": "Aviso legal",
   privacidad: "Privacidad",
 };
@@ -200,6 +221,25 @@ function datosEstructurados(html: string, pagina: string): string {
             },
           ]
         : []),
+      // Las guías son artículos con fecha y autor: es lo que Google enseña en
+      // el resultado («hace 3 días») y lo que le dice que la cifra es de hoy.
+      ...(GUIAS.includes(pagina)
+        ? [
+            {
+              "@type": "Article",
+              "@id": `${direccion}#articulo`,
+              headline: titulo,
+              ...(descripcion ? { description: descripcion } : {}),
+              mainEntityOfPage: { "@id": `${direccion}#pagina` },
+              datePublished: "2026-09-24",
+              dateModified: tocada(pagina),
+              inLanguage: "es-ES",
+              author: { "@id": `${sitio.url}/#organizacion` },
+              publisher: { "@id": `${sitio.url}/#organizacion` },
+              image: `${sitio.url}/og.png`,
+            },
+          ]
+        : []),
       ...(legal ? [] : [aplicacion]),
       ...(preguntas.length ? [{ "@type": "FAQPage", "@id": `${sitio.url}/#preguntas`, mainEntity: preguntas }] : []),
     ],
@@ -256,6 +296,9 @@ function arcia(): Plugin {
           // Las piezas primero: traen sus propios iconos, enlaces y %CORREO%,
           // y así pasan por el resto de sustituciones como el HTML de la página.
           .replace(/^[ \t]*<!--parte:([\w-]+)-->[ \t]*\r?\n?/gm, (_, nombre) => pieza(nombre))
+          // En la lista de guías no sale la que se está leyendo. Las funciones
+          // lo hacen por CSS; aquí son siete y crecerán, así que se quita.
+          .replace(/[ \t]*<li data-guia="([\w-]+)">[\s\S]*?<\/li>\r?\n?/g, (li, guia) => (guia === pagina ? "" : li))
           // Cualquier enlace a una página propia —«/», «/ia», «/#precio»—, no
           // solo a las legales. Los recursos (/src/…, /favicon.ico) no casan:
           // llevan barra o punto.
@@ -297,7 +340,7 @@ function arcia(): Plugin {
     },
     generateBundle() {
       const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad"] : [];
-      const urls = ["", ...FUNCIONES, ...legales].map(
+      const urls = ["", ...FUNCIONES, ...GUIAS, ...legales].map(
         (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${tocada(p)}</lastmod></url>`,
       );
       this.emitFile({

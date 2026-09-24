@@ -2454,6 +2454,189 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   }
 }
 
+/* --- Guías ------------------------------------------------------------------
+   Las páginas que responden a lo que se busca («peluquerías sin página web»),
+   con las cifras de escaneos reales. Texto largo a una columna, al ancho de
+   las legales: aquí se lee, no se mira. */
+
+.guia {
+  padding-block: clamp(16px, 3vw, 40px) clamp(56px, 8vw, 104px);
+}
+.guia .contenedor {
+  max-width: calc(760px + var(--gutter) * 2);
+}
+.guia h2 {
+  margin-top: 56px;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.guia h2:first-child {
+  margin-top: 0;
+}
+.guia h3 {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.guia p,
+.guia li {
+  margin-top: 14px;
+  color: var(--fg-muted);
+  text-wrap: pretty;
+}
+.guia ul,
+.guia ol {
+  padding-left: 1.2em;
+}
+.guia ul {
+  list-style: disc;
+}
+.guia ol {
+  list-style: decimal;
+}
+.guia li::marker {
+  color: var(--fg-faint);
+}
+.guia strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.guia a {
+  color: var(--brand-ink);
+}
+.guia-cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.guia-cifras div {
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+.guia-cifras b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--fg);
+}
+.guia-cifras span {
+  display: block;
+  margin-top: 6px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+/* La tabla se desliza de lado en el móvil en vez de empujar la página. */
+.guia-tabla {
+  margin-top: 24px;
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+.guia-tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+@media (max-width: 639px) {
+  .guia-tabla table {
+    font-size: 0.8125rem;
+  }
+  .guia-tabla th,
+  .guia-tabla td {
+    padding: 10px 6px;
+    hyphens: auto;
+  }
+  .guia-tabla th:first-child,
+  .guia-tabla td:first-child {
+    padding-left: 14px;
+  }
+  .guia-tabla th:last-child,
+  .guia-tabla td:last-child {
+    padding-right: 14px;
+  }
+}
+/* En el móvil, la tabla de cinco columnas deja fuera la de «web en su ficha»:
+   con ella el porcentaje, que es lo que se busca, se salía de la caja. */
+@media (max-width: 639px) {
+  .guia-tabla-ancha th:nth-child(3),
+  .guia-tabla-ancha td:nth-child(3) {
+    display: none;
+  }
+}
+/* La de precios deja fuera «Dónde» en el móvil (solo Arcia no es web: lo
+   dice el texto) y no parte una cifra de su moneda. */
+@media (max-width: 639px) {
+  .guia-tabla-precios th:nth-child(2),
+  .guia-tabla-precios td:nth-child(2) {
+    display: none;
+  }
+}
+.guia-tabla-precios td:last-child {
+  white-space: nowrap;
+}
+/* La cabecera de una guía, al ancho del texto que viene debajo: al ancho de la
+   página, el titular quedaba a la izquierda y el artículo centrado. */
+.guia-cabecera .contenedor {
+  max-width: calc(760px + var(--gutter) * 2);
+}
+.guia-tabla th,
+.guia-tabla td {
+  padding: 12px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums;
+}
+.guia-tabla th:first-child,
+.guia-tabla td:first-child {
+  text-align: left;
+}
+.guia-tabla th {
+  color: var(--fg-faint);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.guia-tabla td {
+  color: var(--fg-muted);
+}
+.guia-tabla td:first-child,
+.guia-tabla td b {
+  color: var(--fg);
+}
+.guia-tabla tr:last-child td {
+  border-bottom: 0;
+}
+.guia-tabla caption {
+  padding: 12px 16px 0;
+  caption-side: bottom;
+  color: var(--fg-faint);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+.guia-nota {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--brand) 8%, transparent);
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+}
+.guia .pagina-acciones {
+  margin-top: 40px;
+}
+
 /* --- Páginas legales ------------------------------------------------------ */
 
 .legal {
