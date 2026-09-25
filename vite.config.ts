@@ -21,7 +21,7 @@ const GUIAS = [
   "inmobiliarias-sin-pagina-web-alicante",
   "alternativas",
 ];
-const PAGINAS = ["index", ...FUNCIONES, ...GUIAS, "aviso-legal", "privacidad", "404"];
+const PAGINAS = ["index", ...FUNCIONES, ...GUIAS, "aviso-legal", "privacidad", "terminos", "404"];
 
 /**
  * Las piezas que se repiten en varias páginas: cabecera, pie, barra de
@@ -104,6 +104,7 @@ const MIGAS: Record<string, string> = {
   alternativas: "Alternativas",
   "aviso-legal": "Aviso legal",
   privacidad: "Privacidad",
+  terminos: "Términos y condiciones",
 };
 
 function datosEstructurados(html: string, pagina: string): string {
@@ -166,7 +167,7 @@ function datosEstructurados(html: string, pagina: string): string {
   // El aviso legal y la privacidad no van «de» la aplicación: son del titular.
   // Declararlas como páginas sobre el producto, con su precio y todo, es
   // decirle a Google que ahí se vende algo, y ahí no se vende nada.
-  const legal = pagina === "aviso-legal" || pagina === "privacidad";
+  const legal = pagina === "aviso-legal" || pagina === "privacidad" || pagina === "terminos";
 
   // La Organization y el WebSite van en **todas** las páginas, no solo en la
   // portada. Son lo que le dice a Google que «Arcia» es una cosa concreta con
@@ -339,7 +340,7 @@ function arcia(): Plugin {
       },
     },
     generateBundle() {
-      const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad"] : [];
+      const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad", "terminos"] : [];
       const urls = ["", ...FUNCIONES, ...GUIAS, ...legales].map(
         (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${tocada(p)}</lastmod></url>`,
       );

@@ -2658,6 +2658,17 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   font-size: 1.35rem;
   font-weight: 600;
 }
+/* Cada tratamiento de la privacidad va con su subtítulo. */
+.legal h3 {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.legal li strong {
+  color: var(--fg);
+  font-weight: 600;
+}
 .legal p,
 .legal li {
   margin-top: 12px;
