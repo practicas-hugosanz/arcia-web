@@ -2144,6 +2144,19 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   color: var(--fg-muted);
   font-size: 0.875rem;
 }
+/* Las guías van en tres grupos: dieciséis tarjetas seguidas no se leen. El
+   gris, y no el cian del antetítulo: esto no se pulsa. */
+.otras-sub {
+  margin-top: 36px;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.otras-sub + .otras-lista {
+  margin-top: 14px;
+}
 
 /* En la portada, las tarjetas y etiquetas de «Cómo funciona» llevan a su
    página. El enlace cubre la tarjeta entera, pero el texto es el título. */

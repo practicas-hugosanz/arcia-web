@@ -20,8 +20,25 @@ const GUIAS = [
   "brunch-sin-pagina-web",
   "inmobiliarias-sin-pagina-web-alicante",
   "alternativas",
+  "conseguir-clientes-diseno-web",
+  "negocios-sin-pagina-web-alicante",
+  "negocios-sin-pagina-web-elche",
+  "negocios-sin-pagina-web-madrid",
+  "cafeterias-sin-pagina-web-murcia",
+  "cafeterias-sin-pagina-web-valencia",
+  "cafeterias-sin-pagina-web-malaga",
 ];
-const PAGINAS = ["index", ...FUNCIONES, ...GUIAS, "aviso-legal", "privacidad", "terminos", "404"];
+/**
+ * Las que hablan a quien vende webs, según cómo trabaje. Se buscan así
+ * —«clientes para diseñadores web», «leads para agencias web»— y no son
+ * artículos: no llevan fecha ni autor.
+ */
+const PUBLICOS = ["para-disenadores-web", "para-agencias"];
+/** Cuándo salió cada guía. Las que no están aquí, con la primera tanda. */
+const PUBLICADA: Record<string, string> = Object.fromEntries(
+  GUIAS.slice(GUIAS.indexOf("conseguir-clientes-diseno-web")).map((g) => [g, "2026-09-30"]),
+);
+const PAGINAS = ["index", ...FUNCIONES, ...PUBLICOS, ...GUIAS, "aviso-legal", "privacidad", "terminos", "404"];
 
 /**
  * Las piezas que se repiten en varias páginas: cabecera, pie, barra de
@@ -102,6 +119,15 @@ const MIGAS: Record<string, string> = {
   "brunch-sin-pagina-web": "Brunch sin web",
   "inmobiliarias-sin-pagina-web-alicante": "Inmobiliarias sin web en Alicante",
   alternativas: "Alternativas",
+  "conseguir-clientes-diseno-web": "Conseguir clientes de diseño web",
+  "negocios-sin-pagina-web-alicante": "Negocios sin web en Alicante",
+  "negocios-sin-pagina-web-elche": "Negocios sin web en Elche",
+  "negocios-sin-pagina-web-madrid": "Negocios sin web en Madrid",
+  "cafeterias-sin-pagina-web-murcia": "Cafeterías sin web en Murcia",
+  "cafeterias-sin-pagina-web-valencia": "Cafeterías sin web en València",
+  "cafeterias-sin-pagina-web-malaga": "Cafeterías sin web en Málaga",
+  "para-disenadores-web": "Para diseñadores web",
+  "para-agencias": "Para agencias",
   "aviso-legal": "Aviso legal",
   privacidad: "Privacidad",
   terminos: "Términos y condiciones",
@@ -232,7 +258,7 @@ function datosEstructurados(html: string, pagina: string): string {
               headline: titulo,
               ...(descripcion ? { description: descripcion } : {}),
               mainEntityOfPage: { "@id": `${direccion}#pagina` },
-              datePublished: "2026-09-24",
+              datePublished: PUBLICADA[pagina] ?? "2026-09-24",
               dateModified: tocada(pagina),
               inLanguage: "es-ES",
               author: { "@id": `${sitio.url}/#organizacion` },
@@ -341,7 +367,7 @@ function arcia(): Plugin {
     },
     generateBundle() {
       const legales = sitio.legalCompleto ? ["aviso-legal", "privacidad", "terminos"] : [];
-      const urls = ["", ...FUNCIONES, ...GUIAS, ...legales].map(
+      const urls = ["", ...FUNCIONES, ...PUBLICOS, ...GUIAS, ...legales].map(
         (p) => `  <url><loc>${sitio.url}/${p}</loc><lastmod>${tocada(p)}</lastmod></url>`,
       );
       this.emitFile({
