@@ -2519,7 +2519,10 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   color: var(--fg);
   font-weight: 600;
 }
-.guia a {
+/* Los enlaces del texto, no los botones: con `.guia a` a secas el color pesaba
+   más que el de `.boton-primario` y «Descargar para Windows» salía con el texto
+   azul sobre el cian en las 16 guías (2026-10-04). */
+.guia a:not(.boton) {
   color: var(--brand-ink);
 }
 .guia-cifras {
