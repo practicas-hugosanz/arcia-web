@@ -2681,6 +2681,13 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   font-size: 1.05rem;
   font-weight: 600;
 }
+/* Los apartados que pide Google dentro del resumen en inglés. */
+.legal h4 {
+  margin-top: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+}
 .legal li strong {
   color: var(--fg);
   font-weight: 600;
