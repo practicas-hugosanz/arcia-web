@@ -1,8 +1,38 @@
 {
   "app": {
+    "hoy-claro": {
+      "width": 3840,
+      "height": 2736,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "hoy-oscuro": {
+      "width": 3840,
+      "height": 2736,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "hoy": {
+      "width": 3840,
+      "height": 2736,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
     "scan-claro": {
       "width": 3840,
-      "height": 2352,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -12,7 +42,7 @@
     },
     "scan-oscuro": {
       "width": 3840,
-      "height": 2352,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -22,7 +52,7 @@
     },
     "scan": {
       "width": 3840,
-      "height": 2352,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -32,7 +62,7 @@
     },
     "call-claro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -42,7 +72,7 @@
     },
     "call-oscuro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -52,7 +82,7 @@
     },
     "call": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -62,7 +92,7 @@
     },
     "leads-claro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -72,7 +102,7 @@
     },
     "leads-oscuro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -82,7 +112,7 @@
     },
     "leads": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -92,7 +122,7 @@
     },
     "agenda-claro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -102,7 +132,7 @@
     },
     "agenda-oscuro": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -112,7 +142,37 @@
     },
     "agenda": {
       "width": 3840,
-      "height": 2400,
+      "height": 2414,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "email-claro": {
+      "width": 3840,
+      "height": 2414,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "email-oscuro": {
+      "width": 3840,
+      "height": 2414,
+      "anchos": [
+        960,
+        1600,
+        2400,
+        3840
+      ]
+    },
+    "email": {
+      "width": 3840,
+      "height": 2414,
       "anchos": [
         960,
         1600,
@@ -123,35 +183,43 @@
   },
   "recortes": {
     "horas": {
-      "width": 1432,
-      "height": 563,
+      "width": 2275,
+      "height": 925,
       "anchos": [
-        716,
-        1432
+        1138,
+        2275
       ]
     },
     "hoy": {
-      "width": 2048,
-      "height": 595,
+      "width": 2150,
+      "height": 535,
       "anchos": [
-        1024,
-        2048
+        1075,
+        2150
       ]
     },
-    "pendiente": {
-      "width": 2413,
-      "height": 880,
+    "suweb": {
+      "width": 1054,
+      "height": 836,
       "anchos": [
-        1207,
-        2413
+        527,
+        1054
       ]
     },
-    "webmuestra": {
-      "width": 1171,
-      "height": 451,
+    "enlace": {
+      "width": 1054,
+      "height": 498,
       "anchos": [
-        586,
-        1171
+        527,
+        1054
+      ]
+    },
+    "bandeja": {
+      "width": 1150,
+      "height": 577,
+      "anchos": [
+        575,
+        1150
       ]
     }
   }

@@ -67,7 +67,7 @@ npm run build
 
 `capturas.mjs` hace dos cosas para que nada salga cortado a medias:
 
-* Busca, para cada pantalla, el alto de ventana más cercano a 900 px en el que
+* Busca, para cada pantalla, el alto de ventana más cercano a 1000 px (a 1600 de ancho, la app a pantalla completa) en el que
   el borde de abajo no parte ninguna tarjeta, fila ni texto. Si no lo encuentra
   lo dice con un `AVISO`: en Prospección pasó con cuatro escaneos, y se arregló
   con un quinto en el doble.
@@ -75,7 +75,7 @@ npm run build
   filas y columnas de la tabla), y guarda su radio para que `imagenes.mjs`
   redondee las esquinas en transparente.
 
-`SOLO=leads` rehace solo esa pantalla; `SONDA=scan` lista las tarjetas de una
+`SOLO=leads` rehace solo esa pantalla, `RECORTE=suweb` solo ese recorte; `SONDA=scan` lista las tarjetas de una
 pantalla con su posición, para ver por qué no encuentra alto limpio.
 
 ## Medirla

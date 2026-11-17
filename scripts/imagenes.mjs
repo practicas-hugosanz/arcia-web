@@ -28,12 +28,12 @@ mkdirSync(resolve(SALIDA, "img/app"), { recursive: true });
 mkdirSync(resolve(SALIDA, "fonts"), { recursive: true });
 mkdirSync(resolve(WEB, "src"), { recursive: true });
 
-const VISTAS = ["scan", "call", "leads", "agenda"];
+const VISTAS = ["hoy", "scan", "call", "leads", "agenda", "email"];
 const TEMAS = ["claro", "oscuro"];
 // Hasta 4K: el navegador elige por `sizes` y la densidad de la pantalla, así
 // que un móvil no se baja nunca la de 3840.
 const ANCHOS = [960, 1600, 2400, 3840];
-const NOMBRES_RECORTE = ["horas", "hoy", "pendiente", "webmuestra"];
+const NOMBRES_RECORTE = ["horas", "hoy", "suweb", "enlace", "bandeja"];
 
 const medidas = { app: {}, recortes: {} };
 
@@ -116,7 +116,8 @@ writeFileSync(resolve(SALIDA, "favicon.ico"), Buffer.concat([cabecera, png32]));
 // Las mismas fuentes que la app, con nombres estables.
 copyFileSync(resolve(APP, "src/assets/fonts/poppins-regular-JJFECG.woff2"), resolve(SALIDA, "fonts/poppins-400.woff2"));
 copyFileSync(resolve(APP, "src/assets/fonts/poppins-semibold-Z1XLFQ.woff2"), resolve(SALIDA, "fonts/poppins-600.woff2"));
-copyFileSync(resolve(APP, "src/assets/fonts/instrument-sans-VYC4K7BH.woff2"), resolve(SALIDA, "fonts/instrument-sans.woff2"));
+// Instrument Sans ya no está en la app (pasó a Allo en la 1.14.15): la de la web
+// sigue en `public/fonts/instrument-sans.woff2`, que es la que se publica.
 
 writeFileSync(resolve(WEB, "src/medidas.json"), `${JSON.stringify(medidas, null, 2)}\n`);
 console.log("Imágenes listas:", VISTAS.length, "vistas,", NOMBRES_RECORTE.length, "recortes");

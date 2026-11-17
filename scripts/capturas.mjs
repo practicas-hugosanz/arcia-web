@@ -5,15 +5,19 @@
 //
 // 1. Compila la interfaz de la app en una carpeta temporal y le mete delante
 //    `doble-de-tauri.js`, que contesta a la interfaz con datos inventados.
-// 2. Abre cada pantalla en Chrome sin cabeza a 1440 px de ancho CSS con una
-//    densidad de 8/3: la imagen sale de 3840 px, 4K.
-// 3. Busca el alto de ventana más cercano a 900 en el que el borde de abajo del
+// 2. Abre cada pantalla en Chrome sin cabeza a 1600 px de ancho CSS —la app a
+//    pantalla completa, con el panel de Prospección fijo al lado— con una
+//    densidad de 2,4: la imagen sale de 3840 px, 4K.
+// 3. Busca el alto de ventana más cercano a 1000 en el que el borde de abajo del
 //    panel no parte ninguna tarjeta, fila ni línea de texto.
 // 4. Recorta las tarjetas que usa la web por su caja real en la página, no por
 //    coordenadas medidas a ojo, y guarda su radio para redondear las esquinas.
 //
 // Deja `fuentes/capturas/<vista>-<tema>.png`, `fuentes/recortes/<nombre>-<tema>.png`
 // y `fuentes/recortes/radios.json`. Después: `node scripts/imagenes.mjs`.
+//
+// `SOLO=leads` rehace solo esa pantalla; `RECORTE=suweb`, solo ese recorte
+// (`RECORTE=-` ninguno).
 
 import { execSync, spawn } from "node:child_process";
 import { copyFileSync, createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
@@ -25,21 +29,26 @@ import { fileURLToPath } from "node:url";
 const WEB = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const APP = resolve(WEB, "..");
 const CHROME = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const ANCHO = 1440;
+const ANCHO = 1600;
+const ALTO = 1000;
 const DENSIDAD = 3840 / ANCHO;
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const VISTAS = ["scan", "call", "leads", "agenda"];
+const VISTAS = ["hoy", "scan", "call", "leads", "agenda", "email"];
 const TEMAS = ["claro", "oscuro"];
+// Cada recorte abre su pantalla de cero, pulsa lo que diga `pulsar` —por el
+// texto visible, en orden— y recorta la tarjeta que lleva `titulo`, o el panel
+// lateral que empieza por la tarjeta de `panel`.
 const RECORTES = [
-  { nombre: "horas", vista: "scan", titulo: "A qué hora cogen" },
+  // Más estrecha que la app entera: la web la pone en una celda de 520 px, y a
+  // lo ancho de Resultados las barras salían de un dedo de alto.
+  { nombre: "horas", vista: "embudo", titulo: "A qué hora cogen", ancho: 1080 },
   { nombre: "hoy", vista: "agenda", titulo: "Hoy" },
-  // Cinco filas y hasta la columna de estado: la tabla entera, puesta en la
-  // mitad de la pantalla, no se leía.
-  { nombre: "pendiente", vista: "leads", tabla: 5, hastaColumna: "Seguimiento" },
-  // Después de la tabla y no antes: con la ficha abierta, Leads esconde la
-  // columna «Seguimiento» y el recorte de arriba ya no tendría dónde acabar.
-  { nombre: "webmuestra", vista: "leads", abrirFicha: true, titulo: "Web de muestra" },
+  // La ficha de un negocio con web mala: sus fallos y sus señales.
+  { nombre: "suweb", vista: "leads", pulsar: ["Web mala", "Asador Casa Julián"], titulo: "Su web" },
+  { nombre: "enlace", vista: "leads", pulsar: ["Peluquería Carmen Vidal", "Venta"], titulo: "Enlace para enseñársela" },
+  // El panel «Pendiente» de Correos: el agente, las respuestas y las secuencias.
+  { nombre: "bandeja", vista: "email", pulsar: ["Pendiente"], panel: "Bandeja del agente" },
 ];
 
 const temporal = mkdtempSync(join(tmpdir(), "arcia-capturas-"));
@@ -118,24 +127,26 @@ const cajaDe = (r) => `(() => {
   };
   let caja, fondo, derecha;
   ${
-    r.tabla
-      ? `const tabla = document.querySelector("table");
-         caja = tarjeta(tabla);
-         caja.scrollIntoView({ block: "start" });
-         fondo = tabla.querySelectorAll("tbody tr")[${r.tabla - 1}].getBoundingClientRect().bottom;
-         ${
-           r.hastaColumna
-             ? `derecha = [...tabla.querySelectorAll("th")].find((th) => th.textContent.trim() === ${JSON.stringify(r.hastaColumna)}).getBoundingClientRect().left;`
-             : ""
-         }`
+    r.panel
+      ? `// El panel lateral desde la tarjeta que empieza por ese texto hasta la
+         // última, sin el hueco vacío de debajo.
+         const t = [...document.querySelectorAll("p, span")].find((e) => e.offsetParent && e.textContent.trim().startsWith(${JSON.stringify(r.panel)}));
+         caja = tarjeta(t);
+         const tarjetas = [...caja.parentElement.children].filter((e) => e.offsetParent);
+         fondo = tarjetas[tarjetas.length - 1].getBoundingClientRect().bottom;
+         derecha = Math.max(...tarjetas.map((e) => e.getBoundingClientRect().right));`
       : `// Entre todos los textos iguales, el de la tarjeta más grande: «Hoy»
          // sale también en la baldosa de la cabecera, y esa no es la que se quiere.
-         // Se compara el primer texto del elemento y no todo su texto: el título
-         // del bloque lleva el contador pegado («Hoy2») y no casaba nunca.
-         caja = [...document.querySelectorAll("h1, h2, h3, h4, p, span")]
-           .filter((e) => e.textContent.trim() === ${JSON.stringify(r.titulo)} || e.firstChild?.textContent?.trim() === ${JSON.stringify(r.titulo)})
+         // Se compara el primer y el último texto del elemento y no todo su texto:
+         // el título del bloque lleva el contador o el icono pegados.
+         // Nunca la barra de la izquierda: «Hoy» es también una de sus secciones,
+         // y la barra entera es la tarjeta más grande de todas.
+         caja = [...document.querySelectorAll("h1, h2, h3, h4, p, span, dt")]
+           .filter((e) => e.offsetParent)
+           .filter((e) => e.textContent.trim() === ${JSON.stringify(r.titulo)} || e.firstChild?.textContent?.trim() === ${JSON.stringify(r.titulo)} || e.lastChild?.textContent?.trim() === ${JSON.stringify(r.titulo)})
            .map(tarjeta)
-           .filter(Boolean)
+           // La barra es el <aside> que lleva el <nav>; la ficha es otro <aside>.
+           .filter((x) => x && !x.closest("aside")?.querySelector("nav"))
            .sort((a, b) => b.offsetWidth * b.offsetHeight - a.offsetWidth * a.offsetHeight)[0];
          caja.scrollIntoView({ block: "center" });`
   }
@@ -143,9 +154,20 @@ const cajaDe = (r) => `(() => {
   return { x: b.left, y: b.top, width: (derecha ?? b.right) - b.left, height: (fondo ?? b.bottom) - b.top, radio: parseFloat(getComputedStyle(caja).borderTopLeftRadius) };
 })()`;
 
-async function abrir(vista, tema, alto) {
-  await cdp("Emulation.setDeviceMetricsOverride", { width: ANCHO, height: alto, deviceScaleFactor: DENSIDAD, mobile: false });
-  await cdp("Page.navigate", { url: `http://localhost:${puertoWeb}/?vista=${vista}&tema=${tema}&escaneo=hecho` });
+/** Pulsa el primer elemento visible con ese texto, como haría alguien. */
+const pulsar = (texto) => `(() => {
+  const t = ${JSON.stringify(texto)};
+  const e = [...document.querySelectorAll("button, [role=tab], td, p, span, a")]
+    // Un botón puede llevar algo más detrás: «Pendiente 1 interesado».
+    .filter((x) => x.offsetParent && (x.textContent.trim() === t || (x.tagName === "BUTTON" && x.textContent.trim().startsWith(t))))[0];
+  if (!e) return false;
+  (e.closest("button, [role=tab], tr") || e).click();
+  return true;
+})()`;
+
+async function abrir(vista, tema, alto, ancho = ANCHO) {
+  await cdp("Emulation.setDeviceMetricsOverride", { width: ancho, height: alto, deviceScaleFactor: DENSIDAD, mobile: false });
+  await cdp("Page.navigate", { url: `http://localhost:${puertoWeb}/?vista=${vista}&tema=${tema}` });
   await espera(4500);
 }
 
@@ -167,10 +189,10 @@ try {
     }
   });
 
-  // SONDA=scan: lista las tarjetas de esa pantalla con su posición a 900 px de
-  // alto y sale. Sirve para ver por qué una pantalla no encuentra alto limpio.
+  // SONDA=scan: lista las tarjetas de esa pantalla con su posición y sale.
+  // Sirve para ver por qué una pantalla no encuentra alto limpio.
   if (process.env.SONDA) {
-    await abrir(process.env.SONDA, "claro", 900);
+    await abrir(process.env.SONDA, "claro", ALTO);
     console.log(
       await evaluar(`[...document.querySelectorAll(".card, table, [class*=bloque]")].map((e) => {
         const b = e.getBoundingClientRect();
@@ -181,17 +203,17 @@ try {
     process.exit(0);
   }
 
-  const radios = {};
-  for (const vista of (process.env.SOLO ?? VISTAS.join(",")).split(",")) {
+  const vistas = process.env.SOLO ? process.env.SOLO.split(",").filter((v) => VISTAS.includes(v)) : VISTAS;
+  for (const vista of vistas) {
     // El alto se busca con el tema claro y se reutiliza en el oscuro: la web
     // reserva un solo hueco por pantalla y los dos temas tienen que casar.
     let altoDeLaVista = null;
     for (const tema of TEMAS) {
-      await abrir(vista, tema, altoDeLaVista ?? 900);
-      // El alto limpio más cercano a 900: 900, 898, 902, 896… hasta ±140.
+      await abrir(vista, tema, altoDeLaVista ?? ALTO);
+      // El alto limpio más cercano a 1000: 1000, 998, 1002… hasta ±140.
       let elegido = altoDeLaVista;
       for (let d = 0; d <= 140 && elegido === null; d += 2) {
-        for (const alto of d ? [900 - d, 900 + d] : [900]) {
+        for (const alto of d ? [ALTO - d, ALTO + d] : [ALTO]) {
           await cdp("Emulation.setDeviceMetricsOverride", { width: ANCHO, height: alto, deviceScaleFactor: DENSIDAD, mobile: false });
           await espera(120);
           if ((await evaluar(CORTES)).length === 0) {
@@ -201,8 +223,8 @@ try {
         }
       }
       if (elegido === null) {
-        elegido = 900;
-        await cdp("Emulation.setDeviceMetricsOverride", { width: ANCHO, height: 900, deviceScaleFactor: DENSIDAD, mobile: false });
+        elegido = ALTO;
+        await cdp("Emulation.setDeviceMetricsOverride", { width: ANCHO, height: ALTO, deviceScaleFactor: DENSIDAD, mobile: false });
         await espera(300);
         console.log(`  AVISO ${vista}-${tema}: ningún alto sin cortes; queda cortado`, await evaluar(CORTES));
       }
@@ -215,30 +237,35 @@ try {
       const { data } = await cdp("Page.captureScreenshot", { format: "png" });
       writeFileSync(join(WEB, `fuentes/capturas/${vista}-${tema}.png`), Buffer.from(data, "base64"));
       console.log(`  ${vista}-${tema}: 3840×${Math.round(elegido * DENSIDAD)}`);
-
-      for (const r of RECORTES.filter((x) => x.vista === vista)) {
-        await cdp("Emulation.setDeviceMetricsOverride", { width: ANCHO, height: 1200, deviceScaleFactor: DENSIDAD, mobile: false });
-        await espera(400);
-        if (r.abrirFicha) {
-          await evaluar(`document.querySelector("main tbody tr td:nth-child(2)").click()`);
-          await espera(1800);
-          const { data: ficha } = await cdp("Page.captureScreenshot", { format: "png" });
-          // Solo para revisarla: la web no la usa entera.
-          writeFileSync(join(WEB, `fuentes/capturas/ficha-${tema}.png`), Buffer.from(ficha, "base64"));
-        }
-        const caja = await evaluar(cajaDe(r));
-        await espera(400);
-        const recorte = await cdp("Page.captureScreenshot", {
-          format: "png",
-          clip: { x: caja.x, y: caja.y, width: caja.width, height: caja.height, scale: 1 },
-        });
-        writeFileSync(join(WEB, `fuentes/recortes/${r.nombre}-${tema}.png`), Buffer.from(recorte.data, "base64"));
-        radios[r.nombre] = Math.round(caja.radio * DENSIDAD);
-        console.log(`    recorte ${r.nombre}-${tema}: ${Math.round(caja.width * DENSIDAD)}×${Math.round(caja.height * DENSIDAD)}`);
-      }
     }
   }
-  // Se mezcla con lo que había: con SOLO=leads, los radios de los recortes que
+
+  const radios = {};
+  const recortes = process.env.RECORTE
+    ? RECORTES.filter((r) => process.env.RECORTE.split(",").includes(r.nombre))
+    : process.env.SOLO
+      ? []
+      : RECORTES;
+  for (const r of recortes) {
+    for (const tema of TEMAS) {
+      await abrir(r.vista, tema, 1300, r.ancho);
+      for (const texto of r.pulsar ?? []) {
+        if (!(await evaluar(pulsar(texto)))) throw new Error(`${r.nombre}: no encuentro «${texto}» para pulsar`);
+        await espera(1500);
+      }
+      const caja = await evaluar(cajaDe(r));
+      if (!caja) throw new Error(`${r.nombre}: no encuentro la tarjeta`);
+      await espera(500);
+      const recorte = await cdp("Page.captureScreenshot", {
+        format: "png",
+        clip: { x: caja.x, y: caja.y, width: caja.width, height: caja.height, scale: 1 },
+      });
+      writeFileSync(join(WEB, `fuentes/recortes/${r.nombre}-${tema}.png`), Buffer.from(recorte.data, "base64"));
+      radios[r.nombre] = Math.round(caja.radio * DENSIDAD);
+      console.log(`    recorte ${r.nombre}-${tema}: ${Math.round(caja.width * DENSIDAD)}×${Math.round(caja.height * DENSIDAD)}`);
+    }
+  }
+  // Se mezcla con lo que había: con RECORTE=hoy, los radios de los recortes que
   // no se han rehecho no pueden perderse.
   const rutaRadios = join(WEB, "fuentes/recortes/radios.json");
   const previos = existsSync(rutaRadios) ? JSON.parse(readFileSync(rutaRadios, "utf8")) : {};
