@@ -27,6 +27,11 @@ const GUIAS = [
   "cafeterias-sin-pagina-web-murcia",
   "cafeterias-sin-pagina-web-valencia",
   "cafeterias-sin-pagina-web-malaga",
+  "autoescuelas-sin-pagina-web-alicante",
+  "floristerias-sin-pagina-web-alicante",
+  "tiendas-de-muebles-sin-pagina-web-alicante",
+  "cafeterias-sin-pagina-web-madrid",
+  "cafeterias-sin-pagina-web-barcelona",
 ];
 /**
  * Las que hablan a quien vende webs, según cómo trabaje. Se buscan así
@@ -35,9 +40,11 @@ const GUIAS = [
  */
 const PUBLICOS = ["para-disenadores-web", "para-agencias"];
 /** Cuándo salió cada guía. Las que no están aquí, con la primera tanda. */
-const PUBLICADA: Record<string, string> = Object.fromEntries(
-  GUIAS.slice(GUIAS.indexOf("conseguir-clientes-diseno-web")).map((g) => [g, "2026-09-30"]),
-);
+const TERCERA_TANDA = GUIAS.indexOf("autoescuelas-sin-pagina-web-alicante");
+const PUBLICADA: Record<string, string> = Object.fromEntries([
+  ...GUIAS.slice(GUIAS.indexOf("conseguir-clientes-diseno-web"), TERCERA_TANDA).map((g) => [g, "2026-09-30"]),
+  ...GUIAS.slice(TERCERA_TANDA).map((g) => [g, "2026-11-17"]),
+]);
 const PAGINAS = ["index", ...FUNCIONES, ...PUBLICOS, ...GUIAS, "aviso-legal", "privacidad", "terminos", "404"];
 
 /**
@@ -126,6 +133,11 @@ const MIGAS: Record<string, string> = {
   "cafeterias-sin-pagina-web-murcia": "Cafeterías sin web en Murcia",
   "cafeterias-sin-pagina-web-valencia": "Cafeterías sin web en València",
   "cafeterias-sin-pagina-web-malaga": "Cafeterías sin web en Málaga",
+  "autoescuelas-sin-pagina-web-alicante": "Autoescuelas sin web en Alicante",
+  "floristerias-sin-pagina-web-alicante": "Floristerías sin web en Alicante",
+  "tiendas-de-muebles-sin-pagina-web-alicante": "Tiendas de muebles sin web en Alicante",
+  "cafeterias-sin-pagina-web-madrid": "Cafeterías sin web en Madrid",
+  "cafeterias-sin-pagina-web-barcelona": "Cafeterías sin web en Barcelona",
   "para-disenadores-web": "Para diseñadores web",
   "para-agencias": "Para agencias",
   "aviso-legal": "Aviso legal",
@@ -268,7 +280,7 @@ function datosEstructurados(html: string, pagina: string): string {
           ]
         : []),
       ...(legal ? [] : [aplicacion]),
-      ...(preguntas.length ? [{ "@type": "FAQPage", "@id": `${sitio.url}/#preguntas`, mainEntity: preguntas }] : []),
+      ...(preguntas.length ? [{ "@type": "FAQPage", "@id": `${direccion}#preguntas`, mainEntity: preguntas }] : []),
     ],
   };
   return `<script type="application/ld+json">${JSON.stringify(grafo)}</script>`;
