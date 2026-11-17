@@ -1599,19 +1599,25 @@ button {
   align-items: center;
   padding-block: 96px 48px;
 }
+/* La pantalla, grande: es la app entera a 1600 px, y a la mitad de la página
+   no se leía nada (él, 2026-11-18). El texto se queda en una columna estrecha
+   y la pantalla crece hacia la derecha hasta casi el borde de la ventana. */
 .pasos.fijada .pasos-rejilla {
   display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-  gap: clamp(40px, 5vw, 80px);
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: clamp(40px, 4vw, 64px);
   align-items: center;
 }
+.pasos.fijada .pasos-visor {
+  margin-right: calc(-1 * max(0px, (100vw - var(--ancho)) / 2 - 24px));
+}
 .pasos.fijada .pasos-lista {
-  gap: 6px;
-  margin-top: 32px;
+  gap: 2px;
+  margin-top: 28px;
 }
 .pasos.fijada .paso {
   position: relative;
-  padding: 16px 0 16px 24px;
+  padding: 12px 0 12px 24px;
   opacity: 0.45;
   transition: opacity 0.4s var(--curva);
 }
@@ -1620,8 +1626,8 @@ button {
   content: "";
   position: absolute;
   left: 0;
-  top: 16px;
-  bottom: 16px;
+  top: 12px;
+  bottom: 12px;
   width: 2px;
   border-radius: 2px;
 }
@@ -1646,7 +1652,14 @@ button {
     margin-top 0.45s var(--curva);
 }
 .pasos.fijada .paso.activo p {
+  grid-template-rows: 1fr;
   margin-top: 8px;
+}
+/* Sin esto el texto no se pliega nunca: un elemento de rejilla no baja de su
+   alto mínimo, y con los cinco pasos abiertos la lista no cabía en la
+   pantalla y el último quedaba fuera mientras estaba activo. */
+.pasos.fijada .paso p > span {
+  min-height: 0;
 }
 .pasos.fijada .paso-imagen {
   display: none;
