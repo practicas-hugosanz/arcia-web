@@ -746,70 +746,145 @@ button {
   }
 }
 
-/* --- Cómo funciona -------------------------------------------------------- */
+/* --- Pruebas y comparación ---------------------------------------------- */
 
-/* Tres pasos y una línea con lo demás. Aquí había seis bloques —los pasos
-   fijados con cuatro capturas, verificación, la simulación de Prospección, IA,
-   «Lo que pasa antes y después» y «Tus leads en tu ordenador»— y la página
-   medía 13.450 px en escritorio y 8.482 en móvil (medido el 2026-09-16). Lo
-   que se quiere es que bajen la app, no que se lean la web. */
-.como {
-  padding-block: clamp(64px, 9vw, 120px);
+/* Aquí iba «De la ficha de Maps a la llamada»: cinco párrafos que contaban lo
+   mismo que la simulación de debajo. Él lo dijo el 18/11: el hero convence y el
+   resto no. Lo que faltaba para comprar no era otra descripción sino una razón:
+   cifras medidas, lo que cambia frente a hacerlo a mano y las cuentas junto al
+   precio. Sin tarjetas ni círculos numerados, que él ya dijo que parecían de
+   máquina: el peso lo llevan las cifras y la tipografía. Y sin cian, que es solo para
+   el logo y lo que se pulsa. */
+.pruebas {
+  padding-block: clamp(72px, 10vw, 128px) clamp(56px, 8vw, 104px);
 }
-/* El recorrido se contaba en tres tarjetas blancas iguales con el número en un
-   círculo, títulos de una palabra —Busca, Comprueba, Llama— y una fila de
-   etiquetas con icono. Es el molde de landing que se ve en todas partes y él
-   lo dijo claro: parecía escrito por una máquina. Ahora es lo mismo contado de
-   seguido, con los datos que ninguna máquina se sabe —los 8.132 municipios, lo
-   que hace con lo que no puede confirmar—, y el peso lo lleva la tipografía:
-   sin cajas, sin sombras y sin numerar. */
-.como-rejilla {
+.pruebas-titulo {
+  max-width: 22ch;
+}
+.pruebas-cifras {
   display: grid;
-  gap: 32px;
+  margin-top: clamp(40px, 5vw, 64px);
+  border-top: 1px solid var(--line-soft);
 }
-/* La columna de texto va a 540 px y el título se queda con lo que sobre. En
-   fracciones medía 672 px a 1440, que a 17 px son renglones de 85 caracteres:
-   se lee bien la línea y se pierde el salto a la siguiente. 540 deja unos 68.
-   En píxeles y no en `ch` porque el «0» de esta tipografía mide 11,3 px y
-   `62ch` resolvía a 702, más ancho todavía que la columna que quería estrechar. */
+.pruebas-cifras > div {
+  padding-block: 28px;
+  border-bottom: 1px solid var(--line-soft);
+}
 @media (min-width: 900px) {
-  .como-rejilla {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
-    gap: 72px;
-    align-items: start;
+  .pruebas-cifras {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 56px;
+  }
+  .pruebas-cifras > div {
+    padding-block: 36px 0;
+    border-bottom: 0;
   }
 }
-.como-recorrido > p {
-  padding-block: 24px;
-  border-top: 1px solid var(--line-soft);
+.pruebas-cifras dt {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--fg);
+}
+.pruebas-cifras dd {
+  max-width: 32ch;
+  margin: 14px 0 0;
   color: var(--fg-muted);
   font-size: 1.0625rem;
-  line-height: 1.62;
+  line-height: 1.55;
   text-wrap: pretty;
 }
-.como-recorrido > p:first-child {
-  padding-top: 0;
-  border-top: 0;
+.pruebas .como-mas {
+  margin-top: 28px;
 }
-.como-recorrido b {
-  color: var(--fg);
+
+.frente {
+  padding-block: clamp(56px, 8vw, 104px) clamp(72px, 10vw, 128px);
+}
+.frente-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px 40px;
+}
+.frente-cabecera .titulo-seccion {
+  max-width: 20ch;
+}
+.frente-cabecera .como-mas {
+  margin-top: 0;
+}
+.frente-tabla {
+  margin-top: clamp(32px, 4vw, 48px);
+  border-top: 1px solid var(--line-soft);
+}
+.frente-fila {
+  display: grid;
+  gap: 10px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.frente-titulos {
+  display: none;
+}
+@media (min-width: 900px) {
+  .frente-fila {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 40px;
+    align-items: baseline;
+    padding-block: 28px;
+  }
+  .frente-titulos {
+    display: grid;
+    padding-block: 16px;
+    color: var(--fg-faint);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+}
+.frente-fila h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
-/* Enlaces dentro del texto: subrayado fino en vez de cian, que aquí hay cuatro
-   seguidos y en cian el párrafo se volvía un semáforo. */
-.como-recorrido a {
+.frente-fila p {
+  color: var(--fg-faint);
+  font-size: 1rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.frente-fila p + p {
+  color: var(--fg);
+}
+/* En el móvil las columnas van una debajo de otra, y cada una dice cuál es. */
+@media (max-width: 899px) {
+  .frente-fila p::before {
+    content: attr(data-lado);
+    display: block;
+    margin-bottom: 2px;
+    color: var(--fg-faint);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+}
+.frente-fila a,
+.precio-garantias a,
+.precio-quien a {
   color: var(--fg);
   text-decoration: underline;
   text-decoration-color: var(--line);
   text-underline-offset: 3px;
   transition: text-decoration-color 0.2s var(--curva);
 }
-.como-recorrido a:hover {
+.frente-fila a:hover,
+.precio-garantias a:hover,
+.precio-quien a:hover {
   text-decoration-color: var(--brand-ink);
 }
-.como-extras {
-  font-size: 1rem;
-}
+
 .como-cabecera {
   max-width: 760px;
 }
@@ -2326,6 +2401,51 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   text-align: center;
 }
 
+/* Junto al precio, las cuentas y lo que pasa si no le convence: es donde se
+   decide, y antes solo había un párrafo y media pantalla vacía. */
+.precio-cuenta {
+  max-width: 52ch;
+  margin-top: 28px;
+  padding: 20px 24px;
+  border-radius: 20px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+  color: var(--fg-muted);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.precio-cuenta b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.precio-garantias {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+.precio-garantias li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--fg-muted);
+}
+.precio-garantias .i {
+  flex: none;
+  margin-top: 0.2em;
+  color: var(--won);
+}
+.precio-quien {
+  max-width: 52ch;
+  margin-top: 24px;
+  color: var(--fg-faint);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
 /* --- Preguntas ------------------------------------------------------------ */
 
 .preguntas {

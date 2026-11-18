@@ -357,6 +357,9 @@ function arcia(): Plugin {
           .replace(/%CORREO%/g, sitio.correo)
           .replace(/%TIKTOK%/g, sitio.tiktok)
           .replace(/%PRECIO%/g, sitio.precioMes)
+          // Cuántos meses de Arcia paga una web de 400 €: sale del precio, así
+          // que no se queda mintiendo si el precio cambia.
+          .replace(/%MESES_POR_WEB%/g, () => String(Math.floor(400 / Number(sitio.precioMes.replace(",", ".")))))
           .replace(/%PRECIO_SIN_IVA%/g, sitio.precioSinIva)
           .replace(/%IVA%/g, sitio.iva)
           .replace(/%ANIO%/g, String(new Date().getFullYear()))

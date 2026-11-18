@@ -84,40 +84,68 @@
         </div>
       </section>
 
-      <section id="como-funciona" class="como" aria-labelledby="como-titulo">
-        <div class="contenedor como-rejilla">
-          <div class="como-intro aparece">
-            <h2 id="como-titulo" class="titulo-seccion">De la ficha de Maps a la llamada</h2>
+      <section class="pruebas" aria-labelledby="pruebas-titulo">
+        <div class="contenedor">
+          <h2 id="pruebas-titulo" class="titulo-seccion pruebas-titulo aparece">Clientes hay. Lo difícil es no llamar al que ya tiene web</h2>
+          <dl class="pruebas-cifras">
+            <div class="aparece">
+              <dt>37 %</dt>
+              <dd>de los negocios de Google Maps no tiene web. Lo medimos en 1.054 fichas, una a una.</dd>
+            </div>
+            <div class="aparece">
+              <dt>1 de cada 5</dt>
+              <dd>fichas «sin web» de Maps sí tenía web, o no se podía confirmar. Arcia las aparta antes de que marques.</dd>
+            </div>
+            <div class="aparece">
+              <dt>8.132</dt>
+              <dd>municipios de España donde buscar, de la capital al último pueblo de la comarca.</dd>
+            </div>
+          </dl>
+          <p class="como-mas aparece">
+            <a href="/negocios-sin-pagina-web">Ver los datos de los 1.054 negocios<i data-i="arrow-right"></i></a>
+          </p>
+        </div>
+      </section>
+
+      <section id="como-funciona" class="frente" aria-labelledby="frente-titulo">
+        <div class="contenedor">
+          <div class="frente-cabecera aparece">
+            <h2 id="frente-titulo" class="titulo-seccion">Una mañana de llamadas, a mano y con Arcia</h2>
             <p class="como-mas">
               <a href="/como-funciona">Ver el recorrido paso a paso<i data-i="arrow-right"></i></a>
             </p>
           </div>
-          <div class="como-recorrido">
-            <p class="aparece">
-              <b>Escribes un oficio y un municipio</b>, de los 8.132 de España, y
-              Arcia lee Google Maps. Lo que ya tiene web se queda fuera.
-            </p>
-            <p class="aparece">
-              <b>Lo comprueba uno por uno.</b> Solo da una web por suya si cuadra
-              el teléfono o la ciudad; lo que no puede asegurar
-              <a href="/verificacion">queda aparte, y no se cuela como bueno</a>.
-            </p>
-            <p class="aparece">
-              <b>Y marcas</b>, con el guion delante y el
-              <a href="/seguimiento">horario de hoy</a>. Cada llamada se cierra
-              con una tecla.
-            </p>
-            <p class="aparece">
-              <b>Y no se te escapa nadie.</b> Cada mañana, Hoy te dice qué toca:
-              los seguimientos que vencen, los
-              <a href="/seguimiento">correos que el agente te ha dejado escritos</a>
-              y a quién llamar primero.
-            </p>
-            <p class="como-extras aparece">
-              Trae además <a href="/seguimiento">secuencias de correo y llamada</a>,
-              <a href="/ia">webs de muestra con su enlace</a> y
-              <a href="/tus-datos">todo en tu ordenador</a>.
-            </p>
+          <div class="frente-tabla" role="table" aria-label="Lo mismo, a mano y con Arcia">
+            <div class="frente-fila frente-titulos" role="row">
+              <span role="columnheader" aria-label="Paso"></span>
+              <span role="columnheader">A mano</span>
+              <span role="columnheader">Con Arcia</span>
+            </div>
+            <div class="frente-fila aparece" role="row">
+              <h3 role="rowheader">Encontrar negocios</h3>
+              <p role="cell" data-lado="A mano">Abres Google Maps y vas ficha por ficha, apuntando nombre y teléfono.</p>
+              <p role="cell" data-lado="Con Arcia">Escribes un oficio y un municipio. La lista sale sola, sin los que ya declaran web.</p>
+            </div>
+            <div class="frente-fila aparece" role="row">
+              <h3 role="rowheader">Saber si tienen web</h3>
+              <p role="cell" data-lado="A mano">Buscas cada nombre en Google y adivinas si la web que sale es la suya.</p>
+              <p role="cell" data-lado="Con Arcia">La busca y la abre. Solo la da por suya si cuadra el teléfono o la ciudad, y <a href="/verificacion">lo dudoso queda aparte</a>.</p>
+            </div>
+            <div class="frente-fila aparece" role="row">
+              <h3 role="rowheader">Llamar</h3>
+              <p role="cell" data-lado="A mano">El número en un papel y lo que se te ocurra al descolgar.</p>
+              <p role="cell" data-lado="Con Arcia">El guion por fases y <a href="/seguimiento">su horario de hoy</a> delante. Al colgar, una tecla apunta cómo fue.</p>
+            </div>
+            <div class="frente-fila aparece" role="row">
+              <h3 role="rowheader">No perder a nadie</h3>
+              <p role="cell" data-lado="A mano">Una hoja de cálculo y tu memoria.</p>
+              <p role="cell" data-lado="Con Arcia">Cada mañana, Hoy te dice a quién volver a llamar, y el agente te deja <a href="/seguimiento">los correos escritos</a> para que los apruebes.</p>
+            </div>
+            <div class="frente-fila aparece" role="row">
+              <h3 role="rowheader">Saber qué funciona</h3>
+              <p role="cell" data-lado="A mano">Lo intuyes.</p>
+              <p role="cell" data-lado="Con Arcia">Resultados te dice qué gremio, qué pueblo y qué asunto de correo acaban en cita.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -251,6 +279,23 @@
               Instalas, pulsas «Empezar la prueba gratis» y la app se activa
               sola en ese ordenador. Los primeros 7 días no pagas nada; después
               se renueva cada mes y cancelas cuando quieras.
+            </p>
+            <!--si-precio-->
+            <p class="precio-cuenta">
+              <b>Una web vendida paga más de un año.</b> Si vendes tus webs a
+              400 €, el primer cliente que cierres cubre %MESES_POR_WEB% meses
+              de Arcia.
+            </p>
+            <!--/si-precio-->
+            <ul class="precio-garantias">
+              <li><i data-i="check-circle"></i>Si cancelas en los 7 días de prueba, no pagas nada.</li>
+              <li><i data-i="check-circle"></i>Cancelas desde la propia app, sin llamar a nadie.</li>
+              <li><i data-i="check-circle"></i><span>Tus negocios y tus llamadas se quedan <a href="/tus-datos">en tu ordenador</a>.</span></li>
+            </ul>
+            <p class="precio-quien">
+              Hecho para <a href="/para-disenadores-web">diseñadores web freelance</a>,
+              <a href="/para-agencias">agencias pequeñas</a> y quien vende cartas
+              con QR, reservas o citas online.
             </p>
           </div>
           <div class="tarjeta-precio aparece">
