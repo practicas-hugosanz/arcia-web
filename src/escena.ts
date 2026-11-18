@@ -539,7 +539,9 @@ export function montar(lienzo: HTMLCanvasElement, reducido: boolean): Escena | n
     ancho = lienzo.clientWidth;
     alto = lienzo.clientHeight;
     if (!ancho || !alto) return;
-    const dpr = Math.min(window.devicePixelRatio, 2);
+    // En el móvil, a 1,5: los puntos no lo notan y el scroll va más suelto
+    // (una auditoría del 18/11/2026 vio el navegador atascarse al bajar).
+    const dpr = Math.min(window.devicePixelRatio, ancho < 768 ? 1.5 : 2);
     render.setPixelRatio(dpr);
     render.setSize(ancho, alto, false);
     material.uniforms.uPixel.value = dpr;

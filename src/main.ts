@@ -41,17 +41,29 @@ if (nav) {
 
 const mm = gsap.matchMedia();
 
+/**
+ * Lo que esconde algo para luego enseñarlo, solo cuando el navegador pinta de
+ * verdad. Si no corre `requestAnimationFrame` —una pestaña de fondo, un móvil
+ * atascado, las herramientas de auditoría—, GSAP escondía el titular y no
+ * llegaba a sacarlo: una auditoría del 18/11/2026 vio el título cortado y sin
+ * botones durante 8 s. Así, sin fotogramas no se esconde nada y el texto está
+ * desde el principio, que es lo que manda el HTML.
+ */
+const alPintar = (fn: () => void) => requestAnimationFrame(() => requestAnimationFrame(fn));
+
 mm.add("(prefers-reduced-motion: no-preference)", () => {
   // Lo de la portada solo donde hay portada: en las páginas de funciones GSAP
   // avisaba en la consola de cada selector que no encontraba.
   if ($(".hero")) {
     // Entrada del titular, línea a línea: lo primero que se lee es lo primero
     // que se mueve.
-    gsap
-      .timeline({ defaults: { ease: "power4.out" } })
-      .from(".hero-titulo .linea > span", { yPercent: 110, duration: 0.9, stagger: 0.09 })
-      .from(".hero-sub", { y: 16, opacity: 0, duration: 0.7 }, "-=0.55")
-      .from(".hero-acciones > *", { y: 12, opacity: 0, duration: 0.6, stagger: 0.07 }, "-=0.5");
+    alPintar(() =>
+      gsap
+        .timeline({ defaults: { ease: "power4.out" } })
+        .from(".hero-titulo .linea > span", { yPercent: 110, duration: 0.9, stagger: 0.09 })
+        .from(".hero-sub", { y: 16, opacity: 0, duration: 0.7 }, "-=0.55")
+        .from(".hero-acciones > *", { y: 12, opacity: 0, duration: 0.6, stagger: 0.07 }, "-=0.5"),
+    );
 
     // La escena se aleja y se apaga mientras la portada sale por arriba.
     // `fromTo` y no `to`: con `to`, GSAP toma como inicio la opacidad que haya
@@ -87,12 +99,14 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 
   // Aparecer al entrar, en grupo para que lo que está junto llegue junto.
   if ($(".aparece")) {
-    gsap.set(".aparece", { opacity: 0, y: 28 });
-    ScrollTrigger.batch(".aparece", {
-      start: "top 88%",
-      once: true,
-      onEnter: (elementos) =>
-        gsap.to(elementos, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, overwrite: true }),
+    alPintar(() => {
+      gsap.set(".aparece", { opacity: 0, y: 28 });
+      ScrollTrigger.batch(".aparece", {
+        start: "top 88%",
+        once: true,
+        onEnter: (elementos) =>
+          gsap.to(elementos, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, overwrite: true }),
+      });
     });
   }
 });

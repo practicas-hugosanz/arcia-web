@@ -338,6 +338,12 @@ button {
   width: 108px;
   height: auto;
 }
+/* 44 px de zona de toque, sin mover el logo. */
+.nav-marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .nav-enlaces {
   display: flex;
   gap: 4px;
@@ -497,12 +503,13 @@ button {
     top: -12px;
     height: 12px;
   }
+  /* Ni en el móvil por debajo de 13 px: a 11 no se leía (auditoría, 18/11/2026). */
   .ficha-nombre {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
   .ficha-meta {
     margin-top: 2px;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
   }
   .ficha-sinweb {
     padding: 1px 6px;
@@ -2206,6 +2213,7 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
   color: var(--brand-ink);
   font-weight: 600;
   text-decoration: none;
@@ -2639,6 +2647,13 @@ body[data-pagina="tus-datos"] .otras-lista [data-pagina="tus-datos"] {
 }
 .guia-tabla td {
   color: var(--fg-muted);
+}
+/* El enlace ocupa toda la altura de la fila para el dedo, sin cambiar el
+   alto de la fila: el relleno que gana lo devuelve el margen. */
+.guia-tabla td a {
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
 }
 .guia-tabla td:first-child,
 .guia-tabla td b {
