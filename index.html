@@ -110,43 +110,65 @@
       <section id="como-funciona" class="frente" aria-labelledby="frente-titulo">
         <div class="contenedor">
           <div class="frente-cabecera aparece">
-            <h2 id="frente-titulo" class="titulo-seccion">Una mañana de llamadas, a mano y con Arcia</h2>
+            <h2 id="frente-titulo" class="titulo-seccion">A mano, con un buscador de leads o con Arcia</h2>
             <p class="como-mas">
               <a href="/como-funciona">Ver el recorrido paso a paso<i data-i="arrow-right"></i></a>
             </p>
           </div>
-          <div class="frente-tabla" role="table" aria-label="Lo mismo, a mano y con Arcia">
-            <div class="frente-fila frente-titulos" role="row">
-              <span role="columnheader" aria-label="Paso"></span>
-              <span role="columnheader">A mano</span>
-              <span role="columnheader">Con Arcia</span>
-            </div>
-            <div class="frente-fila aparece" role="row">
-              <h3 role="rowheader">Encontrar negocios</h3>
-              <p role="cell" data-lado="A mano">Abres Google Maps y vas ficha por ficha, apuntando nombre y teléfono.</p>
-              <p role="cell" data-lado="Con Arcia">Escribes un oficio y un municipio. La lista sale sola, sin los que ya declaran web.</p>
-            </div>
-            <div class="frente-fila aparece" role="row">
-              <h3 role="rowheader">Saber si tienen web</h3>
-              <p role="cell" data-lado="A mano">Buscas cada nombre en Google y adivinas si la web que sale es la suya.</p>
-              <p role="cell" data-lado="Con Arcia">La busca y la abre. Solo la da por suya si cuadra el teléfono o la ciudad, y <a href="/verificacion">lo dudoso queda aparte</a>.</p>
-            </div>
-            <div class="frente-fila aparece" role="row">
-              <h3 role="rowheader">Llamar</h3>
-              <p role="cell" data-lado="A mano">El número en un papel y lo que se te ocurra al descolgar.</p>
-              <p role="cell" data-lado="Con Arcia">El guion por fases y <a href="/seguimiento">su horario de hoy</a> delante. Al colgar, una tecla apunta cómo fue.</p>
-            </div>
-            <div class="frente-fila aparece" role="row">
-              <h3 role="rowheader">No perder a nadie</h3>
-              <p role="cell" data-lado="A mano">Una hoja de cálculo y tu memoria.</p>
-              <p role="cell" data-lado="Con Arcia">Cada mañana, Hoy te dice a quién volver a llamar, y el agente te deja <a href="/seguimiento">los correos escritos</a> para que los apruebes.</p>
-            </div>
-            <div class="frente-fila aparece" role="row">
-              <h3 role="rowheader">Saber qué funciona</h3>
-              <p role="cell" data-lado="A mano">Lo intuyes.</p>
-              <p role="cell" data-lado="Con Arcia">Resultados te dice qué gremio, qué pueblo y qué asunto de correo acaban en cita.</p>
-            </div>
+          <div class="frente-marco aparece">
+            <table class="frente-tabla">
+              <thead>
+                <tr>
+                  <td></td>
+                  <th scope="col">A mano</th>
+                  <th scope="col">Buscadores de leads</th>
+                  <th scope="col" class="frente-arcia">Arcia</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Negocios por oficio y municipio</th>
+                  <td data-m="parte"><i data-i="minus"></i><small>ficha a ficha</small></td><td data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/verificacion">Comprueba que de verdad no tienen web</a></th>
+                  <td data-m="parte"><i data-i="minus"></i><small>uno a uno</small></td><td data-m="parte"><i data-i="minus"></i><small>solo la ficha de Maps</small></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/verificacion">Webs malas y mejorables, no solo sin web</a></th>
+                  <td data-m="parte"><i data-i="minus"></i><small>abriéndolas</small></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/seguimiento">Guion de llamada y una tecla por resultado</a></th>
+                  <td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/seguimiento">A quién volver a llamar, cada mañana</a></th>
+                  <td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/seguimiento">Correos desde tu cuenta, escritos por un agente</a></th>
+                  <td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/ia">Web de muestra para enseñársela</a></th>
+                  <td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td data-m="parte"><i data-i="minus"></i><small>algunos</small></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Qué gremio y qué pueblo acaban en cita</th>
+                  <td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+                <tr>
+                  <th scope="row"><a href="/tus-datos">Tus datos en tu ordenador</a></th>
+                  <td data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td><td data-m="no"><i data-i="x"></i><span class="lector">No</span></td><td class="frente-arcia" data-m="si"><i data-i="check"></i><span class="lector">Sí</span></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+          <p class="frente-nota">
+            Buscadores de leads: las webs que buscan negocios sin página en
+            Google Maps, según lo que anuncian en noviembre de 2026.
+          </p>
         </div>
       </section>
 

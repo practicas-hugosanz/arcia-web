@@ -816,61 +816,129 @@ button {
 .frente-cabecera .como-mas {
   margin-top: 0;
 }
-.frente-tabla {
+/* La tabla de ticks y cruces la pidió él el 18/11, frente a la de texto que
+   había: se lee de un vistazo. La columna de Arcia se distingue por el fondo,
+   no por el cian. Los cruces van en gris y no en rojo: es una comparación,
+   no una alarma. */
+.frente-marco {
   margin-top: clamp(32px, 4vw, 48px);
-  border-top: 1px solid var(--line-soft);
 }
-.frente-fila {
-  display: grid;
-  gap: 10px;
-  padding-block: 24px;
+.frente-tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+.frente-tabla th,
+.frente-tabla td {
+  padding: 18px 12px;
   border-bottom: 1px solid var(--line-soft);
+  text-align: center;
+  vertical-align: middle;
 }
-.frente-titulos {
-  display: none;
+.frente-tabla thead th {
+  padding-block: 20px 16px;
+  color: var(--fg-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
-@media (min-width: 900px) {
-  .frente-fila {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.25fr);
-    gap: 40px;
-    align-items: baseline;
-    padding-block: 28px;
-  }
-  .frente-titulos {
-    display: grid;
-    padding-block: 16px;
-    color: var(--fg-faint);
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
+.frente-tabla thead td,
+.frente-tabla tbody th {
+  width: 46%;
 }
-.frente-fila h3 {
+.frente-tabla tbody th {
+  padding-left: 0;
+  text-align: left;
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   letter-spacing: -0.015em;
+  line-height: 1.3;
 }
-.frente-fila p {
+.frente-tabla td .i {
+  display: block;
+  margin-inline: auto;
+}
+.frente-tabla .i {
+  width: 22px;
+  height: 22px;
   color: var(--fg-faint);
-  font-size: 1rem;
-  line-height: 1.55;
-  text-wrap: pretty;
 }
-.frente-fila p + p {
+.frente-tabla td[data-m="si"] .i {
   color: var(--fg);
 }
-/* En el móvil las columnas van una debajo de otra, y cada una dice cuál es. */
-@media (max-width: 899px) {
-  .frente-fila p::before {
-    content: attr(data-lado);
-    display: block;
-    margin-bottom: 2px;
-    color: var(--fg-faint);
+.frente-tabla td[data-m="no"] .i {
+  opacity: 0.6;
+}
+.frente-tabla td[data-m="parte"] small {
+  display: block;
+  margin-top: 4px;
+  color: var(--fg-faint);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+/* La columna de Arcia: una placa que baja de la cabecera al final. */
+.frente-tabla .frente-arcia {
+  background: var(--surface);
+  border-inline: 1px solid var(--line-soft);
+}
+.frente-tabla thead .frente-arcia {
+  border-top: 1px solid var(--line-soft);
+  border-radius: 20px 20px 0 0;
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+}
+.frente-tabla tbody tr:last-child .frente-arcia {
+  border-radius: 0 0 20px 20px;
+}
+.frente-tabla tbody tr:last-child th,
+.frente-tabla tbody tr:last-child td:not(.frente-arcia) {
+  border-bottom: 0;
+}
+.frente-tabla .frente-arcia[data-m="si"] .i {
+  color: var(--won);
+}
+.frente-nota {
+  max-width: 64ch;
+  margin-top: 20px;
+  color: var(--fg-faint);
+  font-size: 0.875rem;
+}
+.lector {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* En el móvil caben las tres columnas solo con iconos: el nombre de la fila
+   se encoge y las cabeceras parten renglón. */
+@media (max-width: 639px) {
+  .frente-tabla th,
+  .frente-tabla td {
+    padding: 14px 4px;
+  }
+  .frente-tabla thead td,
+  .frente-tabla tbody th {
+    width: 40%;
+  }
+  .frente-tabla tbody th {
+    font-size: 0.9375rem;
+  }
+  .frente-tabla thead th {
     font-size: 0.8125rem;
-    font-weight: 600;
+    line-height: 1.25;
+  }
+  .frente-tabla thead .frente-arcia {
+    font-size: 1rem;
+  }
+  .frente-tabla td[data-m="parte"] small {
+    font-size: 0.75rem;
   }
 }
-.frente-fila a,
+.frente-tabla th a,
 .precio-garantias a,
 .precio-quien a {
   color: var(--fg);
@@ -879,10 +947,15 @@ button {
   text-underline-offset: 3px;
   transition: text-decoration-color 0.2s var(--curva);
 }
-.frente-fila a:hover,
+.frente-tabla th a:hover,
 .precio-garantias a:hover,
 .precio-quien a:hover {
   text-decoration-color: var(--brand-ink);
+}
+/* En la tabla, nueve filas subrayadas seguidas pesaban más que los ticks: el
+   subrayado sale al pasar por encima. */
+.frente-tabla th a {
+  text-decoration-color: transparent;
 }
 
 .como-cabecera {
